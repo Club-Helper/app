@@ -1,4 +1,4 @@
-# <img align="right" src="https://sun9-81.userapi.com/impg/1WJhNCxzY5IH0zVlgo-Dx94UY3wlypTy_8Pvgw/_nyEsJVD35g.jpg?size=450x450&quality=95&sign=4b597b57c9c5675d491efb5476c25d43&type=album" alt="openvk" title="openvk" width="15%">Club Helper
+# <img align="right" src="https://sun9-81.userapi.com/impg/1WJhNCxzY5IH0zVlgo-Dx94UY3wlypTy_8Pvgw/_nyEsJVD35g.jpg?size=450x450&quality=95&sign=4b597b57c9c5675d491efb5476c25d43&type=album" width="15%">Club Helper
 
 Club Helper — это сервис VK Mini Apps, который позволяет создавать автоматизированные службы поддержки пользователей прямо в сообществах VK.
 
