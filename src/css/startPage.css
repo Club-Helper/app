@@ -1,0 +1,429 @@
+/*******************************************************
+ * Авторское право (C) 2021-2022 Club Helper
+ *
+ * Этот файл является частью мини-приложения Club Helper, размещенного
+ * в сети Интернет по адресу https://www.vk.com/app7938346
+ *
+ * Несанкционированное копирование, инженерный анализ, передача,
+ * публичная демонстрация, распространение кода приложения запрещены
+ *******************************************************/
+
+.clubHelper--slideStart {
+  background: rgb(63, 138, 224);
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.clubHelper--slideStart *:not(.clubHelper--comment *) {
+  color: #fff;
+}
+
+.clubHelper--nextSlideStart {
+  width: 300px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clubHelper--nextSlideStart .vkuiProgress {
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-top: 10px;
+}
+
+.clubHelper--nextSlideStart .vkuiProgress__in {
+  background-color: #FFF;
+}
+
+.clubHelper--gearImage {
+  position: absolute;
+  z-index: 0;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  opacity: .15;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--gearImage {
+  opacity: .08;
+}
+
+.clubHelper--gearImage .vkuiIcon {
+  animation: rotate 25s linear infinite;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__1 {
+  width: 280px;
+  height: 280px;
+  margin-top: -100px;
+  margin-left: -105px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__2 {
+  width: 380px;
+  height: 380px;
+  right: -175px;
+  bottom: -170px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__3 {
+  margin-left: -140px;
+  margin-top: -75px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__4 {
+  width: 380px;
+  height: 380px;
+  bottom: -150px;
+  margin-left: -25px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__4 .vkuiIcon {
+  animation-name: -rotate;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--gearImage.clubHelper--gearImage__4 {
+  margin-left: -5px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__5 {
+  width: 380px;
+  height: 380px;
+  margin-top: -100px;
+  margin-left: 600px;
+}
+
+.clubHelper--gearImage.clubHelper--gearImage__6 {
+  width: 120px;
+  height: 280px;
+  overflow: hidden;
+  margin-left: -120px;
+  bottom: -140px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--gearImage.clubHelper--gearImage__5,
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--gearImage.clubHelper--gearImage__6 {
+  display: none;
+}
+
+
+@keyframes rotate {
+  from {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes -rotate {
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.clubHelper--flexIconInfoBlcok {
+  display: flex;
+  margin: 0;
+  padding: 35px 20px;
+}
+
+.clubHelper--slideStart.clubHelper--slideStart--vkcom .clubHelper--flexIconInfoBlcok {
+  padding: 80px 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--flexIconInfoBlcok {
+  flex-direction: column;
+  padding-bottom: 50px;
+}
+
+.clubHelper--flexIconInfoBlcok .clubHelper--info {
+  box-sizing: border-box;
+  list-style: none;
+  position: relative;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--flexIconInfoBlcok .clubHelper--info {
+  margin-bottom: 20px;
+}
+
+.clubHelper--slideStart.clubHelper--slideStart--vkcom .clubHelper--flexIconInfoBlcok .clubHelper--info {
+  max-width: 33.33%;
+  padding-right: 30px;
+}
+
+.clubHelper--flexIconInfoBlcok .clubHelper--imageInfo {
+  box-sizing: border-box;
+  list-style: none;
+  position: relative;
+}
+
+.clubHelper--flexIconInfoBlcok .clubHelper--info .vkuiIcon {
+  background: radial-gradient(98.05% 261.61% at 16.38% 3.59%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 100%);
+  width: 66px !important;
+  height: 66px !important;
+  box-sizing: border-box;
+  padding: 10px;
+  display: block;
+  border-radius: 50%;
+}
+
+.clubHelper--flexIconInfoBlcok .clubHelper--info .vkuiText {
+  margin-top: 25px;
+}
+
+.clubHelper--comment {
+  display: flex;
+  margin-bottom: 15px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 10px 15px;
+}
+
+.clubHelper--comment .clubHelper--comment__avatar {
+  margin-right: 10px;
+  color: #2787f5;
+}
+
+.clubHelper--comment .clubHelper--comment__content {
+  color: #000;
+}
+
+.clubHelper--comment .clubHelper--comment__content .vkuiText--w-semibold {
+  color: #2787f5;
+  margin-bottom: 2.5px;
+}
+
+.clubHelper--comment__1,
+.clubHelper--comment__2 {
+  margin-left: 50px;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-duration: 500ms;
+  animation-delay: 2s;
+  animation-iteration-count: 1;
+}
+
+.clubHelper--comment__1 {
+  transform-origin: 50% 0;
+  animation-name: comment_1;
+}
+
+.clubHelper--comment__2 {
+  opacity: 0;
+  transform: scale(0);
+  animation-name: comment_2;
+}
+
+@keyframes comment_1 {
+  to {
+    opacity: 0;
+    transform: scale(0);
+    margin-bottom: 0;
+  }
+}
+
+@keyframes comment_2 {
+  to {
+    margin-top: -55px;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.clubHelper--URL {
+  width: 100%;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.clubHelper--message {
+  display: flex;
+  margin: 0 40px 25px;
+}
+
+.clubHelper--message .clubHelper--message__avatar {
+  margin-right: 15px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--message.clubHelper--message__club {
+  margin-bottom: 70px;
+}
+
+.clubHelper--message.clubHelper--message__club .clubHelper--message__avatar {
+  margin-right: 0;
+  margin-left: 15px;
+}
+
+.clubHelper--message .clubHelper--message__content {
+  padding: 10px 15px;
+  border-radius: 0 10px 10px 10px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.clubHelper--message.clubHelper--message__club .clubHelper--message__content {
+  border-radius: 10px 0 10px 10px;
+}
+
+.clubHelper--hpIconSymbol,
+.clubHelper--hpIconSymbol__2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  opacity: .15;
+  bottom: -50px;
+  margin-left: 450px;
+  transform: rotate(-15deg);
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.clubHelper--hpIconSymbol__2 {
+  margin-left: 560px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--hpIconSymbol {
+  margin-left: 20px;
+  opacity: .08;
+  width: 400px;
+  height: 400px;
+  margin-bottom: 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--hpIconSymbol__2 {
+  margin-left: 20px;
+  opacity: .08;
+  width: 400px;
+  height: 400px;
+  margin-bottom: 50px;
+}
+
+.clubHelper--instalApp {
+  padding: 10px;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 10px;
+  color: #000 !important;
+}
+
+.clubHelper--title {
+  line-height: normal;
+  margin-bottom: -5px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--title {
+  padding-left: 20px;
+}
+
+.clubHelper--title__1 {
+  font-size: 70px;
+  padding-left: 180px;
+  padding-top: 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--title__1 {
+  padding-top: 80px;
+  font-size: 45px;
+  margin-bottom: 0;
+}
+
+.clubHelper--title__2 {
+  font-size: 70px;
+  padding-top: 50px;
+  padding-left: 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--title__2 {
+  font-size: 45px;
+  padding-left: 20px;
+  padding-top: 70px;
+  margin-bottom: 15px;
+  line-height: 40px;
+}
+
+.clubHelper--slideStart .clubHelper--title__3 {
+  font-size: 70px;
+  padding-left: 150px;
+  padding-top: 80px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--title__3 {
+  margin-bottom: 20px;
+  font-size: 45px;
+}
+
+.clubHelper--slideStart .clubHelper--title__4 {
+  font-size: 70px;
+  padding-left: 50px;
+  padding-top: 50px;
+  margin-bottom: 5px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--title__4 {
+  font-size: 40px;
+  padding-left: 20px;
+  line-height: 40px;
+  margin-bottom: 20px;
+  padding-top: 80px;
+}
+
+.clubHelper--description {
+  opacity: .5;
+  line-height: normal;
+}
+
+.clubHelper--description__1 {
+  font-size: 35px;
+  padding-left: 180px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--description__1 {
+  padding-left: 20px;
+  font-size: 22.5px;
+}
+
+.clubHelper--description__2 {
+  font-size: 20px;
+  padding-left: 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--description__2 {
+  padding-left: 20px;
+}
+
+.clubHelper--description__4 {
+  font-size: 20px;
+  padding-left: 50px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--description__4 {
+  padding-left: 20px;
+}
+
+.clubHelper--settingSpinner {
+  display: flex;
+  align-items: center;
+  padding-left: 50px;
+  padding-top: 150px;
+}
+
+.clubHelper--settingSpinner .clubHelper--settingSpinner__content {
+  margin-left: 20px;
+}
+
+.clubHelper--slideStart:not(.clubHelper--slideStart--vkcom) .clubHelper--settingSpinner {
+  padding-left: 20px;
+}
+
+.slidestart {
+  height: auto;
+  overflow-y: auto;
+}

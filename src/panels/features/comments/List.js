@@ -1,0 +1,389 @@
+import React, { Component } from 'react'
+import { Avatar, Button, Cell, ConfigProvider, FormItem, FormLayout, Input, List, ModalPage, ModalPageHeader, ModalRoot, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, Snackbar, SplitCol, SplitLayout, Textarea, Group, Title, Div, MiniInfoCell, Link, Alert, Footer, CellButton, Spacing, SegmentedControl } from '@vkontakte/vkui';
+import { Icon16Done, Icon24Dismiss, Icon28CommentOutline, Icon28InfoCircleOutline, Icon56CommentsOutline, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon24AddCircleDottedOutline, Icon20MentionOutline } from '@vkontakte/icons';
+
+export default class CommentsList extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isEnabled: true,
+      listLoading: true,
+      isFetching: false,
+      comments: [],
+      availability: [],
+      count: null,
+      activeModal: "",
+      newCommentTitle: "",
+      newCommentCommand: "",
+      newCommentPattern: "",
+      newCommentButtonWorking: false,
+      snackbar: null,
+      openedComment: [],
+      filter: "all"
+    }
+  }
+
+  getComments(filter) {
+    fetch("https://ch.n1rwana.ml/api/comments.get?token=" + this.props.token + "&filter=" + filter)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.error) {
+          this.setState({ comments: data.response.items, count: data.response.count, availability: data.response.availability, isEnabled: true, listLoading: false });
+        } else {
+          this.setState({ isEnabled: false, listLoading: false });
+          this.props.createError(data.error.error_msg);
+        }
+      })
+  }
+
+  onRefresh() {
+    this.setState({ listLoading: true });
+    this.getComments(this.state.filter);
+  }
+
+  getCommentById(id) {
+    this.setState({ openedComment: this.state.comments[id], activeModal: "comment-info" })
+  }
+
+  updateComments() {
+
+  }
+
+  createComment() {
+    fetch("https://ch.n1rwana.ml/api/comments.creat", {
+      method: "POST",
+      body: JSON.stringify({
+        token: this.props.token,
+        title: this.state.newCommentTitle,
+        comand: this.state.newCommentCommand,
+        pattern: this.state.newCommentPattern
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.error) {
+          this.closeModal();
+          this.setState({
+            snackbar: (
+              <Snackbar
+                onClose={() => this.setState({ snackbar: null })}
+                before={
+                  <Avatar
+                    size={24}
+                    style={{ background: "var(--button_commerce_background)" }}
+                  >
+                    <Icon16Done fill="#FFF" width={14} height={14} />
+                  </Avatar>
+                }
+              >
+                Шаблон создан успешно
+              </Snackbar>
+            )
+          })
+          this.getComments(this.state.filter);
+        } else {
+          this.props.createError(data.error.error_msg);
+        }
+      })
+  }
+
+  deleteComment() {
+    fetch("https://ch.n1rwana.ml/api/comments.delete?token=" + this.props.token + "&id=" + this.state.openedComment.id)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.error) {
+          this.getComments(this.state.filter);
+          this.setState({
+            snackbar: (
+              <Snackbar
+                onClose={() => this.setState({ snackbar: null })}
+                before={
+                  <Avatar
+                    size={24}
+                    style={{ background: "var(--button_commerce_background)" }}
+                  >
+                    <Icon16Done fill="#FFF" width={14} height={14} />
+                  </Avatar>
+                }
+              >
+                Шаблон удалён успешно
+              </Snackbar>
+            ),
+            activeModal: ""
+          });
+        } else {
+          this.props.createError(data.error.error_msg);
+        }
+      })
+  }
+
+  delete() {
+    this.props.setPopout(
+      <Alert
+        actions={[
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: true,
+            action: () => { this.deleteComment() }
+          },
+          {
+            title: "Отмена",
+            autoclose: true,
+            mode: "cancel",
+          },
+        ]}
+        onClose={() => this.props.setPopout(null)}
+        actionsLayout="vertical"
+        header="Подтвердите действие"
+        text="Вы уверены, что хотите удалить этот шаблон? Данное действие необратимо."
+      />
+    );
+  }
+
+  closeModal() { this.setState({ activeModal: "" }); }
+
+  componentDidMount() {
+    this.props.setLoading(false);
+    this.interval = setInterval(() => this.getComments(this.state.filter), 60000);
+
+    this.getComments(this.state.filter);
+  }
+
+  onFilterChange(value) {
+    this.setState({ filter: value });
+    this.getComments(value);
+  }
+
+  render() {
+    const modal = (
+      <ModalRoot
+        activeModal={this.state.activeModal}
+      >
+        <ModalPage
+          id="create-comment"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => this.closeModal()}><Icon24Dismiss /></PanelHeaderButton>}>Создать комментарий</ModalPageHeader>}
+          onClose={() => this.closeModal()}
+          settlingHeight={100}
+        >
+          <FormLayout>
+            <FormItem
+              top="Название шаблона"
+              status={
+                this.state.newCommentTitle != ''
+                  && this.state.newCommentTitle.length <= 50
+                  && /^\s+$/.test(this.state.newCommentTitle) == false
+                  && /^[^\s][^_\s]*$/.test(this.state.newCommentTitle) == true
+                  ? "" : "error"}
+              bottom={
+                this.state.newCommentTitle == '' && "Заголовок не может быть пустым"
+                ||
+                this.state.newCommentTitle.length > 50 && "Заголовок не может быть длиннее 50 символов"
+                ||
+                /^\s+$/.test(this.state.newCommentTitle) === true && "Заголовок не может состоять только из пробелов"
+                ||
+                /^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false && "Неверный формат заголовка"
+              }
+            >
+              <Input
+                type="text"
+                name="title"
+                placeholder="Название шаблона"
+                value={this.state.newCommentTitle}
+                onChange={(e) => this.setState({ newCommentTitle: e.target.value })}
+                disabled={this.state.newCommentButtonWorking}
+              />
+            </FormItem>
+            <FormItem
+              top="Команда"
+              bottom={
+                this.state.newCommentCommand == '' && "Команда не может быть пустой"
+              }
+              status={
+                this.state.newCommentCommand != ''
+                  ? "" : "error"
+              }
+            >
+              <Input
+                type="text"
+                name="title"
+                placeholder="Команда для отправки шаблона"
+                value={this.state.newCommentCommand}
+                onChange={(e) => this.setState({ newCommentCommand: e.target.value })}
+                disabled={this.state.newCommentButtonWorking}
+              />
+            </FormItem>
+            <FormItem
+              top="Текст"
+              bottom={
+                this.state.newCommentPattern == '' && "Шаблон комментария не может быть пустым"
+                ||
+                this.state.newCommentPattern.length < 10 && "Шаблон комментария не может содержать меньше 10 символов"
+                ||
+                /^\s+$/.test(this.state.newCommentPattern) === true && "Шаблон комментария не может состоять только из пробелов"
+                ||
+                /^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false && "Неверный формат шаблона комментария"
+              }
+              status={
+                this.state.newCommentPattern != ''
+                  && this.state.newCommentPattern.length >= 10
+                  && /^\s+$/.test(this.state.newCommentPattern) === false
+                  && /^[^\s][^_\s]*$/.test(this.state.newCommentPattern) === true
+                  ? "" : "error"}>
+              <Textarea
+                placeholder={"{greetings}, {user_name}!\n\nСообщение, которое получит пользователь в комментариях при использовании команды."}
+                value={this.state.newCommentPattern}
+                onChange={(e) => this.setState({ newCommentPattern: e.target.value })}
+                disabled={this.state.newCommentButtonWorking}
+              />
+            </FormItem>
+            <FormItem>
+              <Button
+                size="m"
+                stretched
+                onClick={() => this.createComment()}
+                loading={this.state.newCommentButtonWorking}
+                disabled={
+                  this.state.newCommentTitle == "" || this.state.newCommentPattern == "" || this.state.newCommentCommand == ""
+                  ||
+                  this.state.newCommentTitle?.length == 0 || this.state.newCommentTitle?.length > 50 || this.state.newCommentCommand?.length == 0 || this.state.newCommentPattern?.length < 10
+                  ||
+                  this.state.newCommentButtonWorking
+                }
+              >
+                Создать шаблон
+              </Button>
+            </FormItem>
+          </FormLayout>
+        </ModalPage>
+
+        <ModalPage
+          id="comment-info"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton aria-label="Скрыть информацию" onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.openedComment.title}</ModalPageHeader>}
+          onClose={() => this.closeModal()}
+          settlingHeight={100}
+        >
+          <Group header={<Title level='3' style={{ marginLeft: "15px", marginTop: "15px" }}>Текст шаблона</Title>}>
+            <Div disabled style={{ whiteSpace: "pre-wrap" }}>
+              {this.state.openedComment.pattern}
+            </Div>
+          </Group>
+
+          <Group>
+            <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>
+              {this.state.openedComment?.id}
+            </MiniInfoCell>
+            <MiniInfoCell before={<Icon20MentionOutline />}>
+              {this.state.openedComment?.comand}
+            </MiniInfoCell>
+            <MiniInfoCell before={<Icon20UserOutline />}>
+              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
+            </MiniInfoCell>
+            <MiniInfoCell before={<Icon20CalendarOutline />}>
+              {this.state.openedComment?.creat?.time?.label}
+            </MiniInfoCell>
+          </Group>
+
+          <Div style={{ width: "93%", marginTop: "10px" }}>
+            <Button size="m" mode="destructive" stretched onClick={() => this.delete(this.state.openedComment?.id)} loading={this.state?.deleteButtonLoading}>
+              Удалить
+            </Button>
+          </Div>
+        </ModalPage>
+      </ModalRoot>
+    );
+
+    return (
+      <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
+        <SplitLayout modal={modal}>
+          {this.props.isLoading ? <PanelSpinner /> :
+            <>
+              {this.state.isEnabled &&
+                <SplitCol>
+                  {this.state.listLoading ? <PanelSpinner /> :
+                    <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
+                      <Div style={{ maxWidth: 300 }}>
+                        <SegmentedControl
+                          size="m"
+                          name="filter"
+                          options={[
+                            {
+                              label: "Все",
+                              value: "all"
+                            },
+                            {
+                              label: "Мои",
+                              value: "my"
+                            }
+                          ]}
+                          style={{ height: "35px", padding: "5px" }}
+                          onChange={(value) => this.onFilterChange(value)}
+                          value={this.state.filter}
+                        />
+                      </Div>
+                      <List>
+                        {this.state.comments.length > 0 ?
+                          <>
+                            {this.state.comments.map((comment, idx) => (
+                              <Cell
+                                key={idx}
+                                description={comment.comand}
+                                before={<Icon28CommentOutline />}
+                                after={<Icon28InfoCircleOutline onClick={() => this.getCommentById(idx)} />}
+                                onClick={() => this.getCommentById(idx)}
+                              >
+                                {comment.title}
+                              </Cell>
+                            ))}
+                            {this.state.availability.limit ?
+                              <Footer>
+                                Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["комментарий", "комментария", "комментариев"])}
+                              </Footer>
+                              : ""}
+                            {!this.state.availability.creat &&
+                              <Footer>
+                                Достигнут лимит шаблонов комментариев. Оплатите подписку VK Donut или удалите ненужные шаблоны, чтобы создать больше.
+                              </Footer>
+                            }
+                            {this.state.availability.creat &&
+                              <div>
+                                <Spacing size={20} separator />
+                                <CellButton
+                                  before={<Icon24AddCircleDottedOutline />}
+                                  onClick={() => this.setState({ activeModal: "create-comment" })}
+                                >
+                                  Создать шаблон
+                                </CellButton>
+                              </div>
+                            }
+                          </>
+                          :
+                          <Placeholder
+                            action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
+                          >
+                            В этом сообществе ещё нет ни одного шаблона комментария.
+                          </Placeholder>
+                        }
+                      </List>
+                    </PullToRefresh>
+
+                  }
+                </SplitCol>
+              }
+              {!this.state.isEnabled &&
+                <Placeholder
+                  icon={<Icon56CommentsOutline />}
+                  action={<Button size="m" onClick={() => this.props.go("settings")}>Перейти в настройки</Button>}
+                >
+                  Вам нужно включить Комментарии в Настройках, чтобы использовать этот раздел.
+                </Placeholder>
+              }
+            </>
+          }
+          {this.state.snackbar}
+        </SplitLayout>
+      </ConfigProvider>
+    )
+  }
+}

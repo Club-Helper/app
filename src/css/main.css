@@ -1,0 +1,325 @@
+/*******************************************************
+* Авторское право (C) 2021-2022 Club Helper
+*
+* Этот файл является частью мини-приложения Club Helper, размещенного
+* в сети Интернет по адресу https://www.vk.com/app7938346
+*
+* Несанкционированное копирование, инженерный анализ, передача,
+* публичная демонстрация, распространение кода приложения запрещены
+*******************************************************/
+
+body {
+  margin: 0;
+}
+
+.clubHelper--TextLoad {
+  height: 10px;
+  border-radius: 100px;
+  background-color: rgba(0, 28, 61, .08);
+  display: block;
+  width: 150px;
+  margin: 0;
+}
+
+.clubHelper--gridContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 5px;
+}
+
+.vkuiSwitch__self:not([disabled])+.vkuiSwitch__pseudo {
+  cursor: pointer;
+}
+
+.vkuiTitle,
+.vkuiText,
+.vkuiFooter,
+.vkuiGallery__slide {
+  cursor: default;
+}
+
+.vkuiTappable:not([disabled]) * {
+  cursor: inherit;
+}
+
+.vkuiFooter.clubHelper--supportInfoFooter {
+  margin-top: 50px;
+  margin-bottom: 0;
+  opacity: .4;
+}
+
+.vkuiFooter.vkuiCaption--vkcom.clubHelper--supportInfoFooter {
+  font-size: inherit;
+  margin-top: 0;
+  opacity: 1;
+}
+
+.clubHelper--dountIcon {
+  position: absolute;
+  user-select: none;
+  right: 0;
+  bottom: -7px;
+}
+
+.clubHelper--dountIcon--vkcom.clubHelper--dountIcon {
+  right: -7px;
+}
+
+.clubHelper--switchDisabled .SimpleCell__content:after {
+  content: 'Эта возможность заблокирована командой Club Helper';
+  display: block;
+  font-size: 12px;
+  color: #818c99;
+}
+
+.clubHelper--systemMessage {
+  text-align: center;
+  margin: 20px 0 30px;
+}
+
+.clubHelper--systemMessage .vkuiLink {
+  color: inherit;
+  font-weight: 700;
+}
+
+.clubHelper--systemMessage.no--last {
+  margin-bottom: 0;
+}
+
+.clubHelper--systemMessage.no--last+.clubHelper--systemMessage {
+  margin-top: 10px;
+}
+
+.clubHelper--clubMessage,
+.clubHelper--userMessage {
+  display: flex;
+}
+
+.clubHelper--mobile .clubHelper--clubMessage,
+.clubHelper--mobile .clubHelper--userMessage {
+  padding: 0 10px;
+}
+
+.clubHelper--clubMessage .clubHelper--contentMessage {
+  margin-left: auto;
+}
+
+.clubHelper--contentMessage {
+  position: relative;
+  max-width: 90%;
+  display: inline-flex;
+  align-items: flex-end;
+  grid-gap: 15px;
+  margin: 10px 0;
+  --sizePhoto: 35px;
+}
+
+.clubHelper--mobile .clubHelper--contentMessage {
+  --sizePhoto: 25px;
+  max-width: calc(100% - var(--sizePhoto));
+  grid-gap: 10px;
+}
+
+.clubHelper--contentMessage.no--last {
+  margin-bottom: 0;
+}
+
+.clubHelper--contentMessage .clubHelper--photoMessage {
+  border-radius: 50%;
+  display: block;
+  position: sticky;
+  bottom: 10px;
+  margin-bottom: 15px;
+  min-width: var(--sizePhoto);
+  min-height: var(--sizePhoto);
+  height: var(--sizePhoto);
+  width: var(--sizePhoto);
+  border: 1px solid rgb(0 0 0 / 8%);
+}
+
+.clubHelper--contentMessage.no--last .clubHelper--photoMessage {
+  visibility: hidden;
+}
+
+.clubHelper--contentMessage .clubHelper--textContentMessage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
+  padding: 10px 15px;
+  border-radius: 20px;
+  position: relative;
+  font-size: 14px;
+  white-space: pre-wrap;
+  background-color: #DEDEE3;
+  color: var(--text_primary);
+}
+
+body[scheme="space_gray"] .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
+  background-color: #26252a;
+}
+
+.clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
+  background-color: #007aff;
+  color: #fff;
+}
+
+body[scheme="space_gray"] .clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
+  background-color: #4e92f7;
+}
+
+.clubHelper--contentMessage .clubHelper--textContentMessage.no--background .clubHelper--textMessage,
+body[scheme="space_gray"] .clubHelper--contentMessage .clubHelper--textContentMessage.no--background .clubHelper--textMessage {
+  background-color: transparent;
+  padding: 10px 0 0;
+}
+
+.clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage:after {
+  content: '';
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  bottom: 4px;
+}
+
+.clubHelper--contentMessage.no--last .clubHelper--textContentMessage .clubHelper--textMessage:after {
+  display: none;
+}
+
+.clubHelper--userMessage .clubHelper--contentMessage .clubHelper--textContentMessage:not(.no--background) .clubHelper--textMessage:after {
+  background-image: url(/src/img/svg/message/gray.svg);
+  left: -5px;
+}
+
+body[scheme="space_gray"] .clubHelper--userMessage .clubHelper--contentMessage .clubHelper--textContentMessage:not(.no--background) .clubHelper--textMessage:after {
+  background-image: url(/src/img/svg/message/gray_black.svg);
+}
+
+.clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage:not(.no--background) .clubHelper--textMessage:after {
+  background-image: url(/src/img/svg/message/blue.svg);
+  right: -5px;
+}
+
+body[scheme="space_gray"] .clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage:not(.no--background) .clubHelper--textMessage:after {
+  background-image: url(/src/img/svg/message/blue_black.svg);
+}
+
+.clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--grayText {
+  opacity: .5;
+}
+
+.clubHelper--userMessage .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--grayText {
+  margin-right: auto;
+  margin-left: 10px;
+}
+
+.clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--grayText {
+  margin-right: 10px;
+  margin-left: auto;
+}
+
+.clubHelper--statusTiсket {
+  padding-left: 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.clubHelper--statusTiсket:before {
+  width: 10px;
+  height: 10px;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  content: '';
+  background-color: #99a2ad;
+  position: absolute;
+}
+
+.clubHelper--statusTiсket.clubHelper--statusTiсket--green:before {
+  background-color: #32b332;
+}
+
+.clubHelper--statusTiсket.clubHelper--statusTiсket--red:before {
+  background-color: #ff3347;
+}
+
+.clubHelper--statusTiсket.clubHelper--statusTiсket--yellow:before {
+  background-color: #ffa000;
+}
+
+.clubHelper--headerTiсket {
+  display: flex;
+  justify-content: space-between;
+}
+
+.clubHelper--desktop .clubHelper--headerTiсket {
+  margin: 16px;
+}
+
+.clubHelper--mobile .clubHelper--headerTiсket {
+  padding: 10px 0 20px;
+  margin: 0 15px;
+}
+
+.clubHelper--buttonChatTiсket {
+  margin: 0 15px 20px;
+}
+
+.clubHelper--buttonChatTiсket.fixed {
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 100px;
+}
+
+.clubHelper--headerTiсketButton {
+  margin: 0 15px;
+}
+
+.clubHelper--headerTiсketButton button {
+  margin-right: 10px;
+}
+
+.clubHelper--ticketSee--content {
+  margin: 0 15px;
+}
+
+.clubHelper--desktop .clubHelper--ticketSee--content {
+  padding-left: 60px;
+}
+
+.clubHelper--mobile .clubHelper--ticketSee--content {
+  padding-top: 10px;
+}
+
+.clubHelper--ticketSee--content .clubHelper--grayText {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ebedf0;
+  border-radius: 10px;
+}
+
+body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText {
+  background-color: #454647;
+  color: #fff !important;
+}
+
+.clubHelper--helloMessageSend {
+  text-align: center;
+}
+
+.clubHelper--helloMessageSend .clubHelper--grayText {
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.clubHelper--imageMessage {
+  max-width: 300px;
+  display: block;
+  border-radius: 10px;
+  margin-top: 10px;
+}

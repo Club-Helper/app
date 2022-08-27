@@ -1,0 +1,33 @@
+/*******************************************************
+ * Авторское право (C) 2021-2022 Club Helper
+ *
+ * Этот файл является частью мини-приложения Club Helper, размещенного
+ * в сети Интернет по адресу https://www.vk.com/app7938346
+ *
+ * Несанкционированное копирование, инженерный анализ, передача,
+ * публичная демонстрация, распространение кода приложения запрещены
+ *******************************************************/
+
+.clubHelper--ticketSee--content {
+    margin: 5px 20px;
+}
+
+.clubHelper--desktop .clubHelper--ticketSee--content {
+    padding-left: 60px;
+}
+
+.clubHelper--mobile .clubHelper--ticketSee--content {
+    padding-top: 10px;
+}
+
+.clubHelper--ticketSee--content .clubHelper--grayText {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #ebedf0;
+    border-radius: 10px;
+}
+
+body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText {
+    background-color: #454647;
+    color: #fff !important;
+}
