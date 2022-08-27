@@ -18,6 +18,10 @@ export default class AppInfo extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    this.props.setLoading(false);
+  }
+
   render() {
     return (
       <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
