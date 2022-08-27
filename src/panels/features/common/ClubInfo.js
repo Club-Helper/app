@@ -1,3 +1,13 @@
+/*******************************************************
+ * Авторское право (C) 2021-2022 Club Helper
+ *
+ * Этот файл является частью мини-приложения Club Helper, размещенного
+ * в сети Интернет по адресу https://www.vk.com/app7938346
+ *
+ * Несанкционированное копирование, инженерный анализ, передача,
+ * публичная демонстрация, распространение кода приложения запрещены
+ *******************************************************/
+
 import {
   ConfigProvider,
   Gradient,
@@ -65,43 +75,43 @@ export default class ClubInfo extends Component {
 
   getManagers() {
     this.setState({ isManagersLoading: true });
-    fetch("https://ch.n1rwana.ml/api/clubs.getManagers?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ managers: data.response, isManagersLoading: false });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      });
+
+    this.props.req("clubs.getManagers", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ managers: data.response, isManagersLoading: false });
+      }
+    )
   }
 
   getStats() {
     this.setState({ isStatsLoading: true });
-    fetch("https://ch.n1rwana.ml/api/clubs.getStats?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ stats: data.response, isStatsLoading: false })
-          this.props.setLoading(false);
-        } else {
-          this.setState({ isStatsHidden: true });
-          this.props.createError(data.error.error_msg);
-        }
-      });
+
+    this.props.req("clubs.getStats", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ stats: data.response, isStatsLoading: false })
+        this.props.setLoading(false);
+      },
+      (error) => {
+        this.setState({ isStatsHidden: true });
+        this.props.createError(error.error.error_msg);
+      }
+    )
   }
 
   getClub() {
     this.setState({ isClubLoading: true });
-    fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ club: data.response, isClubLoading: false });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
+
+    this.props.req("clubs.get", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ club: data.response, isClubLoading: false });
+      }
+    )
   }
 
   update() {
@@ -149,22 +159,16 @@ export default class ClubInfo extends Component {
       bridge
         .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(this.state.club.id), "scope": "messages,manage,app_widget"})
         .then(data => {
-          fetch("https://ch.n1rwana.ml/api/utils.setToken", {
-            method: "POST",
-            body: JSON.stringify({
-              access_token: data.access_token,
-              token: this.props.token
-            })})
-            .then(response => response.json())
-            .then(data => {
-                if (!data.error) {
-                  this.props.setStartupError(null);
-                  this.props.setActiveStory("tickets_list");
-                } else {
-                  this.props.createError(data.error.error_msg);
-                }
-              })
-            this.setState({ autofixBtnWorking: false });
+          this.props.req("utils.setToken", {
+            access_token: data.access_token,
+            token: this.props.token
+          },
+            (data) => {
+              this.props.setStartupError(null);
+              this.props.setActiveStory("tickets_list");
+            }
+          );
+          this.setState({ autofixBtnWorking: false });
           }
         )
         .catch(error => {
@@ -174,30 +178,28 @@ export default class ClubInfo extends Component {
       return true;
     } else if (this.state.club.status === 5003) {
       this.setState({ autofixBtnWorking: true });
-      fetch("https://ch.n1rwana.ml/api/utils.callbackAdd?token=" + this.props.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.error) {
-            this.props.setStartupError(null);
-            this.props.setActiveStory("tickets_list");
-          } else {
-            this.props.createError(data.error.error_msg);
-            this.setState({ autofixBtnWorking: false });
-          }
-        })
+
+      this.props.req("utils.callbackAdd", {
+        token: this.props.token
+      },
+        (data) => {
+          this.props.setStartupError(null);
+          this.props.setActiveStory("tickets_list");
+        }
+      );
+      this.setState({ autofixBtnWorking: false });
     } else if (this.state.club.status === 5006) {
       this.setState({autofixBtnWorking: true});
-      fetch("https://ch.n1rwana.ml/api/utils.callbackSetting?token=" + this.props.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.error) {
-            this.props.setStartupError(null);
-            this.props.setActiveStory("tickets_list");
-          } else {
-            this.props.createError(data.error.error_msg);
-            this.setState({autofixBtnWorking: false});
-          }
-        })
+
+      this.props.req("utils.callbackSetting", {
+        token: this.props.token
+      },
+        (data) => {
+          this.props.setStartupError(null);
+          this.props.setActiveStory("tickets_list");
+        }
+      );
+      this.setState({autofixBtnWorking: false});
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
@@ -211,8 +213,6 @@ export default class ClubInfo extends Component {
 
   render() {
     const club = this.props.club;
-    // const managers = this.getManagers(this.props.club.managers);
-    // const _managers = Object.entries(this.props.club.managers);
 
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>

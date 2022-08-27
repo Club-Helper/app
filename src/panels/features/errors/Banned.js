@@ -36,13 +36,13 @@ export default class Banned extends Component {
               onClose={() => this.setState({ activeModal: "" })}
             >
               <Cell
-                before={<Avatar size={48} src={this.state.ban.reason.content.block.photo} />}
-                description={this.state.ban.reason.content.block.time}
+                before={<Avatar size={48} src={this.state.ban.reason.content.snippet.photo} />}
+                description={this.state.ban.reason.content.snippet.time}
                 disabled
               >
-                {this.state.ban.reason.content.block.title}
+                {this.state.ban.reason.content.snippet.title}
               </Cell>
-              <Div>{this.state.ban.reason.content.block.text}</Div>
+              <Div>{this.state.ban.reason.content.snippet.text}</Div>
             </ModalPage>
 
             <ModalPage
@@ -78,33 +78,40 @@ export default class Banned extends Component {
     this.setState({ club_role: params.vk_viewer_group_role })
   }
 
+  qParams(i) {
+    const searchParams = new URLSearchParams(window.location.search);
+    let obj = i;
+
+    for (const [key, value] of searchParams.entries()) {
+      //console.log(`${key}, ${value}`);
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   handleAnswerSelect(e) {
-    fetch("https://ch.n1rwana.ml/api/blocked.question" + window.location.search + "&question=" + e.target.name + "&answer=" + e.target.value)
-      .then(response => response.json())
-      .then(data => {
-        if (data.response) {
-          if (!data.response.solution) {
-            this.setState({ questions: [...this.state.questions, data.response] });
-            console.log(this.state.answers);
-          } else {
-            this.setState({ solution: data.response.solution });
-          }
+    this.props.req("blocked.question", this.qParams({
+      question: e.target.name,
+      answer: e.target.value
+    }),
+      (data) => {
+        if (!data.response.solution) {
+          this.setState({ questions: [...this.state.questions, data.response] });
+          console.log(this.state.answers);
         } else {
-          console.error("Error");
+          this.setState({ solution: data.response.solution });
         }
-      })
+      }
+    )
   }
 
   handleUnbanButton() {
-    fetch("https://ch.n1rwana.ml/api/blocked.unlock" + window.location.search)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ activeModal: "unbanned" });
-        } else {
-          this.setState({ activeModal: "error" });
-        }
-      })
+    this.props.req("blocked.unlock", this.qParams({}), () => {
+      this.setState({ activeModal: "unbanned" });
+    }, () => {
+      this.setState({ activeModal: "error" });
+    });
   }
 
   render() {
@@ -159,13 +166,13 @@ export default class Banned extends Component {
                           :
                           <>
                             <Cell
-                              before={<Avatar size={48} src={this.state.ban.reason.content.block.photo} />}
-                              description={this.state.ban.reason.content.block.time}
+                              before={<Avatar size={48} src={this.state.ban.reason.content.snippet.photo} />}
+                              description={this.state.ban.reason.content.snippet.time}
                               disabled
                             >
-                              {this.state.ban.reason.content.block.title}
+                              {this.state.ban.reason.content.snippet.title}
                             </Cell>
-                            <Div>{this.state.ban.reason.content.block.text}</Div>
+                            <Div>{this.state.ban.reason.content.snippet.text}</Div>
                           </>
                         }
                       </Cell>

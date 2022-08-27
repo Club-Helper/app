@@ -454,6 +454,25 @@ function Home({
     return string.replaceAll(regex, '<a href="$1" target="_blank" style="color: #2688eb; text-decoration: none;">$2</a>');
   }
 
+  const req = (method, body, callback, onError) => {
+    fetch(`https://ch.n1rwana.ml/api/${method}`, {
+      method: "POST",
+      body: JSON.stringify(body)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.error && !data.response.error) {
+          callback(data);
+        } else {
+          if (!onError) {
+            createError(data.error.error_msg || data.response.error);
+          } else {
+            onError(data);
+          }
+        }
+      })
+  }
+
   if (/^\#mark-ticket\/(0|[1-9][0-9]*)$/.test(window.location.hash)) {
     return (
       <View
@@ -543,6 +562,7 @@ function Home({
                           commentsState={commentsState}
                           setCommentsState={setCommentsState}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -571,6 +591,7 @@ function Home({
                           linksState={linksState}
                           setLinksState={setLinksState}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -597,6 +618,7 @@ function Home({
                           isLoading={isLoading}
                           setLoading={setLoading}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -625,6 +647,7 @@ function Home({
                           mailingState={mailingState}
                           setMailingState={setMailingState}
                           declOfNum={declOfNum}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -654,6 +677,7 @@ function Home({
                           linksState={linksState}
                           setLinksState={setLinksState}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
 
@@ -682,6 +706,7 @@ function Home({
                           setPopout={setPopout}
                           platform={platform}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -728,6 +753,7 @@ function Home({
                           setAppearance={setAppearance}
                           serialize={serialize}
                           createError={createError}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -763,6 +789,7 @@ function Home({
                           setCookie={setCookie}
                           getCookie={getCookie}
                           generateRefSourceString={generateRefSourceString}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -795,6 +822,7 @@ function Home({
                           generateRandomString={generateRandomString}
                           generateRandomInt={generateRandomInt}
                           generateRefSourceString={generateRefSourceString}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -844,6 +872,7 @@ function Home({
                           setPopout={setPopout}
                           group_id={group_id}
                           appearance={appearance}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -881,6 +910,7 @@ function Home({
                           setStartupError={setStartupError}
                           generateRefSourceString={generateRefSourceString}
                           setActiveStory={setActiveStory}
+                          req={req}
                         />
                       </Panel>
                     </View>
@@ -979,6 +1009,7 @@ function Home({
                     appearance={appearance}
                     setPage={setPage}
                     lastClubID={lastClubID}
+                    req={req}
                   />
                 </Panel>
               </View>
@@ -1006,6 +1037,7 @@ function Home({
                     activeStory={activeStory}
                     appearance={appearance}
                     setPage={setPage}
+                    req={req}
                   />
                 </Panel>
               </View>;
@@ -1054,7 +1086,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office setPopout={setPopout} office={office} />
+                          <Office setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
@@ -1063,7 +1095,7 @@ function Home({
                         activePanel='office-clubs'
                       >
                         <Panel id='office-clubs'>
-                          <Clubs setPopout={setPopout} office={office} formatRole={formatRole} />
+                          <Clubs setPopout={setPopout} office={office} formatRole={formatRole} req={req} />
                         </Panel>
                       </View>
 
@@ -1080,6 +1112,7 @@ function Home({
                             token={token}
                             updateOffice={updateOffice}
                             createError={createError}
+                            req={req}
                           />
                         </Panel>
                       </View>
@@ -1203,6 +1236,7 @@ function Home({
                           parseLinks={parseLinks}
                           createError={createError}
                           formatRole={formatRole}
+                          req={req}
                         />
                       </View>
 
@@ -1218,6 +1252,7 @@ function Home({
                             token={token}
                             updateMailings={updateCCMailings}
                             createError={createError}
+                            req={req}
                           />
                         </Panel>
                       </View>
@@ -1290,7 +1325,7 @@ function Home({
             id="banned"
             activePanel="banned"
           >
-            <Banned id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
+            <Banned req={req} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
           </View>
         )
       }
@@ -1304,7 +1339,7 @@ function Home({
           <Panel
             id='sign_error'
           >
-            <SignError isMobile={isMobile} appearance={appearance} platform={platform} />
+            <SignError req={req} isMobile={isMobile} appearance={appearance} platform={platform} />
           </Panel>
         </View>
       )

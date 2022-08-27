@@ -1,3 +1,13 @@
+/*******************************************************
+ * Авторское право (C) 2021-2022 Club Helper
+ *
+ * Этот файл является частью мини-приложения Club Helper, размещенного
+ * в сети Интернет по адресу https://www.vk.com/app7938346
+ *
+ * Несанкционированное копирование, инженерный анализ, передача,
+ * публичная демонстрация, распространение кода приложения запрещены
+ *******************************************************/
+
 import React, { Component } from 'react'
 import { ConfigProvider, Group, Panel, PanelSpinner, SplitCol, SplitLayout, Avatar, Gradient, Title, Text, List, SimpleCell, Link } from '@vkontakte/vkui'
 import { Icon24ShareOutline, Icon24Users3Outline, Icon24BugOutline } from '@vkontakte/icons';

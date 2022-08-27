@@ -85,22 +85,30 @@ export default class Settings extends Component {
     this.setState({ helloText: e.target.value });
   }
 
+  qParams(i, s) {
+    const searchParams = new URLSearchParams(s);
+    let obj = i;
+
+    for (const [key, value] of searchParams.entries()) {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   handleSaveButton() {
     this.setState({ saveButtonDisabled: true, saveButtonLoading: true });
 
-    fetch("https://ch.n1rwana.ml/api/clubs.setSetting?token=" + this.props.token + "&" + this.props.serialize(this.state.changes))
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
-          this.props.isEmbedded && this.props.close();
-          this.props.settingsWasChanged();
-        } else {
-          this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
-          this.props.isEmbedded && this.props.close();
-          this.props.createError(data.error.error_msg);
-        }
-      })
+    this.props.req("clubs.setSetting", this.qParams({token: this.props.token}, this.props.serialize(this.state.changes)), (data) => {
+      this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
+      this.props.isEmbedded && this.props.close();
+      this.props.isEmbedded && this.props.settingsWasChanged();
+    },
+      (error) => {
+        this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
+        this.props.isEmbedded && this.props.close();
+        this.props.createError(error.error.error_msg);
+    })
   }
 
   componentDidMount() {

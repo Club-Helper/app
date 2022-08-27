@@ -72,31 +72,34 @@ export default class TicketsList extends Component {
   getTickets(filter, needLoading) {
     needLoading ? this.setState({ ticketsLoading: true }) : this.setState({ fetching: true });
     let timeout = setTimeout(() => this.props.setPopout(<ScreenSpinner />), 10000);
-    fetch("https://ch.n1rwana.ml/api/tickets.get?token=" + this.props.token + "&filter=" + filter)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
-        } else {
-          this.setState({ isEnabled: false });
-        }
-        this.props.setPopout(null);
-        clearTimeout(timeout);
-        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
+
+    this.props.req("tickets.get", {
+      token: this.props.token,
+      filter: filter
+    },
+      (data) => {
+        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+      },
+      (error) => {
+        this.setState({ isEnabled: false });
       }
-      )
+    );
+
+    this.props.setPopout(null);
+    clearTimeout(timeout);
+    needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
   }
 
   performAction(id, action) {
-    fetch("https://ch.n1rwana.ml/api/ticket.action?id=" + id + "&action=" + action + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error && !data.response.error) {
-          this.closeTicketButtonsModal();
-        } else {
-          this.props.createError(data.error.error_msg || data.response.error);
+    this.props.req("ticket.action", {
+      id: id,
+      action: action,
+      token: this.props.token
+    },
+      (data) => {
+        this.closeTicketButtonsModal();
       }
-    })
+    );
   }
 
   onRefresh() {
@@ -105,19 +108,22 @@ export default class TicketsList extends Component {
 
   componentDidMount() {
     this.setState({ ticketsLoading: true });
-    fetch("https://ch.n1rwana.ml/api/tickets.get?token=" + this.props.token + "&filter=" + this.state.activeTab)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
-        } else {
-          this.setState({ isEnabled: false });
-        }
-        this.props.setLoading(false);
-        this.setState({ ticketsLoading: false });
-        this.props.setPopout(null);
+    this.props.req("tickets.get", {
+        token: this.props.token,
+        filter: this.state.activeTab
+    },
+      (data) => {
+        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+      },
+      (error) => {
+        this.setState({ isEnabled: false });
       }
-      )
+    );
+
+    this.props.setLoading(false);
+    this.setState({ ticketsLoading: false });
+    this.props.setPopout(null);
+
     this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
   }
 

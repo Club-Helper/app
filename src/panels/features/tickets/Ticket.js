@@ -61,17 +61,20 @@ export default class TicketsList extends Component {
 
   updateTicket() {
     this.setState({ fetchingHeader: true });
-    fetch("https://ch.n1rwana.ml/api/ticket.needUpdate?id=" + this.props.ticket.id + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
+    req("ticket.needUpdate", {
+      id: this.props.ticket.id,
+      token: this.props.token
+    },
+      (data) => {
         this.setState(
           {
             ticketStatus: data.response.status,
             ticketOptions: data.response.options,
             ticketHistory: data.response.history.items,
             fetchingHeader: false
-          })
-      });
+          });
+      }
+    );
   }
 
   handleOptionClick(actionName) {
@@ -89,68 +92,71 @@ export default class TicketsList extends Component {
   }
 
   mailingInviteSend(id) {
-    fetch(`https://ch.n1rwana.ml/api/ticket.action?id=${this.state.ticket.id}&action=mailing&mailing=${id}&token=${this.props.token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Приглашение отправлено
-              </Snackbar>
-            ),
-            activeModal: ""
-          });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
+    this.props.req("ticket.action", {
+      id: this.state.ticket.id,
+      action: "mailing",
+      mailing: id,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Приглашение отправлено
+            </Snackbar>
+          ),
+          activeModal: ""
+        });
+      }
+    );
   }
 
   sendHelloMsg() {
-    fetch(`https://ch.n1rwana.ml/api/ticket.action?id=${this.state.ticket.id}&action=hello&token=${this.props.token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Сообщение отправлено
-              </Snackbar>
-            ),
-            activeModal: ""
-          });
-          this.updateTicket();
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
+    this.props.req("ticket.action", {
+      id: this.state.ticket.id,
+      action: "hello",
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Сообщение отправлено
+            </Snackbar>
+          ),
+          activeModal: ""
+        });
+        this.updateTicket();
+      }
+    );
   }
 
   componentDidMount() {
-    fetch("https://ch.n1rwana.ml/api/ticket.get?id=" + this.props.ticket.id + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
+    this.props.req("ticket.get", {
+      id: this.props.ticket.id,
+      token: this.props.token
+    },
+      (data) => {
         let color;
         switch (data.response.status.color) {
           case "green":
@@ -185,7 +191,8 @@ export default class TicketsList extends Component {
         if (data.response.history.items.length <= 2) {
           this.setState({ activeModal: "send-hello-msg" });
         }
-      });
+      }
+    );
 
     this.props.setPopout(null);
     this.interval = setInterval(() => this.updateTicket(), 5000)

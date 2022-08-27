@@ -121,29 +121,28 @@ export default class Links extends Component {
    */
   deleteLink(id) {
     this.setState({ deleteButtonLoading: true })
-    fetch("https://ch.n1rwana.ml/api/links.delite?id=" + id + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          this.props.createError(data.error.error_msg)
-        } else {
-          this.setState({ activeModal: null })
-          fetch("https://ch.n1rwana.ml/api/links.get?token=" + this.props.token)
-            .then(response => response.json())
-            .then(data => {
-              if (!data.error) {
-                this.setState({ links: data.response.items, count: data.response.count, isEnabled: true, deleteButtonLoading: false, availability: data.response.availability })
-                this.props.setPopout(null);
-              } else {
-                this.props.createError(data.error.error_msg);
-                this.setState({ isEnabled: false, deleteButtonLoading: false });
-                this.props.setPopout(null);
-              }
-            }
-            )
-          return true;
-        }
-      });
+    this.props.req("links.delete", {
+      id: id,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ activeModal: null });
+        this.props.req("links.get", {
+          token: this.props.token
+        },
+          (data) => {
+            this.setState({ links: data.response.items, count: data.response.count, isEnabled: true, deleteButtonLoading: false, availability: data.response.availability })
+            this.props.setPopout(null);
+            return true;
+          },
+          (error) => {
+            this.props.createError(error.error.error_msg);
+            this.setState({ isEnabled: false, deleteButtonLoading: false });
+            this.props.setPopout(null);
+          }
+        )
+      }
+    )
   }
 
   /**
@@ -176,11 +175,15 @@ export default class Links extends Component {
 
   getLinks(filter) {
     this.setState({ linksLoading: true });
-    fetch("https://ch.n1rwana.ml/api/links.get?token=" + this.props.token + "&filter=" + filter)
-      .then(response => response.json())
-      .then(data => {
+
+    this.props.req("links.get", {
+      token: this.props.token,
+      filter: filter
+    },
+      (data) => {
         this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false })
-      })
+      }
+    )
   }
 
   updateNewLinkTitle(e) {
@@ -205,28 +208,28 @@ export default class Links extends Component {
         this.props.createError("Шаблон сообщения не может содержать меньше 10 символов")
       } else {
         this.setState({ buttonLoading: true })
-        fetch("https://ch.n1rwana.ml/api/links.creat", {
-          method: "POST",
-          body: JSON.stringify({
-            "title": decodeURI(this.state.title),
-            "pattern": decodeURI(this.state.pattern),
-            "token": this.props.token
-          })
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.error) {
-              this.setState({ buttonLoading: false })
-              this.props.createError(data.error.error_msg);
-            } else {
-              fetch("https://ch.n1rwana.ml/api/links.get?filter=my&token=" + this.props.token)
-                .then(response => response.json())
-                .then(data => {
-                  this.setState({ links: data.response.items, count: data.response.count, buttonLoading: false, availability: data.response.availability })
-                  this.closeModal();
-                })
-            }
-          })
+
+        this.props.req("links.creat", {
+          title: decodeURI(this.state.title),
+          pattern: decodeURI(this.state.pattern),
+          token: this.props.token
+        },
+          (data) => {
+            this.props.req("links.get", {
+              filter: this.state.filter,
+              token: this.props.token
+            },
+              (data) => {
+                this.setState({ links: data.response.items, count: data.response.count, buttonLoading: false, availability: data.response.availability })
+                this.closeModal();
+              }
+            )
+          },
+          (error) => {
+            this.setState({ buttonLoading: false })
+            this.props.createError(data.error.error_msg);
+          }
+        )
       }
     } else {
       this.props.createError("Одно из необходимых полей не передано");
@@ -248,18 +251,7 @@ export default class Links extends Component {
     this.props.setLoading(false);
     this.interval = setInterval(() => this.getLinks(this.state.filter), 60000);
 
-    fetch("https://ch.n1rwana.ml/api/links.get?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ links: data.response.items, count: data.response.count, isEnabled: true, availability: data.response.availability })
-        } else {
-          this.props.createError(data.error.error_msg);
-          this.setState({ isEnabled: false });
-        }
-
-        this.setState({ linksLoading: false });
-      })
+    this.getLinks("all");
   }
 
   onFilterChange(value) {

@@ -62,16 +62,16 @@ export default class MailingList extends Component {
 
   getMailing(reloadNeed) {
     reloadNeed && this.setState({ listLoading: true });
-    fetch("https://ch.n1rwana.ml/api/mailings.get?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ mailing: data.response, list: data.response.items, availability: data.response.availability });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-        reloadNeed && this.setState({ listLoading: false });
-      })
+
+    this.props.req("mailings.get", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ mailing: data.response, list: data.response.items, availability: data.response.availability });
+      }
+    )
+
+    reloadNeed && this.setState({ listLoading: false });
   }
 
   updateList({ from, to }, list) {
@@ -82,15 +82,14 @@ export default class MailingList extends Component {
   }
 
   remove(idx) {
-    fetch("https://ch.n1rwana.ml/api/mailings.delete?id=" + idx + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.getMailing(false);
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      });
+    this.props.req("mailings.delete", {
+      id: idx,
+      token: this.props.token
+    },
+      (data) => {
+        this.getMailing(false);
+      }
+    );
   }
 
   removeItem(idx) {
@@ -126,66 +125,17 @@ export default class MailingList extends Component {
   onFormSubmit() {
     if (this.state.formTitle.length >= 10 && this.state.formTitle.length <= 50) {
       this.setState({ formValidation: "", formWorking: true });
-      fetch("https://ch.n1rwana.ml/api/mailings.creat", {
-        method: "POST",
-        body: JSON.stringify({
-          title: this.state.formTitle,
-          description: this.state.formDescription,
-          token: this.props.token
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (!data.error) {
-            this.closeModal();
-            this.getMailing(true);
-            this.setState({
-              formWorking: false,
-              snackbar: (
-                <Snackbar
-                  onClose={() => this.setState({ snackbar: null })}
-                  before={
-                    <Avatar
-                      size={24}
-                      style={{ background: "var(--button_commerce_background)" }}
-                    >
-                      <Icon16Done fill="#FFF" width={14} height={14} />
-                    </Avatar>
-                  }
-                >
-                  Рассылка создана
-                </Snackbar>
-              )
-            });
-          } else {
-            this.closeModal();
-            this.setState({ formWorking: false });
-            this.props.createError(data.error.error_msg);
-          }
-        });
-    } else {
-      this.state.formTitle.length < 10 ? this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." }) : this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." })
-    }
-  }
 
-  getMailingUsers(id) {
-    fetch("https://ch.n1rwana.ml/api/mailings.getUsers?id=" + id + "&token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ openedItemUsers: data.response });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
-  }
-
-  doUnsubscribe(id) {
-    fetch(`https://ch.n1rwana.ml/api/mailings.cancellation?id=${id}&token=${this.props.token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
+      this.props.req("mailings.creat", {
+        title: this.state.formTitle,
+        description: this.state.formDescription,
+        token: this.props.token
+      },
+        (data) => {
+          this.closeModal();
+          this.getMailing(true);
           this.setState({
+            formWorking: false,
             snackbar: (
               <Snackbar
                 onClose={() => this.setState({ snackbar: null })}
@@ -198,15 +148,59 @@ export default class MailingList extends Component {
                   </Avatar>
                 }
               >
-                Пользователь отписан от рассылки.
+                Рассылка создана
               </Snackbar>
             )
           });
-          this.getMailingUsers(this.state.openedItem?.id);
-        } else {
-          this.props.createError(data.error.error_msg);
+        },
+        (error) => {
+          this.closeModal();
+          this.setState({ formWorking: false });
+          this.props.createError(error.error.error_msg);
         }
-      })
+      )
+    } else {
+      this.state.formTitle.length < 10 ? this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." }) : this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." })
+    }
+  }
+
+  getMailingUsers(id) {
+    this.props.req("mailings.getUsers", {
+      id: id,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ openedItemUsers: data.response });
+      }
+    )
+  }
+
+  doUnsubscribe(id) {
+    this.props.req("mailings.cancellation", {
+      id: id,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Пользователь отписан от рассылки.
+            </Snackbar>
+          )
+        });
+        this.getMailingUsers(this.state.openedItem?.id);
+      }
+    )
   }
 
   unsubscribe(id) {
@@ -235,41 +229,36 @@ export default class MailingList extends Component {
 
   sendMailing() {
     this.setState({ sendBtnWorking: true });
-    fetch("https://ch.n1rwana.ml/api/mailings.send", {
-      method: "POST",
-      body: JSON.stringify({
-        id: this.state.openedItem.id,
-        message: this.state.mailingText,
-        token: this.props.token
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Рассылка отправлена подписанным пользователям.
-              </Snackbar>
-            ),
-            activeModal: "",
-            mailingText: ""
-          });
-        } else {
-         this.props.createError(data.error.error_msg);
-        }
-        this.setState({ sendBtnWorking: false });
-      })
+
+    this.props.req("mailings.send", {
+      id: this.state.openedItem.id,
+      message: this.state.mailingText,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Рассылка отправлена подписанным пользователям.
+            </Snackbar>
+          ),
+          activeModal: "",
+          mailingText: ""
+        });
+      }
+    );
+
+    this.setState({ sendBtnWorking: false });
   }
 
   toggleEditMode() {
@@ -278,44 +267,39 @@ export default class MailingList extends Component {
 
   save() {
     this.setState({ mailingEditSaveButtonWorking: true });
-    fetch("https://ch.n1rwana.ml/api/mailings.edit", {
-      method: "POST",
-      body: JSON.stringify({
-        id: this.state.openedItem.id,
-        title: this.state.mailingEditTitle,
-        description: this.state.mailingEditDescription,
-        token: this.props.token
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({
-            mailingEditTitle: "",
-            mailingEditDescription: "",
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Изменения сохранены.
-              </Snackbar>
-            ),
-            activeModal: ""
-          });
-          this.getMailing();
-          this.toggleEditMode();
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
+
+    this.props.req("mailings.edit", {
+      id: this.state.openedItem.id,
+      title: this.state.mailingEditTitle,
+      description: this.state.mailingEditDescription,
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({
+          mailingEditTitle: "",
+          mailingEditDescription: "",
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Изменения сохранены.
+            </Snackbar>
+          ),
+          activeModal: ""
+        });
+        this.getMailing();
+        this.toggleEditMode();
+      }
+    );
+
     this.setState({ mailingEditSaveButtonWorking: false });
   }
 

@@ -29,15 +29,13 @@ export default class TicketActions extends Component {
   }
 
   getMailing() {
-    fetch("https://ch.n1rwana.ml/api/mailings.get?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.setState({ mailingList: data.response.items, modalLoading: false });
-        } else {
-          this.props.createError(data.error.error_msg)
-        }
-      })
+    this.props.req("mailings.get", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ mailingList: data.response.items, modalLoading: false });
+      }
+    );
   }
 
   handleClick(id) {
