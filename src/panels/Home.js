@@ -15,7 +15,6 @@ import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, 
 import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
-import Dount from '../img/donut.png'
 import Donut from './features/landings/Donut';
 
 import AppInfo from './features/common/AppInfo';
@@ -44,6 +43,8 @@ import Clubs from './features/office/Clubs';
 import Mailings from './features/office/Mailings';
 import ClubCard from './features/office/Club';
 import ClubCardMailings from './features/office/ClubCardMailings';
+
+import DonutIcon from '../img/donut.png'
 
 function Home({
   id,
@@ -820,8 +821,7 @@ function Home({
                       <Panel
                         id='app_info'
                       >
-                        <PanelHeader>Информация о приложении</PanelHeader>
-                        <AppInfo platform={platform} setPopout={setPopout} appearance={appearance} />
+                        <AppInfo platform={platform} setPopout={setPopout} appearance={appearance} isDesktop={isDesktop} />
                       </Panel>
                     </View>
 
@@ -901,7 +901,7 @@ function Home({
                                   size={28}
                                   src={club.photo}
                                   onClick={() => go("club_info")}
-                                  badge={donutStatus ? <img src={Dount} style={{
+                                  badge={donutStatus ? <img src={DonutIcon} style={{
                                     width: '14px',
                                     height: '14px'
                                   }} /> : ""}
@@ -947,7 +947,7 @@ function Home({
                       </Group>
 
                       <Footer onClick={() => go("app_info")}>
-                        1.0.0
+                        v1.0.0-beta
                       </Footer>
                     </Panel>
                   </SplitCol>
@@ -1100,7 +1100,7 @@ function Home({
                                     size={28}
                                     src={office.user.photo}
                                     onClick={() => go("club_info")}
-                                    badge={donutStatus ? <img src={Dount} style={{
+                                    badge={donutStatus ? <img src={DonutIcon} style={{
                                       width: '14px',
                                       height: '14px'
                                     }} /> : ""}
