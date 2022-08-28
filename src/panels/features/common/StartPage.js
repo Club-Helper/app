@@ -87,73 +87,67 @@ class StartPage extends React.Component {
 
 
   settingClub(clubID, token) {
-    fetch('https://ch.n1rwana.ml/api/clubs.startSetting?token=' + token, {
-      method: 'POST',
-      body: JSON.stringify({
-        'token': token
-      })
-    })
-      .then(res => res.json())
-      .then(
-        (response) => {
-          if (response['response']) {
-            this.setState({
-              load: {
-                isLoad: false
-              }
-            });
-
-            if (response['response'] === 1) {
-              this.props.reCheckState();
-            }
-          } else {
-            this.setState({
-              load: {
-                isLoad: false,
-                isError: true,
-                codeError: response['error']['error_code'],
-                msgError: response['error']['error_msg'],
-                textError: response['error']['error_info']
-              }
-            });
-            this.props.setPopout(
-              <Alert
-                actions={[
-                  {
-                    title: "Закрыть",
-                    mode: "cancel",
-                  }
-                ]}
-                actionsLayout="vertical"
-                onClose={() => { }}
-                header="Ошибка"
-                text={"Сообщество не удалось настроить: " + response['error']['error_msg']}
-              />
-            )
-          }
-
-          fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + this.props.token)
-            .then(response => response.json())
-            .then(data => {
-              if (!data.error) {
-                this.props.setClub(data.response);
-              } else {
-                this.props.createError(data.error.error_msg);
-              }
-            });
-
-          this.props.setPage("app");
-          this.props.setIsNew(false);
-          this.props.setActiveStory("tickets_list")
-        },
-        () => {
+    req("clubs.startSetting", {
+      token: token
+    },
+      (response) => {
+        if (response['response']) {
           this.setState({
+            load: {
+              isLoad: false
+            }
+          });
+
+          if (response['response'] === 1) {
+            this.props.reCheckState();
+          }
+        } else {
+          this.setState({
+            load: {
+              isLoad: false,
+              isError: true,
+              codeError: response['error']['error_code'],
+              msgError: response['error']['error_msg'],
+              textError: response['error']['error_info']
+            }
+          });
+          this.props.setPopout(
+            <Alert
+              actions={[
+                {
+                  title: "Закрыть",
+                  mode: "cancel",
+                }
+              ]}
+              actionsLayout="vertical"
+              onClose={() => { }}
+              header="Ошибка"
+              text={"Сообщество не удалось настроить: " + response['error']['error_msg']}
+            />
+          )
+        }
+
+        this.props.req("clubs.get", {
+          token: this.props.token
+        },
+          (data) => {
+            this.props.setClub(data.response);
+          }
+        )
+
+        this.props.setPage("app");
+        this.props.setIsNew(false);
+        this.props.setActiveStory("tickets_list")
+      },
+      () => {
+        this.setState({
             load: {
               isLoad: false,
               isError: true
             }
-          });
-        });
+          }
+        )
+      })
   }
 
   handleClick() {
@@ -178,76 +172,42 @@ class StartPage extends React.Component {
         bridge
           .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,app_widget" })
           .then(data => {
-            console.log('Получено ращрешение на права доступа', this.props.token);
+            console.log('Получено разрешение на права доступа', this.props.token);
 
-            fetch('https://ch.n1rwana.ml/api/clubs.creat', {
-              method: 'POST',
-              body: JSON.stringify({
-                'access_token': data.access_token,
-                'token': this.props.token
-              })
-            })
-              .then(res => res.json())
-              .then(
-                (response) => {
-                  if (response.error == null) {
-                    console.log('Сообщество создано в базе');
-                    console.log(response);
+            this.props.req("clubs.creat", {
+              'access_token': data.access_token,
+              'token': this.props.token
+            },
+              (response) => {
+                if (response.error == null) {
+                  console.log('Сообщество создано в базе');
+                  console.log(response);
 
-                    this.props.setIsNew(false);
-                    console.log(this.props.activeStory)
+                  this.props.setIsNew(false);
+                  console.log(this.props.activeStory)
 
-                    this.setState({
-                      load: {
-                        isLoad: false
-                      }
-                    });
-
-                    localStorage.setItem('checkEduceation', groupID);
-                    localStorage.setItem('checkToken', 'true');
-
-                    if (response['response']) {
-                      this.setState({
-                        slideIndex: newSlideIndex,
-                        noButton: true
-                      });
-
-                      this.settingClub(groupID, this.props.token);
+                  this.setState({
+                    load: {
+                      isLoad: false
                     }
+                  });
 
-                    this.props.setActiveStory("tickets_list")
-                  } else {
-                    console.log('Сообщество не удалось создать в базе');
-                    console.log(response.error)
+                  localStorage.setItem('checkEduceation', groupID);
+                  localStorage.setItem('checkToken', 'true');
 
+                  if (response['response']) {
                     this.setState({
-                      load: {
-                        isLoad: false,
-                        isError: true
-                      }
+                      slideIndex: newSlideIndex,
+                      noButton: true
                     });
 
-                    console.log(window.token);
-
-                    this.props.setPopout(
-                      <Alert
-                        actions={[
-                          {
-                            title: "Закрыть",
-                            autoclose: true,
-                            mode: "cancel",
-                          }
-                        ]}
-                        actionsLayout="vertical"
-                        onClose={() => this.props.setPopout(null)}
-                        header="Ошибка"
-                        text={response.error.error_msg}
-                      />
-                    )
+                    this.settingClub(groupID, this.props.token);
                   }
-                },
-                () => {
-                  console.log('Сообщество неудалось создать в базе');
+
+                  this.props.setActiveStory("tickets_list")
+                } else {
+                  console.log('Сообщество не удалось создать в базе');
+                  console.log(response.error)
 
                   this.setState({
                     load: {
@@ -255,7 +215,36 @@ class StartPage extends React.Component {
                       isError: true
                     }
                   });
+
+                  console.log(window.token);
+
+                  this.props.setPopout(
+                    <Alert
+                      actions={[
+                        {
+                          title: "Закрыть",
+                          autoclose: true,
+                          mode: "cancel",
+                        }
+                      ]}
+                      actionsLayout="vertical"
+                      onClose={() => this.props.setPopout(null)}
+                      header="Ошибка"
+                      text={response.error.error_msg}
+                    />
+                  )
+                }
+              },
+              (error) => {
+                console.log('Сообщество неудалось создать в базе');
+
+                this.setState({
+                  load: {
+                    isLoad: false,
+                    isError: true
+                  }
                 });
+              });
           })
           .catch((error) => {
             console.log('Разрешение не было получено');

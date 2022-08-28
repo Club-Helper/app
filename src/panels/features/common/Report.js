@@ -9,13 +9,12 @@
  *******************************************************/
 
 /**
- * Встраиваемая панель отправки жалобы. В будущем пригодится.
+ * Встраиваемая панель отправки жалобы. Не используется.
  */
 
 import { Icon16Chevron, Icon24ReportOutline, Icon28ReportOutline } from '@vkontakte/icons'
 import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Link, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, List, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button } from '@vkontakte/vkui'
 import React, { Component } from 'react'
-
 
 export default class ClubCard extends Component {
   constructor(props) {

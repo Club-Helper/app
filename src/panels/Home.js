@@ -454,6 +454,223 @@ function Home({
     return string.replaceAll(regex, '<a href="$1" target="_blank" style="color: #2688eb; text-decoration: none;">$2</a>');
   }
 
+  const req = (method, body, callback, onError) => {
+    fetch(`https://ch.n1rwana.ml/api/${method}`, {
+      method: "POST",
+      body: JSON.stringify(body)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.error && !data.response.error) {
+          callback(data);
+        } else {
+          if (!onError) {
+            createError(data.error.error_msg || data.response.error);
+          } else {
+            onError(data);
+          }
+        }
+      })
+  }
+
+  const basicProps = {
+    club_role: club_role,
+    group_id: group_id,
+    go: go,
+    goBack: goBack,
+    token: token,
+    isMobile: isMobile,
+    setPopout: setPopout,
+    platform: platform,
+    hasDonut: donutStatus,
+    createError: createError,
+    isLoading: isLoading,
+    setLoading: setLoading,
+    appearance: appearance,
+    req: req,
+    generateRefSourceString: generateRefSourceString
+  };
+
+  const panels = [
+    {
+      id: "comments_list",
+      panelHeader: isMobile && <PanelHeader>Комментарии</PanelHeader>,
+      obj: (
+        <Comments
+          {...basicProps}
+          declOfNum={declOfNum}
+          commentsState={commentsState}
+          setCommentsState={setCommentsState}
+        />
+      )
+    },
+    {
+      id: "templates",
+      panelHeader: null,
+      obj: (
+        <Templates
+          {...basicProps}
+          declOfNum={declOfNum}
+          linksState={linksState}
+          setLinksState={setLinksState}
+        />
+      )
+    },
+    {
+      id: "stats_home",
+      panelHeader: null,
+      obj: (
+        <StatsHome
+          {...basicProps}
+        />
+      )
+    },
+    {
+      id: "mailing_list",
+      panelHeader: null,
+      obj: (
+        <MailingList
+          {...basicProps}
+          mailingState={mailingState}
+          setMailingState={setMailingState}
+          declOfNum={declOfNum}
+        />
+      )
+    },
+    {
+      id: "links",
+      panelHeader: isMobile && <PanelHeader>Ссылки</PanelHeader>,
+      obj: (
+        <Links
+          {...basicProps}
+          declOfNum={declOfNum}
+          linksState={linksState}
+          setLinksState={setLinksState}
+        />
+      )
+    },
+    {
+      id: "donut-landing",
+      panelHeader: (
+        <PanelHeader
+          left={<PanelHeaderBack onClick={() => goBack()} />}
+        >
+          VK Donut
+        </PanelHeader>
+      ),
+      obj: (
+        <Donut
+          {...basicProps}
+
+        />
+      )
+    },
+    {
+      id: "sign-error",
+      panelHeader: null,
+      obj: (
+        <SignError
+          {...basicProps}
+        />
+      )
+    },
+    {
+      id: "settings",
+      panelHeader: isMobile && <PanelHeader left={<PanelHeaderBack onClick={() => goBack()} />}>Настройки</PanelHeader>,
+      obj: (
+        <Settings
+          {...basicProps}
+          setAppearance={setAppearance}
+          serialize={serialize}
+          settingsState={settingsState}
+          setSettingsState={setSettingsState}
+          setDonutStatus={setDonutStatus}
+          setIsNew={setIsNew}
+          setActiveStory={setActiveStory}
+        />
+      )
+    },
+    {
+      id: "tickets_list",
+      panelHeader: isMobile && <PanelHeader>Обращения</PanelHeader>,
+      obj: (
+        <TicketsList
+          {...basicProps}
+          setCookie={setCookie}
+          getCookie={getCookie}
+          setTicket={setTicket}
+          ticketsState={ticketsState}
+          setTicketsState={setTicketsState}
+          setActiveStory={setActiveStory}
+          setIsNew={setIsNew}
+        />
+      )
+    },
+    {
+      id: "ticket",
+      panelHeader: null,
+      obj: (
+        <Ticket
+          {...basicProps}
+          generateRandomString={generateRandomString}
+          generateRandomInt={generateRandomInt}
+          ticket={ticket}
+          setActiveStory={setActiveStory}
+          club={club}
+
+        />
+      )
+    },
+    {
+      id: "call_admin",
+      panelHeader: null,
+      obj: (
+        <CallAdmin
+          {...basicProps}
+        />
+      )
+    },
+    {
+      id: "app_info",
+      panelHeader: null,
+      obj: (
+        <AppInfo
+          {...basicProps}
+        />
+      )
+    },
+    {
+      id: "ticket_eval",
+      panelHeader: null,
+      obj: (
+        <TicketEval
+          {...basicProps}
+          setIsNew={setIsNew}
+          club={club}
+          setActiveStory={setActiveStory}
+        />
+      )
+    },
+    {
+      id: "club_info",
+      panelHeader: null,
+      obj: (
+        <ClubInfo
+          {...basicProps}
+          club={club}
+          setActiveStory={setActiveStory}
+          setIsNew={setIsNew}
+          formatRole={formatRole}
+          setAppearance={setAppearance}
+          setDonutStatus={setDonutStatus}
+          serialize={serialize}
+          startupError={startupError}
+          setStartupError={setStartupError}
+        />
+      )
+    }
+  ];
+
   if (/^\#mark-ticket\/(0|[1-9][0-9]*)$/.test(window.location.hash)) {
     return (
       <View
@@ -519,370 +736,19 @@ function Home({
                     </Tabbar>
                   )}>
                     <View
-                      id='comments_list'
-                      activePanel='comments_list'
+                      id={activeStory}
+                      activePanel={activeStory}
                       history={history}
                       onSwipeBack={() => goBack()}
                     >
-                      <Panel
-                        id='comments_list'
-                      >
-                        {isMobile && <PanelHeader>Комментарии</PanelHeader>}
-                        <Comments
-                          club_role={club_role}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setPopout={setPopout}
-                          platform={platform}
-                          hasDonut={donutStatus}
-                          createError={createError}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          declOfNum={declOfNum}
-                          commentsState={commentsState}
-                          setCommentsState={setCommentsState}
-                          appearance={appearance}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='templates'
-                      activePanel='templates'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='templates'
-                      >
-                        <Templates
-                          club_role={club_role}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setPopout={setPopout}
-                          platform={platform}
-                          hasDonut={donutStatus}
-                          createError={createError}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          declOfNum={declOfNum}
-                          linksState={linksState}
-                          setLinksState={setLinksState}
-                          appearance={appearance}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='stats_home'
-                      activePanel='stats_home'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='stats_home'
-                      >
-                        <StatsHome
-                          club_role={club_role}
-                          go={go}
-                          goBack={goBack}
-                          token={token}
-                          isMobile={isMobile}
-                          setPopout={setPopout}
-                          platform={platform}
-                          hasDonut={donutStatus}
-                          createError={createError}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          appearance={appearance}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='mailing_list'
-                      activePanel='mailing_list'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='mailing_list'
-                      >
-                        <MailingList
-                          club_role={club_role}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setPopout={setPopout}
-                          platform={platform}
-                          hasDonut={donutStatus}
-                          createError={createError}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          appearance={appearance}
-                          mailingState={mailingState}
-                          setMailingState={setMailingState}
-                          declOfNum={declOfNum}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='links'
-                      activePanel='links'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='links'
-                      >
-                        {isMobile && <PanelHeader>Ссылки</PanelHeader>}
-                        <Links
-                          club_role={club_role}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setPopout={setPopout}
-                          platform={platform}
-                          hasDonut={donutStatus}
-                          createError={createError}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          declOfNum={declOfNum}
-                          linksState={linksState}
-                          setLinksState={setLinksState}
-                          appearance={appearance}
-                        />
-                      </Panel>
-
-                    </View>
-
-                    <View
-                      id='donut-landing'
-                      activePanel='donut-landing'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='donut-landing'
-                      >
-                        <PanelHeader
-                          left={<PanelHeaderBack onClick={() => goBack()} />}
+                      {panels.map((panel, idx) => (
+                        <Panel
+                          id={panel.id}
                         >
-                          VK Donut
-                        </PanelHeader>
-                        <Donut
-                          club_role={club_role}
-                          club={club}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          setIsNew={setIsNew}
-                          setPopout={setPopout}
-                          platform={platform}
-                          appearance={appearance}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='sign_error'
-                      activePanel='sign_error'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='sign_error'
-                      >
-                        <SignError isMobile={isMobile} appearance={appearance} platform={platform} />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='settings'
-                      activePanel='settings'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='settings'
-                      >
-                        {isMobile && <PanelHeader left={<PanelHeaderBack onClick={() => goBack()} />}>Настройки</PanelHeader>}
-                        <Settings
-                          club_role={club_role}
-                          club={club}
-                          token={token}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          setIsNew={setIsNew}
-                          hasDonut={donutStatus}
-                          setDonutStatus={setDonutStatus}
-                          platform={platform}
-                          setPopout={setPopout}
-                          settingsState={settingsState}
-                          setSettingsState={setSettingsState}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          appearance={appearance}
-                          setAppearance={setAppearance}
-                          serialize={serialize}
-                          createError={createError}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='tickets_list'
-                      activePanel='tickets_list'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='tickets_list'
-                      >
-                        {isMobile && <PanelHeader>Обращения</PanelHeader>}
-                        <TicketsList
-                          club_role={club_role}
-                          club={club}
-                          group_id={group_id}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          setIsNew={setIsNew}
-                          hasDonut={donutStatus}
-                          platform={platform}
-                          setPopout={setPopout}
-                          setTicket={setTicket}
-                          ticketsState={ticketsState}
-                          setTicketsState={setTicketsState}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          appearance={appearance}
-                          setCookie={setCookie}
-                          getCookie={getCookie}
-                          generateRefSourceString={generateRefSourceString}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='ticket'
-                      activePanel='ticket'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='ticket'
-                      >
-                        <Ticket
-                          club_role={club_role}
-                          club={club}
-                          group_id={group_id}
-                          go={go}
-                          token={token}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          hasDonut={donutStatus}
-                          platform={platform}
-                          setPopout={setPopout}
-                          ticket={ticket}
-                          isLoading={isLoading}
-                          setLoading={setLoading}
-                          appearance={appearance}
-                          createError={createError}
-                          generateRandomString={generateRandomString}
-                          generateRandomInt={generateRandomInt}
-                          generateRefSourceString={generateRefSourceString}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='call_admin'
-                      activePanel='call_admin'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='call_admin'
-                      >
-                        <CallAdmin platform={platform} setPopout={setPopout} appearance={appearance} generateRefSourceString={generateRefSourceString} />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='app_info'
-                      activePanel='app_info'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='app_info'
-                      >
-                        <AppInfo platform={platform} setPopout={setPopout} appearance={appearance} isDesktop={isDesktop} />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='ticket_eval'
-                      activePanel='ticket_eval'
-                    >
-                      <Panel
-                        id='ticket_eval'
-                      >
-                        <TicketEval
-                          club_role={club_role}
-                          club={club}
-                          token={token}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          setIsNew={setIsNew}
-                          hasDonut={donutStatus}
-                          platform={platform}
-                          setPopout={setPopout}
-                          group_id={group_id}
-                          appearance={appearance}
-                        />
-                      </Panel>
-                    </View>
-
-                    <View
-                      id='club_info'
-                      activePanel='club_info'
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      <Panel
-                        id='club_info'
-                      >
-                        <ClubInfo
-                          club_role={club_role}
-                          club={club}
-                          token={token}
-                          isMobile={isMobile}
-                          setActiveStory={setActiveStory}
-                          setIsNew={setIsNew}
-                          hasDonut={donutStatus}
-                          platform={platform}
-                          setPopout={setPopout}
-                          group_id={group_id}
-                          appearance={appearance}
-                          formatRole={formatRole}
-                          go={go}
-                          goBack={goBack}
-                          setAppearance={setAppearance}
-                          setDonutStatus={setDonutStatus}
-                          setLoading={setLoading}
-                          createError={createError}
-                          serialize={serialize}
-                          startupError={startupError}
-                          setStartupError={setStartupError}
-                          generateRefSourceString={generateRefSourceString}
-                          setActiveStory={setActiveStory}
-                        />
-                      </Panel>
+                          {panel.panelHeader}
+                          {panel.obj}
+                        </Panel>
+                      ))}
                     </View>
                   </Epic>
                 </SplitCol>
@@ -890,7 +756,6 @@ function Home({
                   <SplitCol fixed width="280px" maxWidth="280px">
                     <Panel>
                       {hasHeader && <PanelHeader />}
-
                       <Group>
                         {club ?
                           <>
@@ -931,7 +796,6 @@ function Home({
                             >
                               {menuItem.name}
                             </Cell>
-                            {/* menuItem.id === "mailing_list" && <Spacing separator /> */}
                           </>
                         )}
                       </Group>
@@ -979,6 +843,7 @@ function Home({
                     appearance={appearance}
                     setPage={setPage}
                     lastClubID={lastClubID}
+                    req={req}
                   />
                 </Panel>
               </View>
@@ -1006,6 +871,7 @@ function Home({
                     activeStory={activeStory}
                     appearance={appearance}
                     setPage={setPage}
+                    req={req}
                   />
                 </Panel>
               </View>;
@@ -1054,7 +920,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office setPopout={setPopout} office={office} />
+                          <Office setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
@@ -1063,7 +929,7 @@ function Home({
                         activePanel='office-clubs'
                       >
                         <Panel id='office-clubs'>
-                          <Clubs setPopout={setPopout} office={office} formatRole={formatRole} />
+                          <Clubs setPopout={setPopout} office={office} formatRole={formatRole} req={req} />
                         </Panel>
                       </View>
 
@@ -1080,6 +946,7 @@ function Home({
                             token={token}
                             updateOffice={updateOffice}
                             createError={createError}
+                            req={req}
                           />
                         </Panel>
                       </View>
@@ -1203,6 +1070,7 @@ function Home({
                           parseLinks={parseLinks}
                           createError={createError}
                           formatRole={formatRole}
+                          req={req}
                         />
                       </View>
 
@@ -1218,6 +1086,7 @@ function Home({
                             token={token}
                             updateMailings={updateCCMailings}
                             createError={createError}
+                            req={req}
                           />
                         </Panel>
                       </View>
@@ -1290,7 +1159,7 @@ function Home({
             id="banned"
             activePanel="banned"
           >
-            <Banned id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
+            <Banned req={req} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
           </View>
         )
       }
@@ -1304,7 +1173,7 @@ function Home({
           <Panel
             id='sign_error'
           >
-            <SignError isMobile={isMobile} appearance={appearance} platform={platform} />
+            <SignError req={req} isMobile={isMobile} appearance={appearance} platform={platform} />
           </Panel>
         </View>
       )

@@ -23,32 +23,31 @@ export default class ClubCardMailings extends Component {
   }
 
   doUnsubscribe(id) {
-    fetch(`https://ch.n1rwana.ml/api/mailings.cancellation?id=${id}&token=${this.props.token}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          this.props.updateMailings();
-          this.setState({
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Вы отписались от рассылки.
-              </Snackbar>
-            )
-          });
-        } else {
-          this.props.createError(data.error.error_msg);
-        }
-      })
+    this.props.req("mailings.cancellation", {
+      id: id,
+      token: token
+    },
+      (data) => {
+        this.props.updateMailings();
+        this.setState({
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Вы отписались от рассылки.
+            </Snackbar>
+          )
+        });
+      }
+    );
   }
 
   unsubscribe(id) {

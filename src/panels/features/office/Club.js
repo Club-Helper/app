@@ -42,11 +42,14 @@ export default class ClubCard extends Component {
 
   openReportForm() {
     this.setState({ activeModal: "report" });
-    fetch("https://ch.n1rwana.ml/api/reports.getReportFormData?token=" + this.props.token)
-      .then(response => response.json())
-      .then(data => {
+
+    this.props.req("reports.getReportFormData", {
+      token: this.props.token
+    },
+      (data) => {
         this.setState({ reportForm: data.response })
-      })
+      }
+    )
   }
 
   openReason(reason) {
@@ -57,27 +60,22 @@ export default class ClubCard extends Component {
     this.setState({ sendButtonDisabled: true, sendButtonLoading: true });
     bridge.send("VKWebAppAllowMessagesFromGroup", { "group_id": 207049707, "key": this.props.token })
       .then(data => {
-        fetch("https://ch.n1rwana.ml/api/reports.add",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              reason: this.state.selectedReason.id || this.state.openedReason?.reasons[0].id,
-              comment: this.state.comment,
-              token: this.props.token
-            })
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (!data.error) {
-              this.setState({ activeModal: "" });
-              this.setState({ activeModal: "success" });
-            } else {
-              this.setState({ activeModal: "error", errorText: data.error.error_msg });
-            }
-          });
+
+        this.props.req("reports.add", {
+          reason: this.state.selectedReason.id || this.state.openedReason?.reasons[0].id,
+          comment: this.state.comment,
+          token: this.props.token
+        },
+          (data) => {
+            this.setState({ activeModal: "" });
+            this.setState({ activeModal: "success" });
+          },
+          (error) => {
+            this.setState({ activeModal: "error", errorText: error.error.error_msg });
+          }
+        );
 
         this.setState({ sendButtonDisabled: false, sendButtonLoading: false });
-
       })
       .catch((error) => {
         this.setState(
@@ -92,15 +90,25 @@ export default class ClubCard extends Component {
   }
 
   updateCCMailings () {
-    fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${this.props.token}&my=true`)
-      .then(response => response.json())
-      .then(cc => this.setState({clubCardMailings: cc.response}));
+    this.props.req("mailings.get", {
+      token: this.props.token,
+      my: true
+    },
+      (data) => {
+        this.setState({clubCardMailings: data.response});
+      }
+    );
   }
 
   componentDidMount() {
-    fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${this.props.token}&my=true`)
-      .then(response => response.json())
-      .then(cc => this.setState({clubCardMailings: cc.response}));
+    this.props.req("mailings.get", {
+      token: this.props.token,
+      my: true
+    },
+      (data) => {
+        this.setState({clubCardMailings: data.response})
+      }
+    );
   }
 
   render() {
@@ -346,6 +354,7 @@ export default class ClubCard extends Component {
                     token={this.props.token}
                     updateMailings={this.updateCCMailings}
                     createError={this.props.createError}
+                    req={this.props.req}
                   />
                 </>
                 : <PanelSpinner />}
