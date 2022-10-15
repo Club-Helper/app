@@ -34,7 +34,8 @@ export default class Clubs extends Component {
           <List>
             {!this.props.office?.clubs ? <PanelSpinner /> :
               this.props.office.clubs.length > 0 ?
-              this.props.office?.clubs.map((club, idx) => (
+                this.props.office?.clubs.map((club, idx) => (
+                  <Link href={"https://vk.com/app7938346_-" + club.id} target="_blank">
                   <Cell
                     onClick={() => this.handleClick()}
                     key={idx}
@@ -54,7 +55,8 @@ export default class Clubs extends Component {
                     after={<Icon12Chevron width={16} height={16} />}
                   >
                     {club.title}
-                  </Cell>
+                    </Cell>
+                  </Link>
               )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
           </List>
         </Group>

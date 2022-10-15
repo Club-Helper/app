@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack } from '@vkontakte/vkui';
-import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline } from '@vkontakte/icons';
+import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
@@ -45,6 +45,8 @@ import ClubCard from './features/office/Club';
 import ClubCardMailings from './features/office/ClubCardMailings';
 
 import DonutIcon from '../img/donut.png'
+
+import bridge from '@vkontakte/vk-bridge';
 
 function Home({
   id,
@@ -1000,6 +1002,12 @@ function Home({
                               {/* menuItem.id === "mailing_list" && <Spacing separator /> */}
                             </>
                           )}
+                        </Group>
+
+                        <Group>
+                          <SimpleCell onClick={() => bridge.send("VKWebAppAddToCommunity")} multiline before={<Icon28AddCircleOutline />}>
+                            Новое сообщество
+                          </SimpleCell>
                         </Group>
 
                         <Group>
