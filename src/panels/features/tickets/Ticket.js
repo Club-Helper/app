@@ -61,7 +61,7 @@ export default class TicketsList extends Component {
 
   updateTicket() {
     this.setState({ fetchingHeader: true });
-    req("ticket.needUpdate", {
+    this.props.req("ticket.needUpdate", {
       id: this.props.ticket.id,
       token: this.props.token
     },
