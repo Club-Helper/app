@@ -170,7 +170,7 @@ class StartPage extends React.Component {
         });
 
         bridge
-          .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,app_widget" })
+          .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" })
           .then(data => {
             console.log('Получено разрешение на права доступа', this.props.token);
 
