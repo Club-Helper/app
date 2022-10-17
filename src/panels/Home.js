@@ -463,11 +463,13 @@ function Home({
     })
       .then(response => response.json())
       .then(data => {
-        if (!data.error && !data.response.error) {
+        if (!data.error) {
           callback(data);
         } else {
           if (!onError) {
-            createError(data.error.error_msg || data.response.error);
+            if (data.error?.error_msg) {
+              createError(data.error?.error_msg)
+            }
           } else {
             onError(data);
           }

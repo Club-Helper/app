@@ -438,7 +438,7 @@ class StartPage extends React.Component {
                 <li className="clubHelper--info">
                   <Icon28KeySquareOutline width={46} height={46} fill="#FFF" />
                   <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Управление сообществом</Text>
-                  <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Приложение будет взимодейстовать с подписчиками от имени Вашего сообесщтва, поэтому нам необходимо получить от Вас право управления сообществом. Это единоразовая процедура, необходимая только при устанвке приложения</Text>
+                  <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Приложение будет взаимодейстовать с подписчиками от имени Вашего сообщества, поэтому нам необходимо получить от Вас право управления сообществом. Это единоразовая процедура, необходимая только при установке приложения</Text>
                 </li>
                 <li className="clubHelper--info">
                   <Icon28LockOutline width={46} height={46} fill="#FFF" />

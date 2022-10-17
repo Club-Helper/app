@@ -35,10 +35,11 @@ import {
   CardScroll,
   Banner,
   Button,
-  Div
+  Div,
+  Placeholder
 } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done } from '@vkontakte/icons';
+import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline } from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -61,7 +62,9 @@ export default class ClubInfo extends Component {
       isStatsHidden: false,
       snackbar: null,
       isFetching: false,
-      autofixBtnWorking: false
+      autofixBtnWorking: false,
+      codeBtnWorking: false,
+      supportCode: null
     }
 
     this.getManagers = this.getManagers.bind(this);
@@ -71,6 +74,7 @@ export default class ClubInfo extends Component {
     this.settingsWasChanged = this.settingsWasChanged.bind(this);
     this.update = this.update.bind(this);
     this.getClub = this.getClub.bind(this);
+    this.getCode = this.getCode.bind(this);
   }
 
   getManagers() {
@@ -151,8 +155,12 @@ export default class ClubInfo extends Component {
   }
 
   startupErrorAutofix() {
-    if (!this.props.startupError.autofix)
+    this.setState({ autofixBtnWorking: true });
+
+    if (!this.props.startupError.autofix) {
       this.props.createError("Автоисправление для данной ошибки недоступно.");
+      this.setState({ autofixBtnWorking: false });
+    }
 
     if (this.state.club.status === 1000) {
       this.setState({ autofixBtnWorking: true });
@@ -205,10 +213,28 @@ export default class ClubInfo extends Component {
     }
   }
 
+  getCode() {
+    this.setState({ codeBtnWorking: true });
+    this.props.req("support.getPin", {
+      token: this.props.token
+    },
+      (data) => {
+        console.log(data);
+        this.setState({ codeBtnWorking: false, supportCode: data.response });
+        this.openModal("support_code_result");
+      }
+    )
+  }
+
   componentDidMount() {
+    this.props.setLoading(false);
     this.getClub();
-    this.getManagers();
-    this.getStats();
+    if (!this.props.startupError) {
+      this.getManagers();
+      this.getStats();
+    } else {
+      this.setState({ isStatsHidden: true })
+    }
   }
 
   render() {
@@ -240,6 +266,40 @@ export default class ClubInfo extends Component {
         >
           <StatsHome {...this.props} isLoading={this.state.modalLoading} setLoading={() => this.setState({ modalLoading: !this.state.modalLoading })} />
         </ModalPage>
+        <ModalPage
+          id="support_code"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Поддержка</ModalPageHeader>}
+          onClose={this.closeModal}
+          settlingHeight={100}
+        >
+          <Div>
+            При обращении в <b>Службу Поддержки Club Helper</b> Вам может понадобиться 4-значный PIN-код для подтверждения личности.
+            <br /><br />
+            <Button
+              size="m"
+              stretched
+              onClick={this.getCode}
+              loading={this.state.codeBtnWorking}
+              disabled={this.state.codeBtnWorking}
+            >
+              Получить код
+            </Button>
+          </Div>
+        </ModalPage>
+        <ModalPage
+          id="support_code_result"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>PIN-код</ModalPageHeader>}
+          onClose={this.closeModal}
+          settlingHeight={100}
+        >
+          <Placeholder icon={<Icon56CheckShieldOutline fill="var(--button_commerce_background)" />} header="Ваш PIN-код">
+            {this.state.supportCode?.code}
+          </Placeholder>
+          <Separator />
+          <Div>
+            <center>PIN-код действителен до <b>{this.state.supportCode?.deactivation?.label}</b>.</center>
+          </Div>
+        </ModalPage>
       </ModalRoot>
 
     );
@@ -252,9 +312,14 @@ export default class ClubInfo extends Component {
               <Panel>
                 <PanelHeader
                   left={
-                    <PanelHeaderButton onClick={() => this.openModal("settings")}>
-                      <Icon28SettingsOutline />
-                    </PanelHeaderButton>
+                    <React.Fragment>
+                      <PanelHeaderButton onClick={() => this.openModal("settings")}>
+                        <Icon28SettingsOutline />
+                      </PanelHeaderButton>
+                      <PanelHeaderButton onClick={() => this.openModal("support_code")}>
+                        <Icon28LifebuoyOutline />
+                      </PanelHeaderButton>
+                    </React.Fragment>
                   }
                 >
                   Сообщество
