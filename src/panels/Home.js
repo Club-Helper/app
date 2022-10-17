@@ -119,6 +119,10 @@ function Home({
             setRole(role);
             setToken(data.response.token);
 
+            ym(90794548, 'userParams', {
+              uid: data.response.uid
+            });
+
             console.log(data.response.page);
 
             setLastClubID(data.response.last_club)
@@ -180,6 +184,10 @@ function Home({
             } else if (data.response.page === "club") {
               setIsNew(false);
               setToken(data.response.token)
+
+              ym(90794548, 'userParams', {
+                uid: data.response.uid
+              });
 
                 fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
                   .then(response => response.json())
