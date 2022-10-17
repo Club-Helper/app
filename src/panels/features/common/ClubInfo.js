@@ -184,7 +184,7 @@ export default class ClubInfo extends Component {
           this.setState({ autofixBtnWorking: false });
         })
       return true;
-    } else if (this.state.club.status === 5003) {
+    } else if (this.state.club.status === 5002 || this.state.club.status === 5003) {
       this.setState({ autofixBtnWorking: true });
 
       this.props.req("utils.callbackAdd", {
@@ -196,7 +196,7 @@ export default class ClubInfo extends Component {
         }
       );
       this.setState({ autofixBtnWorking: false });
-    } else if (this.state.club.status === 5006) {
+    } else if (this.state.club.status === 5004) {
       this.setState({autofixBtnWorking: true});
 
       this.props.req("utils.callbackSetting", {
@@ -219,7 +219,6 @@ export default class ClubInfo extends Component {
       token: this.props.token
     },
       (data) => {
-        console.log(data);
         this.setState({ codeBtnWorking: false, supportCode: data.response });
         this.openModal("support_code_result");
       }
