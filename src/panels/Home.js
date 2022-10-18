@@ -123,7 +123,7 @@ function Home({
               uid: data.response.uid
             });
 
-            console.log(data.response.page);
+            console.log("Session ID", data.response.session_id);
 
             setLastClubID(data.response.last_club)
 
