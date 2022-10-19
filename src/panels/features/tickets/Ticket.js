@@ -86,6 +86,7 @@ export default class TicketsList extends Component {
           this.props.createError(data.response.error);
         } else {
           this.updateTicket();
+          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         }
         this.setState({ buttonLoading: null });
       })
@@ -117,6 +118,7 @@ export default class TicketsList extends Component {
           ),
           activeModal: ""
         });
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     );
   }
@@ -147,6 +149,7 @@ export default class TicketsList extends Component {
           activeModal: ""
         });
         this.updateTicket();
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     );
   }

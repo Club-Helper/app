@@ -22,6 +22,7 @@ import {
   Icon16Hashtag,
   Icon24CancelOutline
 } from '@vkontakte/icons';
+import bridge from '@vkontakte/vk-bridge';
 
 export default class MailingList extends Component {
   constructor(props) {
@@ -49,7 +50,8 @@ export default class MailingList extends Component {
       mailingEditMode: false,
       mailingEditTitle: "",
       mailingEditDescription: "",
-      mailingEditSaveButtonWorking: false
+      mailingEditSaveButtonWorking: false,
+      formValidationDescription: ""
     }
 
     this.getMailing = this.getMailing.bind(this);
@@ -67,7 +69,12 @@ export default class MailingList extends Component {
       token: this.props.token
     },
       (data) => {
-        this.setState({ mailing: data.response, list: data.response.items, availability: data.response.availability });
+        this.setState({
+          mailing: data.response,
+          list: data.response.items,
+          availability: data.response.availability
+        });
+        this.props.setLoading(false);
       }
     )
 
@@ -88,6 +95,7 @@ export default class MailingList extends Component {
     },
       (data) => {
         this.getMailing(false);
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     );
   }
@@ -123,6 +131,31 @@ export default class MailingList extends Component {
   }
 
   onFormSubmit() {
+    if (this.state.formTitle.length　< 10) {
+      this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." });
+      return false;
+    } else {
+      this.setState({ formValidation: "" });
+    }
+    if (this.state.formTitle.length > 50) {
+      this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." });
+      return false;
+    } else {
+      this.setState({ formValidation: "" });
+    }
+    if (this.state.formDescription.length < 10) {
+      this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
+      return false;
+    } else {
+      this.setState({ formValidationDescription: "" });
+    }
+    if (this.state.formDescription.length > 255) {
+      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
+      return false;
+    } else {
+      this.setState({ formValidationDescription: "" });
+    }
+
     if (this.state.formTitle.length >= 10 && this.state.formTitle.length <= 50) {
       this.setState({ formValidation: "", formWorking: true });
 
@@ -152,6 +185,7 @@ export default class MailingList extends Component {
               </Snackbar>
             )
           });
+          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         },
         (error) => {
           this.closeModal();
@@ -198,6 +232,7 @@ export default class MailingList extends Component {
             </Snackbar>
           )
         });
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         this.getMailingUsers(this.state.openedItem?.id);
       }
     )
@@ -255,6 +290,7 @@ export default class MailingList extends Component {
           activeModal: "",
           mailingText: ""
         });
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     );
 
@@ -295,6 +331,7 @@ export default class MailingList extends Component {
           ),
           activeModal: ""
         });
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         this.getMailing();
         this.toggleEditMode();
       }
@@ -305,7 +342,6 @@ export default class MailingList extends Component {
 
   componentDidMount() {
     this.getMailing(true);
-    this.props.setLoading(false);
   }
 
   render() {
@@ -466,6 +502,8 @@ export default class MailingList extends Component {
                 value={this.state.formDescription}
                 onChange={(e) => this.setState({ formDescription: e.target.value })}
                 required={false}
+                status={this.state.formValidationDescription ? "error" : "default"}
+                bottom={this.state.formValidationDescription}
               >
                 <Textarea />
               </FormItem>

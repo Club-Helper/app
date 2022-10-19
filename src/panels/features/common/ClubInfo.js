@@ -365,7 +365,7 @@ export default class ClubInfo extends Component {
                             header={this.props.startupError.title}
                             subheader={this.props.startupError.text}
                             actions={
-                              <Div style={{ padding: "10px 0" }}>
+                              <Div>
                                 <ButtonGroup>
                                   {this.props.startupError.autofix &&
                                     <Button
@@ -384,7 +384,6 @@ export default class ClubInfo extends Component {
                                     </Button>
                                   </Link>
                                 </ButtonGroup>
-
                               </Div>
                             }
                           />
@@ -398,7 +397,7 @@ export default class ClubInfo extends Component {
                   </Group>
                   {!this.state.isStatsHidden &&
                     <>
-                      <Title level='2' style={{padding: "10px", marginLeft: "5px"}}>Статистика</Title>
+                      <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)"}}>Статистика</Title>
                       {this.props.club_role == "admin" &&
                         <Group header={<Title level='3' style={{padding: "10px", marginLeft: "5px"}}>Руководители</Title>}>
                           <CardScroll>
@@ -408,8 +407,8 @@ export default class ClubInfo extends Component {
                                     mode="tint"
                                     key={idx}
                                     subtitle={<Avatar size={28} src={item.photo} />}
-                                    header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">{item.first_name} {item.last_name}</Title>}
-                                    caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.props.formatRole(item.role)}</Caption>}
+                                  header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">{item.first_name} {item.last_name}</Title>}
+                                  caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.props.formatRole(item.role)}</Caption>}
                                   />
                                 )
                               )}
@@ -422,26 +421,26 @@ export default class ClubInfo extends Component {
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
-                            header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
-                            caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.state.stats?.tickets?.all}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
+                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.all}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
-                            header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">Ожидающих специалиста</Title>}
-                            caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.state?.stats.tickets?.waiting_specialist}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Ожидающих специалиста</Title>}
+                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state?.stats.tickets?.waiting_specialist}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
-                            header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">В работе</Title>}
-                            caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.state.stats?.tickets?.work}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">В работе</Title>}
+                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.work}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
-                            header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">Закрыты</Title>}
-                            caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.state.stats?.tickets?.closed}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Закрыты</Title>}
+                            caption={<Caption style={{fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.closed}</Caption>}
                           />
                         </CardScroll>
                       }
@@ -452,8 +451,8 @@ export default class ClubInfo extends Component {
                             <ContentCard
                               mode="tint"
                               subtitle={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
-                              header={<Title style={{fontSize: "18px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
-                              caption={<Caption style={{fontSize: "16px"}} weight={1}>{this.state.stats.links?.all}</Caption>}
+                              header={<Title style={{fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
+                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats.links?.all}</Caption>}
                             />
                           </CardScroll>
                         }

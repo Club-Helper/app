@@ -52,7 +52,7 @@ export default class Office extends Component {
             {this.props.office.activity_history.length > 0 ?
               this.props.office.activity_history.map((item, idx) => (
                 <Cell
-                  description={item.time.label + " · Браузер " + item.browser}
+                  description={item.time.label}
                   before={
                     <React.Fragment>
                       {item.type == "laptop" && <Icon28LaptopOutline />}
@@ -61,7 +61,7 @@ export default class Office extends Component {
                     </React.Fragment>
                   }
                 >
-                  {item.platform} · {item.ip}
+                  {item.platform} · {item.browser}
                 </Cell>
               ))
               :
