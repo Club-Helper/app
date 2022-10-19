@@ -11,6 +11,7 @@
 import React, { Component } from 'react'
 import { Avatar, Button, Cell, ConfigProvider, FormItem, FormLayout, Input, List, ModalPage, ModalPageHeader, ModalRoot, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, Snackbar, SplitCol, SplitLayout, Textarea, Group, Title, Div, MiniInfoCell, Link, Alert, Footer, CellButton, Spacing, SegmentedControl } from '@vkontakte/vkui';
 import { Icon16Done, Icon24Dismiss, Icon28CommentOutline, Icon28InfoCircleOutline, Icon56CommentsOutline, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon24AddCircleDottedOutline, Icon20MentionOutline } from '@vkontakte/icons';
+import bridge from '@vkontakte/vk-bridge';
 
 export default class CommentsList extends Component {
   constructor(props) {
@@ -84,6 +85,7 @@ export default class CommentsList extends Component {
           )
         });
         this.getComments(this.state.filter);
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
     })
   }
 
@@ -258,7 +260,7 @@ export default class CommentsList extends Component {
 
         <ModalPage
           id="comment-info"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton aria-label="Скрыть информацию" onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.openedComment.title}</ModalPageHeader>}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton aria-label="Скрыть информацию" onClick={() => this.closeModal()}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.openedComment.title}</ModalPageHeader>}
           onClose={() => this.closeModal()}
           settlingHeight={100}
         >

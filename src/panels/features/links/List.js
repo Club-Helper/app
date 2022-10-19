@@ -9,8 +9,8 @@
  *******************************************************/
 
 import React, { Component } from 'react'
-import { ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Input, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell } from '@vkontakte/vkui'
-import { Icon24Linked, Icon24InfoCircleOutline, Icon24Dismiss, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon48Linked, Icon24AddCircleDottedOutline } from '@vkontakte/icons';
+import { ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Input, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell, Snackbar } from '@vkontakte/vkui'
+import { Icon24Linked, Icon24InfoCircleOutline, Icon24Dismiss, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon48Linked, Icon24AddCircleDottedOutline, Icon16Done } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
 
@@ -47,7 +47,13 @@ export default class Links extends Component {
       fetching: false,
       showForm: false,
       linksLoading: true,
-      filter: "all"
+      filter: "all",
+      snackbar: null,
+      formTitleStatus: "default",
+      formTitleBottom: "",
+      formPatternStatus: "default",
+      formPatternBottom: "",
+
     }
 
     this.state = this.props.linksState !== null ? this.props.linksState : initialState
@@ -201,6 +207,55 @@ export default class Links extends Component {
   }
 
   createLink() {
+    if (!this.state.title) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
+      return false;
+    } else {
+      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
+    }
+    if (!this.state.pattern) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
+      return false;
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+    if (this.state.title.length > 50) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
+      return false;
+    } else {
+      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
+    }
+    if (this.state.pattern.length < 10) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
+      return false;
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+    if (/^\s+$/.test(this.state.title)) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Неверный формат" });
+      return false;
+    } else {
+      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
+    }
+    if (!/^[^\s][^_\s]*$/.test(this.state.title)) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Неверный формат" });
+      return false;
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+    if (/^\s+$/.test(this.state.pattern)) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Неверный формат" });
+      return false;
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+    if (!/^[^\s][^_\s]*$/.test(this.state.pattern)) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Неверный формат" });
+      return false;
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+
     if (this.state.title != '' && this.state.pattern != '') {
       if (this.state.title.length > 50) {
         this.props.createError("Заголовок не может быть длиннее 50 символов");
@@ -222,6 +277,7 @@ export default class Links extends Component {
               (data) => {
                 this.setState({ links: data.response.items, count: data.response.count, buttonLoading: false, availability: data.response.availability })
                 this.closeModal();
+                bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
               }
             )
           },
@@ -237,8 +293,27 @@ export default class Links extends Component {
   }
 
   copyLink(link) {
-    this.setState({ link_copied: true })
-    setTimeout(this.setState({ link_copied: false }), 2000)
+    bridge.send("VKWebAppCopyText", { "text": link });
+
+    this.setState({
+      snackbar: (
+        <Snackbar
+          onClose={() => this.setState({ snackbar: null })}
+          before={
+            <Avatar
+              size={24}
+              style={{ background: "var(--button_commerce_background)" }}
+            >
+              <Icon16Done fill="#fff" width={14} height={14} />
+            </Avatar>
+          }
+        >
+          Ссылка скопирована
+        </Snackbar>
+      )
+    });
+
+    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
   }
 
   onRefresh() {
@@ -257,6 +332,7 @@ export default class Links extends Component {
   onFilterChange(value) {
     this.setState({ filter: value });
     this.getLinks(value);
+    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
   }
 
   componentWillUnmount() {
@@ -328,23 +404,9 @@ export default class Links extends Component {
           <FormLayout>
             <FormItem
               top="Название шаблона"
-              status={
-                this.state.title != ''
-                  && this.state.title.length <= 50
-                  && /^\s+$/.test(this.state.title) == false
-                  && /^[^\s][^_\s]*$/.test(this.state.title) == true
-                  ? "" : "error"}
-              bottom={
-                this.state.title == '' && "Заголовок не может быть пустым"
-                ||
-                this.state.title.length > 50 && "Заголовок не может быть длиннее 50 символов"
-                ||
-                /^\s+$/.test(this.state.title) === true && "Заголовок не может состоять только из пробелов"
-                ||
-                /^[^\s]+(\s+[^\s]+)*$/.test(this.state.title) === false && "Неверный формат заголовка"
-              }
+              status={this.state.formTitleStatus}
+              bottom={this.state.formTitleBottom}
               onChange={this.updateNewLinkTitle}
-
             >
               <Input
                 type={"text"}
@@ -357,21 +419,9 @@ export default class Links extends Component {
             </FormItem>
             <FormItem
               top="Сообщение"
-              bottom={
-                this.state.pattern == '' && "Шаблон сообщения не может быть пустым"
-                ||
-                this.state.pattern.length < 10 && "Шаблон сообщения не может содержать меньше 10 символов"
-                ||
-                /^\s+$/.test(this.state.title) === true && "Шаблон сообщения не может состоять только из пробелов"
-                ||
-                /^[^\s]+(\s+[^\s]+)*$/.test(this.state.pattern) === false && "Неверный формат шаблона сообщения"
-              }
-              status={
-                this.state.pattern != ''
-                  && this.state.pattern.length >= 10
-                  && /^\s+$/.test(this.state.pattern) === false
-                  && /^[^\s][^_\s]*$/.test(this.state.pattern) === true
-                  ? "" : "error"}>
+              bottom={this.state.formPatternBottom}
+              status={this.state.formPatternStatus}
+            >
               <Textarea
                 placeholder={"{greetings}, {user_name}!\n\nСообщение, которое получит пользователь, если напишет Вам по созданной ссылке"}
                 value={this.state.pattern}
@@ -385,7 +435,7 @@ export default class Links extends Component {
                 stretched
                 onClick={this.createLink}
                 loading={this.state.buttonLoading}
-                disabled={!(this.state.title != '' && '' != this.state.pattern && this.state.title.length <= 50 && this.state.pattern.length >= 10)}
+                disabled={this.state.buttonLoading}
               >Создать ссылку</Button>
             </FormItem>
           </FormLayout>
@@ -451,9 +501,15 @@ export default class Links extends Component {
                                   after={
                                     <div style={{ display: "flex", gridGap: 10 }}>
                                       <IconButton
-                                        onClick={() => bridge.send("VKWebAppCopyText", { "text": item.link })}><Icon24Linked /></IconButton>
+                                        onClick={() => this.copyLink(item.link)}
+                                      >
+                                        <Icon24Linked />
+                                      </IconButton>
                                       <IconButton
-                                        onClick={() => this.openPatternModal(item.id)}><Icon24InfoCircleOutline /></IconButton>
+                                        onClick={() => this.openPatternModal(item.id)}
+                                      >
+                                        <Icon24InfoCircleOutline />
+                                      </IconButton>
                                     </div>
                                   }
                                 >
@@ -493,6 +549,7 @@ export default class Links extends Component {
                       чтобы создать больше.
                     </Footer>
                   }
+                  {this.state.snackbar}
                 </SplitCol>
               </SplitLayout>
             </>}

@@ -12,6 +12,7 @@ import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, 
 import React, { Component } from 'react'
 import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon28PaletteOutline } from '@vkontakte/icons';
 import '../../../css/settings.css';
+import bridge from '@vkontakte/vk-bridge';
 
 export default class Settings extends Component {
   constructor(props) {
@@ -101,6 +102,7 @@ export default class Settings extends Component {
 
     this.props.req("clubs.setSetting", this.qParams({token: this.props.token}, this.props.serialize(this.state.changes)), (data) => {
       this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
+      bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       this.props.isEmbedded && this.props.close();
       this.props.isEmbedded && this.props.settingsWasChanged();
     },
@@ -324,6 +326,7 @@ export default class Settings extends Component {
                   Сохранить
                 </Button>
               </Div>
+              <br/><br/>
             </SplitCol>
           </SplitLayout>
         </Group>
