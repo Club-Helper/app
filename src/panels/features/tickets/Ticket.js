@@ -84,6 +84,7 @@ export default class TicketsList extends Component {
       .then(data => {
         if (!data.response.status) {
           this.props.createError(data.response.error);
+          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" });
         } else {
           this.updateTicket();
           bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });

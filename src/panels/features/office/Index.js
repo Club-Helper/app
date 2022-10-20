@@ -47,7 +47,7 @@ export default class Office extends Component {
             </Title>
           </Gradient>
         </Group>
-        <Group>
+        <Group separator={!this.props.isMobile}>
           <List>
             {this.props.office.activity_history.length > 0 ?
               this.props.office.activity_history.map((item, idx) => (

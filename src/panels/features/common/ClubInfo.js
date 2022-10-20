@@ -211,6 +211,7 @@ export default class ClubInfo extends Component {
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
+    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
   }
 
   getCode() {
@@ -222,6 +223,7 @@ export default class ClubInfo extends Component {
         console.log(data);
         this.setState({ codeBtnWorking: false, supportCode: data.response });
         this.openModal("support_code_result");
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     )
   }

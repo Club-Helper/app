@@ -212,6 +212,7 @@
   opacity: 0;
   transform: scale(0);
   animation-name: comment_2;
+  margin-bottom: 100px;
 }
 
 @keyframes comment_1 {
@@ -426,4 +427,8 @@
 .slidestart {
   height: auto;
   overflow-y: auto;
+}
+
+.clubHelper--bottom {
+  margin-bottom: 100px;
 }

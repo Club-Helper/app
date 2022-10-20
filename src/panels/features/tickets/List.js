@@ -98,6 +98,7 @@ export default class TicketsList extends Component {
     },
       (data) => {
         this.closeTicketButtonsModal();
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
     );
   }
