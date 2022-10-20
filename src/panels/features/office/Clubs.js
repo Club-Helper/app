@@ -9,9 +9,10 @@
  *******************************************************/
 
 
-import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron } from '@vkontakte/icons';
-import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder } from '@vkontakte/vkui'
+import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline } from '@vkontakte/icons';
+import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton } from '@vkontakte/vkui'
 import React, { Component } from 'react'
+import bridge from '@vkontakte/vk-bridge';
 
 export default class Clubs extends Component {
   constructor(props) {
@@ -23,13 +24,21 @@ export default class Clubs extends Component {
   }
 
   handleClick () {
-    this.props.setPage("app");
+    console.log("handleClick");
   }
 
   render() {
     return (
       <Panel>
-        <PanelHeader>Мои сообщества</PanelHeader>
+        <PanelHeader
+          left={
+            <PanelHeaderButton onClick={() => bridge.send("VKWebAppAddToCommunity")}>
+              <Icon28AddCircleOutline />
+            </PanelHeaderButton>
+          }
+        >
+          Мои сообщества
+          </PanelHeader>
         <Group>
           <List>
             {!this.props.office?.clubs ? <PanelSpinner /> :

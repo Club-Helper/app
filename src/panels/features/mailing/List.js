@@ -51,7 +51,8 @@ export default class MailingList extends Component {
       mailingEditTitle: "",
       mailingEditDescription: "",
       mailingEditSaveButtonWorking: false,
-      formValidationDescription: ""
+      formValidationDescription: "",
+      sendMessageValidation: ""
     }
 
     this.getMailing = this.getMailing.bind(this);
@@ -265,6 +266,19 @@ export default class MailingList extends Component {
   sendMailing() {
     this.setState({ sendBtnWorking: true });
 
+    if (!this.state.mailingText) {
+      this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
+      return false;
+    } else {
+      this.setState({ sendMessageValidation: "" });
+    }
+    if (this.state.mailingText.length < 10) {
+      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 10 символов" });
+      return false;
+    } else {
+      this.setState({ sendMessageValidation: "" });
+    }
+
     this.props.req("mailings.send", {
       id: this.state.openedItem.id,
       message: this.state.mailingText,
@@ -436,6 +450,8 @@ export default class MailingList extends Component {
                 <FormItem
                   value={this.state.mailingText}
                   onChange={(e) => this.setState({ mailingText: e.target.value })}
+                  bottom={this.state.sendMessageValidation}
+                  status={this.state.sendMessageValidation ? "error" : "default"}
                 >
                   <Textarea placeholder="Введите текст" rows="4" />
                 </FormItem>
