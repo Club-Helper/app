@@ -5,9 +5,158 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
-.faq-title {
-    margin-bottom: -20px;
+#donut:not(.ModalPage--sizeX-compact) .vkuiModalPage__header {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#donut.vkuiModalPage--desktop .vkuiModalPage__in {
+  max-height: 95vh;
+  width: 600px;
+  color: #fff;
+}
+
+#donut.ModalPage--sizeX-compact .vkuiModalPage__in.ModalPage__in {
+  width: 100%;
+}
+
+#donut.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in {
+  background-color: rgb(63, 138, 224);
+}
+
+#donut.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in .vkuiPanelHeader__content.PanelHeader__content {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#donut.ModalPage--sizeX-compact .vkuiModalPage__header.ModalPage__header .vkuiSeparator {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#donut.vkuiModalPage--desktop .vkuiModalPage__content-wrap {
+  border-radius: 8px;
+}
+
+#donut .vkuiModalPageHeader .vkuiIcon--dismiss_24 {
+  color: #fff;
+}
+
+.clubHelper-donut_panel .vkuiPanel__in {
+  padding-bottom: 0;
+}
+
+.clubHelper--donut {
+  color: #fff;
+  background: rgb(63, 138, 224);
+  padding: calc(var(--safe-area-inset-bottom) + var(--tabbar_height)) 20px;
+}
+
+#donut.ModalPage--sizeX-compact .clubHelper--donut {
+  height: calc(100vh - var(--panelheader_height_vkcom));
+  box-sizing: border-box;
+}
+
+.clubHelper--donut h1 {
+  font-size: 50px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.clubHelper--donut h3 {
+  opacity: .8;
+  font-size: 20px;
+  line-height: 1;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
+.clubHelper--donut_block {
+  display: flex;
+  margin: 20px 0;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.clubHelper--donut_block + a {
+  margin-top: 40px;
+  display: block;
+}
+
+.clubHelper--donut_block-icon {
+  background: radial-gradient(98.05% 261.61% at 16.38% 3.59%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 100%);
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  box-sizing: border-box;
+  padding: 5px;
+  display: block;
+  border-radius: 50%;
+}
+
+.clubHelper--donut_block-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.clubHelper--donut_block-subtitle {
+  opacity: .5;
+}
+
+.clubHelper--donut a[style*="color: #2688eb"] {
+  color: #fff !important;
+  text-decoration: underline !important;
+}
+
+.clubHelper--donut_button {
+  text-decoration: none;
+  color: inherit;
+  max-width: 300px;
+  margin: 50px auto 0;
+  padding: 0 20px;
+  display: block;
+}
+
+.clubHelper--donut .vkuiGroup {
+  padding: 10px 0;
+}
+
+.clubHelper--donut .vkuiGroup .vkuiGroup__inner {
+  padding: 0 !important;
+}
+
+.clubHelper--donut .vkuiHeader--vkcom {
+  height: auto;
+  padding: 0;
+}
+
+.clubHelper--donut .vkuiHeader--vkcom .vkuiHeader__main {
+  color: #fff;
+}
+
+.clubHelper--donut .vkuiHeader--vkcom .vkuiHeadline--w-regular {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.clubHelper--donut .vkuiHeader--vkcom.vkuiHeader--mode-secondary {
+  font-size: 13px;
+  font-weight: normal;
+  opacity: .5;
+}
+
+.clubHelper--donut .vkuiGroup .vkuiSimpleCell {
+  padding: 10px 0 !important;
+  color: #fff;
+}
+
+.clubHelper--donut_note {
+  font-size: 13px;
+  opacity: .3;
 }

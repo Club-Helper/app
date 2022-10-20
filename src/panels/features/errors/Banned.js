@@ -47,7 +47,7 @@ export default class Banned extends Component {
 
             <ModalPage
               id="unbanned"
-              header={<ModalPageHeader right={!this.props.isDesktop && <PanelHeaderButton onClick={() => this.setState({ activeModal: "" })}><Icon24Dismiss /></PanelHeaderButton>}></ModalPageHeader>}
+              header={<ModalPageHeader right={!this.props.isDesktop && <PanelHeaderButton onClick={() => this.setState({activeModal: ""})}><Icon24Dismiss/></PanelHeaderButton>}/>}
               onClose={() => this.setState({ activeModal: "" })}
             >
               <Placeholder
@@ -83,7 +83,6 @@ export default class Banned extends Component {
     let obj = i;
 
     for (const [key, value] of searchParams.entries()) {
-      //console.log(`${key}, ${value}`);
       obj[key] = value;
     }
 
@@ -98,7 +97,6 @@ export default class Banned extends Component {
       (data) => {
         if (!data.response.solution) {
           this.setState({ questions: [...this.state.questions, data.response] });
-          console.log(this.state.answers);
         } else {
           this.setState({ solution: data.response.solution });
         }
@@ -117,13 +115,13 @@ export default class Banned extends Component {
   render() {
     return (
       <SplitLayout modal={this.state.modalRoot}>
-        {this.props.isDesktop && <SplitCol width={125} maxWidth={125}></SplitCol>}
+        {this.props.isDesktop && <SplitCol width={125} maxWidth={125}/>}
         <SplitCol>
-          {this.props.isDesktop && <div style={{ marginBottom: "50px" }}></div>}
+          {this.props.isDesktop && <div style={{marginBottom: "50px"}}/>}
 
           {this.state.ban.reason.type == "blocked_user" &&
             <Panel id="banned">
-              {!this.props.isDesktop && <PanelHeader></PanelHeader>}
+              {!this.props.isDesktop && <PanelHeader/>}
               <Group>
                 <Div>
                   {this.props.isDesktop ?
@@ -132,7 +130,7 @@ export default class Banned extends Component {
                     <Title level='3' style={{ marginTop: "5px", marginBottom: "10px" }}>{this.state.ban.reason.title}</Title>
                   }
                   {this.props.isDesktop && <Separator wide style={{ margin: "20px 0" }} />}
-                  <Text dangerouslySetInnerHTML={{ __html: this.state.ban.reason.text }}></Text>
+                  <Text dangerouslySetInnerHTML={{__html: this.state.ban.reason.text}}/>
                 </Div>
                 <Div>
                   {this.state.ban.reason.content.type == "moderator" &&
@@ -160,7 +158,7 @@ export default class Banned extends Component {
                         {!this.props.isDesktop ?
                           <>
                             <Text level='3' style={{ marginBottom: "10px" }}>Причина блокировки</Text>
-                            <Text style={{ marginBottom: "10px" }} dangerouslySetInnerHTML={{ __html: this.state.ban.reason.content.title }}></Text>
+                            <Text style={{marginBottom: "10px"}} dangerouslySetInnerHTML={{__html: this.state.ban.reason.content.title}}/>
                             <Button mode="secondary" stretched onClick={() => this.setState({ activeModal: "ban-info" })}>Подробнее</Button>
                           </>
                           :
@@ -184,7 +182,7 @@ export default class Banned extends Component {
                     <center>
                       <Button
                         size="l"
-                        stretched={this.props.isDesktop ? false : true}
+                        stretched={!this.props.isDesktop}
                         onClick={() => this.setState({ showQuestions: true })}
 
                       >
@@ -237,7 +235,7 @@ export default class Banned extends Component {
                         <center>
                           <Button
                             size="l"
-                            stretched={this.props.isDesktop ? false : true}
+                            stretched={!this.props.isDesktop}
                             onClick={() => this.handleUnbanButton()}
                           >
                             Разблокировать себя
@@ -255,7 +253,7 @@ export default class Banned extends Component {
                     <center>
                       <Button
                         size="l"
-                        stretched={this.props.isDesktop ? false : true}
+                        stretched={!this.props.isDesktop}
                         onClick={() => this.handleUnbanButton()}
                       >
                         Разблокировать себя
@@ -277,7 +275,7 @@ export default class Banned extends Component {
           {this.state.ban.reason.type == "blocked_club" &&
             <Panel id="banned">
               <Group>
-                {!this.props.isDesktop && <PanelHeader></PanelHeader>}
+                {!this.props.isDesktop && <PanelHeader/>}
                 <Gradient
                   style={{
                     margin: this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
@@ -326,7 +324,7 @@ export default class Banned extends Component {
 
           {this.state.ban.reason.type == "blocked_device" &&
             <Panel id="banned">
-              {!this.props.isDesktop && <PanelHeader></PanelHeader>}
+              {!this.props.isDesktop && <PanelHeader/>}
               <Group>
                 <Div>
                   {this.props.isDesktop ?
@@ -335,7 +333,7 @@ export default class Banned extends Component {
                     <Title level='3' style={{ marginTop: "5px", marginBottom: "10px" }}>{this.state.ban.reason.title}</Title>
                   }
                   {this.props.isDesktop && <Separator wide style={{ margin: "20px 0" }} />}
-                  <Text dangerouslySetInnerHTML={{ __html: this.state.ban.reason.text }}></Text>
+                  <Text dangerouslySetInnerHTML={{__html: this.state.ban.reason.text}}/>
                 </Div>
               </Group>
               <Group>
@@ -346,7 +344,7 @@ export default class Banned extends Component {
             </Panel>
           }
         </SplitCol>
-        {this.props.isDesktop && <SplitCol width={125} maxWidth={125}></SplitCol>}
+        {this.props.isDesktop && <SplitCol width={125} maxWidth={125}/>}
       </SplitLayout >
     )
   }

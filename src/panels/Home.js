@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 import React, { useState, useEffect } from 'react';
@@ -500,6 +500,7 @@ function Home({
     setLoading: setLoading,
     appearance: appearance,
     req: req,
+    parseLinks: parseLinks,
     generateRefSourceString: generateRefSourceString
   };
 
