@@ -679,6 +679,7 @@ function Home({
           serialize={serialize}
           startupError={startupError}
           setStartupError={setStartupError}
+          setPage={setPage}
         />
       )
     }
@@ -933,7 +934,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office setPopout={setPopout} office={office} req={req} />
+                          <Office setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
