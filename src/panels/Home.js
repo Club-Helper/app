@@ -1033,7 +1033,7 @@ function Home({
                         </Group>
 
                         <Footer onClick={() => go("app_info")}>
-                          1.0.0
+                          v1.0.0 beta
                         </Footer>
                       </Panel>
                     </SplitCol>
