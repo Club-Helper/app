@@ -8,7 +8,7 @@
  * публичная демонстрация, распространение кода приложения запрещены
  *******************************************************/
 
-import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea } from '@vkontakte/vkui'
+import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea, CellButton } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon28PaletteOutline } from '@vkontakte/icons';
 import '../../../css/settings.css';
@@ -222,21 +222,6 @@ export default class Settings extends Component {
           }
           <SplitLayout modal={modal}>
             <SplitCol>
-              <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Приложение</b></Header>
-              <Cell
-                multiline
-                disabled
-                after={
-                  <Switch
-                    name="theme"
-                    defaultChecked={this.props.appearance === "dark"}
-                    onClick={() => this.props.appearance === "light" ? this.props.setAppearance("dark") : this.props.setAppearance("light")} />
-                }
-                before={<Icon28PaletteOutline />}
-              >
-                Тёмная тема
-              </Cell>
-              <Spacing size={20} separator />
               <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Возможности сообщества</b></Header>
               <Cell
                 multiline
@@ -314,6 +299,12 @@ export default class Settings extends Component {
               >
                 VK Donut
               </Cell>
+              <CellButton onClick={() => {
+                this.props.setPage("landing");
+                this.props.setActiveStory("start_app");
+              }}>
+                Показать онбординг
+              </CellButton>
               <br />
               <Div>
                 <Button

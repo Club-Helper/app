@@ -10,7 +10,7 @@
 
 
 import React, { Component } from 'react'
-import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, Cell } from '@vkontakte/vkui';
+import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, Cell, CellButton } from '@vkontakte/vkui';
 import { Icon28LaptopOutline, Icon56AndroidDeviceOutline, Icon56AppleDeviceOutline } from '@vkontakte/icons';
 
 export default class Office extends Component {
@@ -52,6 +52,7 @@ export default class Office extends Component {
             {this.props.office.activity_history.length > 0 ?
               this.props.office.activity_history.map((item, idx) => (
                 <Cell
+                  key={idx}
                   description={item.time.label}
                   before={
                     <React.Fragment>
@@ -61,12 +62,20 @@ export default class Office extends Component {
                     </React.Fragment>
                   }
                 >
-                  {item.platform} · {item.browser}
+                  {item.platform} {item.browser && "· " + item.browser}
                 </Cell>
               ))
               :
               <Placeholder>Здесь будет история активности</Placeholder>}
           </List>
+          <CellButton
+            onClick={() => {
+              this.props.setPage("landing");
+              this.props.setActiveStory("start_app");
+            }}
+          >
+            Показать онбординг
+          </CellButton>
         </Group>
       </Panel>
     )
