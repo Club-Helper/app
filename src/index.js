@@ -43,6 +43,6 @@ Sentry.init({
 });
 
 ReactDOM.render(<App />, document.getElementById("root"));
-if (process.env.NODE_ENV === "development") {
-  import("./eruda").then(({ default: eruda }) => { }); // Инициализация Eruda
-}
+// if (process.env.NODE_ENV === "development") {
+import("./eruda").then(({ default: eruda }) => { }); // Инициализация Eruda
+// }

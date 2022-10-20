@@ -8,6 +8,10 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
+#donut {
+  background-color: rgb(63, 138, 224);
+}
+
 #donut:not(.ModalPage--sizeX-compact) .vkuiModalPage__header {
   display: none;
   user-select: none;
