@@ -128,10 +128,12 @@ export default class ClubInfo extends Component {
 
   openModal(id) {
     this.setState({ modalLoading: true, activeModal: id });
+    document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
   }
 
   closeModal() {
     this.setState({ activeModal: "" });
+    document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
   }
 
   settingsWasChanged() {

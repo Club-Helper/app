@@ -323,3 +323,7 @@ body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText 
   border-radius: 10px;
   margin-top: 10px;
 }
+
+.clubHelper--show-modal {
+  overflow: hidden;
+}

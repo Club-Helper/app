@@ -8,7 +8,7 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-#donut {
+#donut .vkuiPanel__in {
   background-color: rgb(63, 138, 224);
 }
 
@@ -24,12 +24,20 @@
   color: #fff;
 }
 
+#donut .vkuiModalPage__in {
+  background-color: rgb(63, 138, 224);
+}
+
 #donut.ModalPage--sizeX-compact .vkuiModalPage__in.ModalPage__in {
   width: 100%;
 }
 
 #donut.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in {
   background-color: rgb(63, 138, 224);
+}
+
+#donut.ModalPage--sizeX-compact:not(.ModalPage--vkcom) .vkuiPanelHeader__in.PanelHeader__in {
+  border-radius: 14px 14px 0 0;
 }
 
 #donut.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in .vkuiPanelHeader__content.PanelHeader__content {
@@ -52,8 +60,16 @@
   color: #fff;
 }
 
-.clubHelper-donut_panel .vkuiPanel__in {
+.clubHelper-donut_panel.vkuiPanel--vkcom .vkuiPanel__in {
   padding-bottom: 0;
+}
+
+.clubHelper-donut_panel:not(.vkuiPanel--vkcom) .vkuiPanel__in {
+  padding-bottom: calc(var(--safe-area-inset-bottom) + var(--tabbar_height) + 110px);
+}
+
+#donut:not(.vkuiModalPage--desktop) .clubHelper--donut {
+  padding-top: 20px;
 }
 
 .clubHelper--donut {
@@ -84,7 +100,6 @@
 .clubHelper--donut_block {
   display: flex;
   margin: 20px 0;
-  align-items: center;
   column-gap: 20px;
 }
 
@@ -163,4 +178,23 @@
 .clubHelper--donut_note {
   font-size: 13px;
   opacity: .3;
+}
+
+#donut .vkuiHeader--ios .vkuiHeader__main,
+#donut .vkuiHeader--android .vkuiHeader__main  {
+  padding: 0;
+  color: #fff;
+}
+
+#donut .vkuiHeader--ios,
+#donut .vkuiHeader--android {
+  padding: 0;
+}
+
+#donut .vkuiHeader--mode-secondary .vkuiHeader__main {
+  margin: 0;
+  color: #fff;
+  text-transform: initial;
+  white-space: normal;
+  opacity: .5;
 }
