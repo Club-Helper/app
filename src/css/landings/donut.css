@@ -65,7 +65,7 @@
 }
 
 .clubHelper-donut_panel:not(.vkuiPanel--vkcom) .vkuiPanel__in {
-  padding-bottom: calc(var(--safe-area-inset-bottom) + var(--tabbar_height) + 110px);
+  padding-bottom: calc(var(--safe-area-inset-bottom) + var(--tabbar_height) * 4);
 }
 
 #donut:not(.vkuiModalPage--desktop) .clubHelper--donut {
@@ -194,7 +194,10 @@
 #donut .vkuiHeader--mode-secondary .vkuiHeader__main {
   margin: 0;
   color: #fff;
+  opacity: .5;
+}
+
+#donut .vkuiHeader--mode-secondary .vkuiHeader__main .vkuiHeader__content-in {
   text-transform: initial;
   white-space: normal;
-  opacity: .5;
 }
