@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea, CellButton } from '@vkontakte/vkui'

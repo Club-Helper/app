@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 
@@ -27,7 +27,7 @@ export default class Menu extends Component {
   constructor(props) {
     super(props)
   }
-  
+
   render() {
     return (
       <Panel>
@@ -87,7 +87,7 @@ export default class Menu extends Component {
         </Group>
 
         <Footer onClick={() => this.props.go("app_info")}>
-          1.0.0
+          v1.0.0 beta
         </Footer>
       </Panel>
     )

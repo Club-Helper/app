@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 import React from "react";
@@ -43,6 +43,6 @@ Sentry.init({
 });
 
 ReactDOM.render(<App />, document.getElementById("root"));
-if (process.env.NODE_ENV === "development") {
-  import("./eruda").then(({ default: eruda }) => { }); // Инициализация Eruda
-}
+// if (process.env.NODE_ENV === "development") {
+import("./eruda").then(({ default: eruda }) => { }); // Инициализация Eruda
+// }

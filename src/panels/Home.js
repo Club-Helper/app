@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 import React, { useState, useEffect } from 'react';
@@ -120,7 +120,11 @@ function Home({
             setRole(role);
             setToken(data.response.token);
 
-            console.log(data.response.page);
+            ym(90794548, 'userParams', {
+              uid: data.response.uid
+            });
+
+            console.log("Session ID", data.response.session_id);
 
             setLastClubID(data.response.last_club)
 
@@ -181,6 +185,10 @@ function Home({
             } else if (data.response.page === "club") {
               setIsNew(false);
               setToken(data.response.token)
+
+              ym(90794548, 'userParams', {
+                uid: data.response.uid
+              });
 
                 fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
                   .then(response => response.json())
@@ -495,6 +503,7 @@ function Home({
     req: req,
     generateRefSourceString: generateRefSourceString,
     toggleShowMenu: toggleShowMenu
+    parseLinks: parseLinks,
   };
 
   const panels = [

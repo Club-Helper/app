@@ -5,7 +5,7 @@
  * в сети Интернет по адресу https://www.vk.com/app7938346
  *
  * Несанкционированное копирование, инженерный анализ, передача,
- * публичная демонстрация, распространение кода приложения запрещены
+ * распространение кода приложения запрещены
  *******************************************************/
 
 import React from "react";
@@ -184,7 +184,7 @@ class StartPage extends React.Component {
         bridge
           .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" })
           .then(data => {
-            console.log('Получено разрешение на права доступа', this.props.token);
+            console.log('Получено разрешение на права доступа');
 
             this.props.req("clubs.creat", {
               'access_token': data.access_token,
@@ -227,8 +227,6 @@ class StartPage extends React.Component {
                       isError: true
                     }
                   });
-
-                  console.log(window.token);
 
                   this.props.setPopout(
                     <Alert
