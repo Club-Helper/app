@@ -9,7 +9,7 @@
  *******************************************************/
 
 
-import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline, Icon28CompassCircleFillPurple } from '@vkontakte/icons';
+import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline } from '@vkontakte/icons';
 import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import bridge from '@vkontakte/vk-bridge';
@@ -74,11 +74,15 @@ export default class Clubs extends Component {
           id="installed"
           header="Приложение установлено"
           actions={
-            <Button
-              size="l"
-              mode="primary"
-              onClick={() => window.open("https://vk.com/app7938346_-" + this.state.bridgeInstallResult.group_id, "_blank")}
-            >Настроить</Button>
+            <Link style={{ width: "96.8%" }} href={"https://vk.com/app7938346_-" + this.state.bridgeInstallResult?.group_id} target="_blank">
+              <Button
+                size="l"
+                mode="primary"
+                style={{ width: "100%" }}
+              >
+                Настроить
+              </Button>
+            </Link>
           }
           icon={<Icon56CheckCircleOutline />}
           onClose={() => {
