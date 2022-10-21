@@ -268,12 +268,14 @@ export default class MailingList extends Component {
 
     if (!this.state.mailingText) {
       this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
+      this.setState({ sendBtnWorking: false });
       return false;
     } else {
       this.setState({ sendMessageValidation: "" });
     }
     if (this.state.mailingText.length < 10) {
       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 10 символов" });
+      this.setState({ sendBtnWorking: false });
       return false;
     } else {
       this.setState({ sendMessageValidation: "" });

@@ -101,6 +101,7 @@ function Home({
   const [clubCardMailings, setClubCardMailings] = useState(null);
 
   const [startupError, setStartupError] = useState(null);
+  const [showMenu, toggleShowMenu] = useState(true);
 
   useEffect(() => {
     fetch(api_url + "app.start" + window.location.search)
@@ -492,7 +493,8 @@ function Home({
     setLoading: setLoading,
     appearance: appearance,
     req: req,
-    generateRefSourceString: generateRefSourceString
+    generateRefSourceString: generateRefSourceString,
+    toggleShowMenu: toggleShowMenu
   };
 
   const panels = [
@@ -722,7 +724,7 @@ function Home({
                   width={isDesktop ? '660px' : '100%'}
                   maxWidth={isDesktop ? '660px' : '100%'}
                 >
-                  <Epic activeStory={activeStory} tabbar={!isDesktop && club && (
+                  <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && (
                     <Tabbar>
                       {menuItems.map(menuItem =>
                         menuItem.show &&
@@ -849,6 +851,8 @@ function Home({
                     setPage={setPage}
                     lastClubID={lastClubID}
                     req={req}
+                    group_id={group_id}
+                    club_role={club_role}
                   />
                 </Panel>
               </View>
@@ -877,6 +881,8 @@ function Home({
                     appearance={appearance}
                     setPage={setPage}
                     req={req}
+                    group_id={group_id}
+                    club_role={club_role}
                   />
                 </Panel>
               </View>;
@@ -902,7 +908,7 @@ function Home({
                     width={isDesktop ? '660px' : '100%'}
                     maxWidth={isDesktop ? '660px' : '100%'}
                   >
-                    <Epic activeStory={activeStory} tabbar={!isDesktop && office && (
+                    <Epic activeStory={activeStory} tabbar={!isDesktop && office && showMenu && (
                       <Tabbar>
                         {officeMenuItems.map(menuItem =>
                           menuItem.show &&
@@ -925,7 +931,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+                          <Office parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
@@ -934,7 +940,7 @@ function Home({
                         activePanel='office-clubs'
                       >
                         <Panel id='office-clubs'>
-                          <Clubs setPopout={setPopout} office={office} formatRole={formatRole} req={req} />
+                          <Clubs setRole={setRole} setGroupId={setGroupId} setPage={setPage} setActiveStory={setActiveStory} toggleShowMenu={toggleShowMenu} setPopout={setPopout} office={office} formatRole={formatRole} req={req} />
                         </Panel>
                       </View>
 
@@ -1007,11 +1013,12 @@ function Home({
                           )}
                         </Group>
 
-                        <Group>
+                        {false && <Group>
                           <SimpleCell onClick={() => bridge.send("VKWebAppAddToCommunity")} multiline before={<Icon28AddCircleOutline />}>
                             Новое сообщество
                           </SimpleCell>
                         </Group>
+                        }
 
                         <Group>
                           <Link href={"https://vk.me/ch_app?ref_source=" + generateRefSourceString("employee_searching")} target='_blank'>
@@ -1024,7 +1031,7 @@ function Home({
                         </Group>
 
                         <Footer onClick={() => go("app_info")}>
-                          1.0.0
+                          v1.0.0-beta
                         </Footer>
                       </Panel>
                     </SplitCol>
