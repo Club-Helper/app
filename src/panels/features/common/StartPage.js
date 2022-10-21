@@ -85,7 +85,6 @@ class StartPage extends React.Component {
     }
   }
 
-
   settingClub(clubID, token) {
     this.props.req("clubs.startSetting", {
       token: token

@@ -502,7 +502,7 @@ function Home({
     appearance: appearance,
     req: req,
     generateRefSourceString: generateRefSourceString,
-    toggleShowMenu: toggleShowMenu
+    toggleShowMenu: toggleShowMenu,
     parseLinks: parseLinks,
   };
 
@@ -949,7 +949,19 @@ function Home({
                         activePanel='office-clubs'
                       >
                         <Panel id='office-clubs'>
-                          <Clubs setRole={setRole} setGroupId={setGroupId} setPage={setPage} setActiveStory={setActiveStory} toggleShowMenu={toggleShowMenu} setPopout={setPopout} office={office} formatRole={formatRole} req={req} />
+                          <Clubs
+                            setRole={setRole}
+                            setGroupId={setGroupId}
+                            setPage={setPage}
+                            setActiveStory={setActiveStory}
+                            toggleShowMenu={toggleShowMenu}
+                            setPopout={setPopout}
+                            office={office}
+                            formatRole={formatRole}
+                            req={req}
+                            token={token}
+                            setOffice={setOffice}
+                          />
                         </Panel>
                       </View>
 
