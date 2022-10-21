@@ -10,7 +10,7 @@
 
 
 import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline, Icon28CompassCircleFillPurple } from '@vkontakte/icons';
-import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div } from '@vkontakte/vkui'
+import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import bridge from '@vkontakte/vk-bridge';
 
@@ -20,7 +20,8 @@ export default class Clubs extends Component {
 
     this.state = {
       activeModal: "",
-      bridgeInstallResult: null
+      bridgeInstallResult: null,
+      isFetching: false
     }
   }
 
@@ -53,6 +54,17 @@ export default class Clubs extends Component {
     this.props.setGroupId(this.state.bridgeInstallResult.group_id);
     this.props.setPage("landing_setting");
     this.props.setActiveStory("start_page");
+  }
+
+  onRefresh() {
+    this.setState({ isFetching: true });
+    this.props.req("office.get", { token: this.props.token }, (response) => {
+      this.props.setOffice(response.response);
+      this.setState({ isFetching: false });
+    }, (error) => {
+      this.props.createError(error.error?.error_msg);
+      this.setState({ isFetching: false });
+    });
   }
 
   render() {
@@ -116,36 +128,40 @@ export default class Clubs extends Component {
             >
               Мои сообщества
             </PanelHeader>
-            <Group>
-              <List>
-                {!this.props.office?.clubs ? <PanelSpinner /> :
-                  this.props.office.clubs.length > 0 ?
-                    this.props.office?.clubs.map((club, idx) => (
-                      <Link href={"https://vk.com/app7938346_-" + club.id} target="_blank">
-                      <Cell
-                        onClick={() => this.handleClick()}
-                        key={idx}
-                        before={
-                          <Avatar
-                            size={48}
-                            src={club.photo}
-                            badge={
-                              <React.Fragment>
-                                {club.donut && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20DonateCircleFillYellow /></Avatar>}
-                                {club.blocked && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon16Block fill='var(--accent)' width={20} height={20} /></Avatar>}
-                              </React.Fragment>
-                            }
-                          />
-                        }
-                        description={this.props.formatRole(club.role)}
-                        after={<Icon12Chevron width={16} height={16} />}
-                      >
-                        {club.title}
-                        </Cell>
-                      </Link>
-                  )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
-              </List>
-            </Group>
+            <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh()}>
+              <Group>
+                {this.state.isFetching ? <PanelSpinner /> :
+                  <List>
+                    {!this.props.office?.clubs ? <PanelSpinner /> :
+                      this.props.office.clubs.length > 0 ?
+                        this.props.office?.clubs.map((club, idx) => (
+                          <Link href={"https://vk.com/app7938346_-" + club.id} target="_blank">
+                            <Cell
+                              onClick={() => this.handleClick()}
+                              key={idx}
+                              before={
+                                <Avatar
+                                  size={48}
+                                  src={club.photo}
+                                  badge={
+                                    <React.Fragment>
+                                      {club.donut && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20DonateCircleFillYellow /></Avatar>}
+                                      {club.blocked && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon16Block fill='var(--accent)' width={20} height={20} /></Avatar>}
+                                    </React.Fragment>
+                                  }
+                                />
+                              }
+                              description={this.props.formatRole(club.role)}
+                              after={<Icon12Chevron width={16} height={16} />}
+                            >
+                              {club.title}
+                            </Cell>
+                          </Link>
+                        )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
+                  </List>
+                }
+              </Group>
+            </PullToRefresh>
           </Panel>
         </SplitCol>
       </SplitLayout>
