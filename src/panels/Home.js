@@ -49,12 +49,11 @@ import DonutIcon from '../img/donut.png'
 import bridge from '@vkontakte/vk-bridge';
 
 function Home({
-  id,
   platform,
   popout,
   setPopout,
   api_url,
-  log,
+  setHistory,
   appearance,
   setAppearance,
   activeStory,
@@ -488,6 +487,21 @@ function Home({
 
   const [params, setParams] = useState(null);
 
+  const changeMode = (mode) => {
+    if (mode == "office") {
+      setPopout(<ScreenSpinner />);
+      fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
+        .then(response => response.json())
+        .then(data => {
+          setOffice(data.response);
+        })
+
+      setHistory(["office-clubs"]);
+      setPage("office");
+      setActiveStory("office-clubs");
+    }
+  }
+
   const basicProps = {
     club_role: club_role,
     group_id: group_id,
@@ -686,24 +700,11 @@ function Home({
           startupError={startupError}
           setStartupError={setStartupError}
           setPage={setPage}
+          changeMode={changeMode}
         />
       )
     }
   ];
-
-  const changeMode = (mode) => {
-    if (mode == "office") {
-      setPopout(<ScreenSpinner />);
-      fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
-        .then(response => response.json())
-        .then(data => {
-          setOffice(data.response);
-        })
-
-      setPage("office");
-      setActiveStory("office-clubs");
-    }
-  }
 
   if (/^\#mark-ticket\/(0|[1-9][0-9]*)$/.test(window.location.hash)) {
     return (
@@ -1003,6 +1004,7 @@ function Home({
                             setCommentsStatus={setCommentsStatus}
                             club_role={club_role}
                             setStartupError={setStartupError}
+                            setHistory={setHistory}
                           />
                         </Panel>
                       </View>

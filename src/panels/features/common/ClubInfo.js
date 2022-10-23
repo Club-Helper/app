@@ -38,10 +38,11 @@ import {
   Div,
   Placeholder,
   CellButton,
-  Card
+  Card,
+  Spacing
 } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon28Notification, Icon28NotificationAddOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline } from '@vkontakte/icons';
+import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon28Notification, Icon28NotificationAddOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline, Icon28UserTagOutline } from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -464,6 +465,14 @@ export default class ClubInfo extends Component {
                         after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
                       >
                         Уведомления
+                      </CellButton>
+                      <Spacing separator />
+                      <CellButton
+                        onClick={() => this.props.changeMode("office")}
+                        before={<Icon28UserTagOutline />}
+                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                      >
+                        Личный кабинет
                       </CellButton>
                     </Group>
                   }

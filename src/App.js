@@ -161,6 +161,7 @@ const App = () => {
                   go={go}
                   goBack={goBack}
                   history={history}
+                  setHistory={setHistory}
                 />
               </View>
             </AppRoot>
