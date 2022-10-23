@@ -1026,6 +1026,15 @@ function Home({
                           />
                         </Panel>
                       </View>
+
+                      <View
+                        id='app_info'
+                        activePanel='app_info'
+                      >
+                        <Panel id='app_info'>
+                          <AppInfo {...basicProps} />
+                        </Panel>
+                      </View>
                     </Epic>
                   </SplitCol>
                   {isDesktop ? (

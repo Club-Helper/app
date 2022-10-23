@@ -45,6 +45,7 @@ export default class Clubs extends Component {
         console.log(response);
         this.props.setIsNew(false);
         this.props.setClub(response.response);
+        this.props.setGroupId(group_id);
         this.props.setDonut(response.response.donut);
         this.props.setDonutStatus(response.response.donut.status);
         this.props.setMessagesStatus(response.response.setting.messages.status);

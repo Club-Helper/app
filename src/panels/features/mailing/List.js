@@ -562,7 +562,7 @@ export default class MailingList extends Component {
                   <List>
                     <PullToRefresh
                       isFetching={this.state.listFetching}
-                      onRefresh={() => this.getMailing(false)}
+                      onRefresh={() => this.getMailing(true)}
                     >
                       {
                         this.state.listLoading ? <PanelSpinner /> :
@@ -577,7 +577,7 @@ export default class MailingList extends Component {
                                 onDragFinish={({ from, to }) =>
                                   this.updateList({ from, to }, this.state.list)
                                 }
-                                onRemove={() => this.removeItem(idx)}
+                                onRemove={() => this.removeItem(item.id)}
                                 after={
                                   <Icon24InfoCircleOutline
                                     onClick={() => {
