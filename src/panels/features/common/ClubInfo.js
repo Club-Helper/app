@@ -36,15 +36,18 @@ import {
   Banner,
   Button,
   Div,
-  Placeholder
+  Placeholder,
+  CellButton,
+  Card
 } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline } from '@vkontakte/icons';
+import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon28Notification, Icon28NotificationAddOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline } from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
 import StatsHome from '../stats/Home';
 import bridge from "@vkontakte/vk-bridge";
+import Notifies from './Notifies';
 
 export default class ClubInfo extends Component {
   constructor(props) {
@@ -64,7 +67,9 @@ export default class ClubInfo extends Component {
       isFetching: false,
       autofixBtnWorking: false,
       codeBtnWorking: false,
-      supportCode: null
+      supportCode: null,
+      notifiesFetching: false,
+      notifies: {}
     }
 
     this.getManagers = this.getManagers.bind(this);
@@ -78,6 +83,8 @@ export default class ClubInfo extends Component {
   }
 
   getManagers() {
+    if (this.props.club_role != "admin") return false;
+
     this.setState({ isManagersLoading: true });
 
     this.props.req("clubs.getManagers", {
@@ -229,8 +236,21 @@ export default class ClubInfo extends Component {
     )
   }
 
+  openNotifies() {
+    this.setState({ notifiesFetching: true });
+    this.openModal("notifies");
+    this.props.req("clubs.getNotifications", {
+      token: this.props.token
+    },
+      (data) => {
+        this.setState({ notifiesFetching: false, notifies: data.response });
+        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    })
+  }
+
   componentDidMount() {
     this.props.setLoading(false);
+    this.props.setPopout(null);
     this.getClub();
     if (!this.props.startupError) {
       this.getManagers();
@@ -303,6 +323,20 @@ export default class ClubInfo extends Component {
             <center>PIN-код действителен до <b>{this.state.supportCode?.deactivation?.label}</b>.</center>
           </Div>
         </ModalPage>
+        <ModalPage
+          id="notifies"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Уведомления</ModalPageHeader>}
+          onClose={this.closeModal}
+          settlingHeight={100}
+        >
+          {this.state.notifiesFetching ? <PanelSpinner /> :
+            this.state.notifies.count > 0 ?
+            <Notifies notifies={this.state.notifies.items} />
+            : <Placeholder icon={<Icon56NotificationOutline />}>
+                Здесь будут уведомления...
+            </Placeholder>
+          }
+        </ModalPage>
       </ModalRoot>
 
     );
@@ -314,7 +348,7 @@ export default class ClubInfo extends Component {
             {this.props.isLoading ? <PanelSpinner /> :
               <Panel>
                 <PanelHeader
-                  left={
+                  left={!this.props.isMobile ?
                     <React.Fragment>
                       <PanelHeaderButton onClick={() => this.openModal("settings")}>
                         <Icon28SettingsOutline />
@@ -322,7 +356,11 @@ export default class ClubInfo extends Component {
                       <PanelHeaderButton onClick={() => this.openModal("support_code")}>
                         <Icon28LifebuoyOutline />
                       </PanelHeaderButton>
+                      <PanelHeaderButton>
+                        <Icon24NotificationOutline onClick={() => this.openNotifies()} width={28} height={28} />
+                      </PanelHeaderButton>
                     </React.Fragment>
+                    : <></>
                   }
                 >
                   Сообщество
@@ -391,13 +429,44 @@ export default class ClubInfo extends Component {
                             }
                           />
                         }
-                        <List>
+                        <List style={{ paddingTop: "10px" }}>
                           <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
                           <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation.time.label}</MiniInfoCell>
                           <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
                         </List>
                       </>}
                   </Group>
+                  {this.props.isMobile &&
+                    <Group>
+                      <CellButton
+                        onClick={() => this.openModal("settings")}
+                        before={
+                          <Icon28SettingsOutline />
+                        }
+                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                      >
+                        Настройки
+                      </CellButton>
+                      <CellButton
+                        onClick={() => this.openModal("support_code")}
+                        before={
+                          <Icon28LifebuoyOutline />
+                        }
+                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                      >
+                        PIN-код для Поддержки
+                      </CellButton>
+                      <CellButton
+                        onClick={() => this.openNotifies()}
+                        before={
+                          <Icon24NotificationOutline width={28} height={28} />
+                        }
+                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                      >
+                        Уведомления
+                      </CellButton>
+                    </Group>
+                  }
                   {!this.state.isStatsHidden &&
                     <>
                       <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)"}}>Статистика</Title>
@@ -418,7 +487,7 @@ export default class ClubInfo extends Component {
                           </CardScroll>
                         </Group>
                       }
-                      <Group header={<Title level='3' style={{padding: "10px", marginLeft: "5px"}}>Обращения</Title>}>
+                    <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Обращения</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
                         <CardScroll>
                           <ContentCard

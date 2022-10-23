@@ -10,7 +10,7 @@
 
 
 import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline } from '@vkontakte/icons';
-import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh } from '@vkontakte/vkui'
+import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh, ScreenSpinner } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import bridge from '@vkontakte/vk-bridge';
 
@@ -29,8 +29,48 @@ export default class Clubs extends Component {
     this.props.setPopout(null);
   }
 
-  handleClick () {
-    console.log("handleClick");
+  handleClick (group_id) {
+    console.log("handleClick", group_id);
+    this.props.setPopout(<ScreenSpinner />);
+    this.props.req("app.changeClub", {
+      token: this.props.token,
+      group_id: group_id
+    }, (response) => {
+      console.log(response);
+      let _role = response.response.group_role;
+      this.props.setRole(response.response.group_role);
+      this.props.setToken(response.response.token.token);
+      this.props.req("clubs.get", {
+        token: this.props.token
+      }, (response) => {
+        console.log(response);
+        this.props.setIsNew(false);
+        this.props.setClub(response.response);
+        this.props.setDonut(response.response.donut);
+        this.props.setDonutStatus(response.response.donut.status);
+        this.props.setMessagesStatus(response.response.setting.messages.status);
+        this.props.setLinksStatus(response.response.setting.links.status);
+        this.props.setCommentsStatus(response.response.setting.comments.status);
+
+        this.props.setPage("app");
+
+        if (response.response.error) {
+          if (this.props.club_role == "admin") {
+            this.props.setStartupError(response.response.error);
+            this.props.setActiveStory("club_info");
+          } else {
+            this.props.setActiveStory("call_admin");
+          }
+        } else {
+          this.props.setStartupError(null);
+          if (response.response.setting.messages.status == false && response.response.setting.links.status == false && response.response.setting.comments.status == false && _role != "admin") {
+            this.props.setActiveStory('call_admin');
+          } else {
+            this.props.setActiveStory('club_info');
+          }
+        }
+      })
+    });
   }
 
   install() {
@@ -139,9 +179,8 @@ export default class Clubs extends Component {
                     {!this.props.office?.clubs ? <PanelSpinner /> :
                       this.props.office.clubs.length > 0 ?
                         this.props.office?.clubs.map((club, idx) => (
-                          <Link href={"https://vk.com/app7938346_-" + club.id} target="_blank">
                             <Cell
-                              onClick={() => this.handleClick()}
+                              onClick={() => this.handleClick(club.id)}
                               key={idx}
                               before={
                                 <Avatar
@@ -160,7 +199,6 @@ export default class Clubs extends Component {
                             >
                               {club.title}
                             </Cell>
-                          </Link>
                         )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
                   </List>
                 }
