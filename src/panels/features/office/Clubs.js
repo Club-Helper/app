@@ -30,7 +30,6 @@ export default class Clubs extends Component {
   }
 
   handleClick (group_id) {
-    console.log("handleClick", group_id);
     this.props.setPopout(<ScreenSpinner />);
     this.props.req("app.changeClub", {
       token: this.props.token,
