@@ -63,12 +63,12 @@ export default class AppInfo extends Component {
                       }
                       }
                     >Поделиться</SimpleCell>
-                    <a href={"https://vk.com/ch_app"} style={{ textDecoration: "none" }}>
+                    <Link href={"https://vk.com/ch_app"} style={{ textDecoration: "none" }} target={"_blank"}>
                       <SimpleCell before={<Icon24Users3Outline />}>Перейти в сообщество</SimpleCell>
-                    </a>
-                    <a href={"https://github.com/Club-Helper/app"} style={{ textDecoration: "none" }} target={"_blank"}>
+                    </Link>
+                    <Link href={"https://github.com/Club-Helper/app"} style={{ textDecoration: "none" }} target={"_blank"}>
                       <SimpleCell before={<Icon24BugOutline />}>GitHub</SimpleCell>
-                    </a>
+                    </Link>
                   </List>
                 </Group>
               }

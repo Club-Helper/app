@@ -11,7 +11,7 @@
 import React, { Component } from 'react'
 
 import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard, Spacing } from '@vkontakte/vkui'
-import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon28SmileOutline, Icon28More, Icon28MoreHorizontal, Icon16Done } from '@vkontakte/icons';
+import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon28SmileOutline, Icon28More, Icon28MoreHorizontal, Icon16Done, Icon28AdvertisingOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 import { SystemMessage, UserMessage, ClubMessage } from './partials/Message';
 import TicketActions from './TicketActions';
@@ -227,7 +227,7 @@ export default class TicketsList extends Component {
         </ModalPage>
         <ModalPage
           id="actions"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>Приглашение в рассылку</ModalPageHeader>}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Приглашение в рассылку</ModalPageHeader>}
           onClose={this.closeModal}
           settlingHeight={100}
         >
@@ -256,7 +256,7 @@ export default class TicketsList extends Component {
           left={
             <React.Fragment>
               <PanelHeaderBack onClick={() => this.props.go("tickets_list")} />
-              <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28MoreHorizontal /></PanelHeaderButton>
+              <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28AdvertisingOutline /></PanelHeaderButton>
               {this.state.fetchingHeader && <PanelHeaderButton><Spinner /></PanelHeaderButton>}
             </React.Fragment>
           }
@@ -293,8 +293,16 @@ export default class TicketsList extends Component {
                   {this.state.ticketOptions != [] &&
                     <>
                       <Separator style={{ margin: "10px 0 10px 0" }} />
-
-                      <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
+                    <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
+                      {this.state.ticketOptions.includes("received_information") &&
+                        <Button
+                          onClick={() => this.handleOptionClick("received_information")}
+                          loading={this.state.buttonLoading === "received_information"}
+                          mode="commerce"
+                        >
+                          Информация получена
+                          </Button>
+                        }
                         {this.state.ticketOptions.includes("request_information") &&
                           <Button
                             onClick={() => this.handleOptionClick("request_information")}

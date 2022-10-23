@@ -9,8 +9,8 @@
  *******************************************************/
 
 
-import { Icon24BlockOutline } from '@vkontakte/icons';
-import { Button, CustomSelectOption, PanelSpinner, Spacing, Title } from '@vkontakte/vkui'
+import { Icon24BlockOutline, Icon56AdvertisingOutline } from '@vkontakte/icons';
+import { Button, CustomSelectOption, PanelSpinner, Placeholder, Spacing, Title } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 
 export default class TicketActions extends Component {
@@ -53,40 +53,58 @@ export default class TicketActions extends Component {
       this.state.modalLoading ? <PanelSpinner /> :
         <>
           <Spacing size={15} />
+          {this.state.mailingList.length > 0 ?
+            <>
           <Title level='3' style={{ marginLeft: "15px" }}>Доступные для подписки</Title>
-          {this.state.mailingList.map((item) => {
-            if (item.status === "open") {
-              return (
-                <CustomSelectOption
-                  key={item.id}
-                  onClick={() => this.handleClick(item.id)}
-                  after={
-                    <Button mode="secondary">Пригласить</Button>
-                  }
-                >
-                  {item.title}
-                </CustomSelectOption>
-              )
-            }
-          })}
-          <Spacing size={35} separator />
-          <Title level='3' style={{ marginLeft: "15px" }}>Недоступные для подписки</Title>
-          {this.state.mailingList.map((item) => {
-            if (item.status !== "open") {
-              return (
-                <CustomSelectOption
-                  key={item.id}
-                  after={
-                    <Button disabled style={{ width: "100.34px" }} mode="tertiary">
-                      <Icon24BlockOutline fill="var(--destructive)" />
-                    </Button>
-                  }
-                >
-                  {item.title}
-                </CustomSelectOption>
-              )
-            }
-          })}
+              {this.state.mailingList.map((item) => {
+                if (item.status === "open") {
+                  return (
+                    <CustomSelectOption
+                      key={item.id}
+                      onClick={() => this.handleClick(item.id)}
+                      after={
+                        <Button mode="secondary">Пригласить</Button>
+                      }
+                    >
+                      {item.title}
+                    </CustomSelectOption>
+                  )
+                }
+              })}</> :
+            <Placeholder
+              icon={<Icon56AdvertisingOutline />}
+              action={<Button
+                onClick={() => {
+                  this.props.setActiveStory("mailing_list");
+                  this.props.close();
+                }}
+              >
+                Создать рассылку
+              </Button>}
+            >
+              Здесь пока ничего нет...
+            </Placeholder>}
+          {this.state.mailingList.find(item => item.status !== "open")?.length > 0 ? (
+            <div>
+              <Spacing size={35} separator />
+              <Title level='3' style={{ marginLeft: "15px" }}>Недоступные для подписки</Title>
+              {this.state.mailingList.map((item) => {
+                if (item.status !== "open") {
+                  return (
+                    <CustomSelectOption
+                      key={item.id}
+                      after={
+                        <Button disabled style={{ width: "100.34px" }} mode="tertiary">
+                          <Icon24BlockOutline fill="var(--destructive)" />
+                        </Button>
+                      }
+                    >
+                      {item.title}
+                    </CustomSelectOption>
+                  )
+                }
+              })}</div>) : ""}
+
           <Spacing size={15} />
         </>
     )
