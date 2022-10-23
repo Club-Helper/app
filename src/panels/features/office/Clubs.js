@@ -56,15 +56,19 @@ export default class Clubs extends Component {
         if (response.response.error) {
           if (this.props.club_role == "admin") {
             this.props.setStartupError(response.response.error);
+            this.props.setHistory(["club_info"]);
             this.props.setActiveStory("club_info");
           } else {
+            this.props.setHistory(["call_admin"]);
             this.props.setActiveStory("call_admin");
           }
         } else {
           this.props.setStartupError(null);
           if (response.response.setting.messages.status == false && response.response.setting.links.status == false && response.response.setting.comments.status == false && _role != "admin") {
+            this.props.setHistory(["call_admin"]);
             this.props.setActiveStory('call_admin');
           } else {
+            this.props.setHistory(["club_info"]);
             this.props.setActiveStory('club_info');
           }
         }
