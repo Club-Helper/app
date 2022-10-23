@@ -11,8 +11,8 @@
 import React, { useState, useEffect } from 'react';
 
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack } from '@vkontakte/vkui';
-import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline } from '@vkontakte/icons';
+import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner } from '@vkontakte/vkui';
+import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
@@ -486,6 +486,8 @@ function Home({
       })
   }
 
+  const [params, setParams] = useState(null);
+
   const basicProps = {
     club_role: club_role,
     group_id: group_id,
@@ -504,6 +506,7 @@ function Home({
     generateRefSourceString: generateRefSourceString,
     toggleShowMenu: toggleShowMenu,
     parseLinks: parseLinks,
+    params: params
   };
 
   const panels = [
@@ -576,7 +579,6 @@ function Home({
       obj: (
         <Donut
           {...basicProps}
-
         />
       )
     },
@@ -671,10 +673,12 @@ function Home({
       panelHeader: null,
       obj: (
         <ClubInfo
+          id="club_info"
           {...basicProps}
           club={club}
           setActiveStory={setActiveStory}
           setIsNew={setIsNew}
+          club_role={club_role}
           formatRole={formatRole}
           setAppearance={setAppearance}
           setDonutStatus={setDonutStatus}
@@ -686,6 +690,20 @@ function Home({
       )
     }
   ];
+
+  const changeMode = (mode) => {
+    if (mode == "office") {
+      setPopout(<ScreenSpinner />);
+      fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
+        .then(response => response.json())
+        .then(data => {
+          setOffice(data.response);
+        })
+
+      setPage("office");
+      setActiveStory("office-clubs");
+    }
+  }
 
   if (/^\#mark-ticket\/(0|[1-9][0-9]*)$/.test(window.location.hash)) {
     return (
@@ -773,10 +791,19 @@ function Home({
                     <Panel>
                       {hasHeader && <PanelHeader />}
                       <Group>
+                        <Cell
+                          onClick={() => changeMode("office")}
+                          before={
+                            <Icon28UserTagOutline />
+                          }
+                        >
+                          Личный кабинет
+                        </Cell>
+                        <Spacing separator />
                         {club ?
                           <>
                             <Cell
-                              disabled
+                              onClick={() => go("club_info")}
                               before={
                                 <Avatar
                                   size={28}
@@ -786,11 +813,16 @@ function Home({
                                     width: '14px',
                                     height: '14px'
                                   }} /> : ""}
-                                  style={{ cursor: "pointer" }}
                                 />
                               }
+                              style={activeStory == "club_info" ? {
+                                cursor: "pointer",
+                                backgroundColor: "var(--button_secondary_background)",
+                                borderRadius: 8
+                              } : { cursor: "pointer" }}
+                              disabled={activeStory == "club_info"}
                             >
-                              <div onClick={() => go("club_info")} style={{ cursor: "pointer" }}>{club.name}</div>
+                              {club.name}
                             </Cell>
                           </> : <Spinner />}
                       </Group>
@@ -940,7 +972,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+                          <Office setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
@@ -961,6 +993,16 @@ function Home({
                             req={req}
                             token={token}
                             setOffice={setOffice}
+                            setClub={setClub}
+                            setToken={setToken}
+                            setIsNew={setIsNew}
+                            setDonut={setDonut}
+                            setDonutStatus={setDonutStatus}
+                            setMessagesStatus={setMessagesStatus}
+                            setLinksStatus={setLinksStatus}
+                            setCommentsStatus={setCommentsStatus}
+                            club_role={club_role}
+                            setStartupError={setStartupError}
                           />
                         </Panel>
                       </View>
@@ -993,12 +1035,12 @@ function Home({
                           {office ?
                             <>
                               <Cell
-                                disabled
+                                disabled={activeStory === "office"}
                                 before={
                                   <Avatar
                                     size={28}
                                     src={office.user.photo}
-                                    onClick={() => go("club_info")}
+                                    onClick={() => go("office")}
                                     badge={donutStatus ? <img src={DonutIcon} style={{
                                       width: '14px',
                                       height: '14px'
@@ -1006,6 +1048,10 @@ function Home({
                                     style={{ cursor: "pointer" }}
                                   />
                                 }
+                                style={activeStory === "office" ? {
+                                  backgroundColor: "var(--button_secondary_background)",
+                                  borderRadius: 8
+                                } : {}}
                               >
                                 <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name} {office.user.last_name}</div>
                               </Cell>

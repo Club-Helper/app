@@ -12,6 +12,7 @@
 import React, { Component } from 'react'
 import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, Cell, CellButton, RichCell } from '@vkontakte/vkui';
 import { Icon28LaptopOutline, Icon56AndroidDeviceOutline, Icon56AppleDeviceOutline, Icon28CheckShieldOutline, Icon56NotificationOutline } from '@vkontakte/icons';
+import Notifies from '../common/Notifies';
 
 export default class Office extends Component {
   constructor(props) {
@@ -27,8 +28,8 @@ export default class Office extends Component {
   handlePushClick(push) {
     if (push.action.type == "link") {
       window.open(push.action.target);
-    } else {
-      this.props.setActiveStory(push.action.target);
+    } else if (push.action.type == "page") {
+      this.props.go(push.action.target);
     }
   }
 
@@ -70,23 +71,7 @@ export default class Office extends Component {
         <Group separator={!this.props.isMobile}>
           <List>
             {this.props.office.push.length > 0 ?
-              this.props.office.push.map((item, idx) => (
-                <RichCell
-                  onClick={() => this.handlePushClick(item)}
-                  key={idx}
-                  before={
-                    <Avatar size={48}>
-                      {icons[item.type]}
-                    </Avatar>
-                  }
-                  text={<div dangerouslySetInnerHTML={{ __html: this.parseBrakesLinks(item.text) }}></div>}
-                  subtitle={item.title}
-                  multiline
-                  caption={item.time.label}
-                >
-                  {item.title}
-                </RichCell>
-              ))
+              <Notifies notifies={this.props.office.push} />
               :
               <Placeholder icon={<Icon56NotificationOutline />}>
                 Здесь будут уведомления...

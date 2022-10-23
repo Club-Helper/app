@@ -70,6 +70,7 @@ export default class TicketsList extends Component {
    * @param {string} filter
    */
   getTickets(filter, needLoading) {
+    this.setState({ fetching: true });
     needLoading ? this.setState({ ticketsLoading: true }) : this.setState({ fetching: true });
     let timeout = setTimeout(() => this.props.setPopout(<ScreenSpinner />), 10000);
 

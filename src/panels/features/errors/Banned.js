@@ -146,7 +146,7 @@ export default class Banned extends Component {
                               </Link>
                             )}
                           >
-                            {this.state.ban.reason.content.block.text}
+                            {this.state.ban.reason.content.snippet.text}
                           </Linkify>
                         </Cell>
                       </Card>
