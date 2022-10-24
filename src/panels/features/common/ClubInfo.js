@@ -230,11 +230,12 @@ export default class ClubInfo extends Component {
       token: this.props.token
     },
       (data) => {
-        this.setState({ codeBtnWorking: false, supportCode: data.response });
+        this.setState({ supportCode: data.response });
         this.openModal("support_code_result");
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
       }
-    )
+    );
+    this.setState({ codeBtnWorking: false });
   }
 
   openNotifies() {
