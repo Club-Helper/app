@@ -89,6 +89,7 @@ export default class TicketsList extends Component {
     this.props.setPopout(null);
     clearTimeout(timeout);
     needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
+    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
   }
 
   performAction(id, action) {

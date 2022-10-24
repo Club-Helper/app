@@ -38,7 +38,6 @@ import {
   Div,
   Placeholder,
   CellButton,
-  Card,
   Spacing
 } from '@vkontakte/vkui'
 import React, { Component } from 'react';
