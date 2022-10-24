@@ -101,25 +101,29 @@ export default class TicketsList extends Component {
       token: this.props.token
     },
       (data) => {
-        this.setState({
-          snackbar: (
-            <Snackbar
-              onClose={() => this.setState({ snackbar: null })}
-              before={
-                <Avatar
-                  size={24}
-                  style={{ background: "var(--button_commerce_background)" }}
-                >
-                  <Icon16Done fill="#FFF" width={14} height={14} />
-                </Avatar>
-              }
-            >
-              Приглашение отправлено
-            </Snackbar>
-          ),
-          activeModal: ""
-        });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (data.response.status) {
+          this.setState({
+            snackbar: (
+              <Snackbar
+                onClose={() => this.setState({ snackbar: null })}
+                before={
+                  <Avatar
+                    size={24}
+                    style={{ background: "var(--button_commerce_background)" }}
+                  >
+                    <Icon16Done fill="#FFF" width={14} height={14} />
+                  </Avatar>
+                }
+              >
+                Приглашение отправлено
+              </Snackbar>
+            ),
+            activeModal: ""
+          });
+          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        } else {
+          this.props.createError(data.response.error);
+        }
       }
     );
   }
