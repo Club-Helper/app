@@ -231,30 +231,6 @@ export default class Links extends Component {
     } else {
       this.setState({ formPatternStatus: "default", formPatternBottom: "" })
     }
-    if (/^\s+$/.test(this.state.title)) {
-      this.setState({ formTitleStatus: "error", formTitleBottom: "Неверный формат" });
-      return false;
-    } else {
-      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
-    }
-    if (!/^[^\s][^_\s]*$/.test(this.state.title)) {
-      this.setState({ formTitleStatus: "error", formTitleBottom: "Неверный формат" });
-      return false;
-    } else {
-      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
-    }
-    if (/^\s+$/.test(this.state.pattern)) {
-      this.setState({ formPatternStatus: "error", formPatternBottom: "Неверный формат" });
-      return false;
-    } else {
-      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
-    }
-    if (!/^[^\s][^_\s]*$/.test(this.state.pattern)) {
-      this.setState({ formPatternStatus: "error", formPatternBottom: "Неверный формат" });
-      return false;
-    } else {
-      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
-    }
 
     if (this.state.title != '' && this.state.pattern != '') {
       if (this.state.title.length > 50) {
