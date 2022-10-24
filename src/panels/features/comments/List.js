@@ -343,25 +343,26 @@ export default class CommentsList extends Component {
                 <SplitCol>
                   {this.state.listLoading ? <PanelSpinner /> :
                     <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
-                      <Div style={{ maxWidth: 300 }}>
-                        <SegmentedControl
-                          size="m"
-                          name="filter"
-                          options={[
-                            {
-                              label: "Все",
-                              value: "all"
-                            },
-                            {
-                              label: "Мои",
-                              value: "my"
-                            }
-                          ]}
-                          style={{ height: "35px", padding: "5px" }}
-                          onChange={(value) => this.onFilterChange(value)}
-                          value={this.state.filter}
-                        />
-                      </Div>
+                      {this.state.comments.length > 0 ?
+                        <Div style={{ maxWidth: 300 }}>
+                          <SegmentedControl
+                            size="m"
+                            name="filter"
+                            options={[
+                              {
+                                label: "Все",
+                                value: "all"
+                              },
+                              {
+                                label: "Мои",
+                                value: "my"
+                              }
+                            ]}
+                            style={{ height: "35px", padding: "5px" }}
+                            onChange={(value) => this.onFilterChange(value)}
+                            value={this.state.filter}
+                          />
+                        </Div> : ""}
                       <List>
                         {this.state.comments.length > 0 ?
                           <>
