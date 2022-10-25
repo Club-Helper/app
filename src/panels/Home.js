@@ -973,7 +973,7 @@ function Home({
                         activePanel='office'
                       >
                         <Panel id='office'>
-                          <Office setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+                          <Office appearance={appearance} platform={platform} setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
                         </Panel>
                       </View>
 
@@ -983,6 +983,8 @@ function Home({
                       >
                         <Panel id='office-clubs'>
                           <Clubs
+                            appearance={appearance}
+                            platform={platform}
                             setRole={setRole}
                             setGroupId={setGroupId}
                             setPage={setPage}
@@ -1015,6 +1017,8 @@ function Home({
                       >
                         <Panel id='office-mailings'>
                           <Mailings
+                            appearance={appearance}
+                            platform={platform}
                             setPopout={setPopout}
                             office={office}
                             mailings={office?.mailings}
@@ -1167,6 +1171,7 @@ function Home({
                           createError={createError}
                           formatRole={formatRole}
                           req={req}
+                          platform={platform}
                         />
                       </View>
 

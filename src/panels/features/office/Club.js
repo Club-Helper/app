@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react'
 
-import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, List, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Banner, Placeholder } from '@vkontakte/vkui'
+import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, List, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Banner, Placeholder, ConfigProvider } from '@vkontakte/vkui'
 import { Icon16Chevron, Icon24ReportOutline, Icon28ReportOutline, Icon56CheckCircleOutline, Icon56ErrorTriangleOutline, Icon28StatisticsOutline } from '@vkontakte/icons'
 import bridge from '@vkontakte/vk-bridge';
 import ClubCardMailings from './ClubCardMailings';
@@ -311,7 +311,8 @@ export default class ClubCard extends Component {
     )
 
     return (
-      <SplitLayout modal={modal}>
+      <ConfigProvider appearance={this.props.appearance} platform={this.props.platform.current}>
+        <SplitLayout modal={modal}>
         <SplitCol>
           <Panel id="club-card">
             <PanelHeader left={<PanelHeaderButton onClick={() => this.openReportForm()}><Icon24ReportOutline /></PanelHeaderButton>} />
@@ -361,7 +362,8 @@ export default class ClubCard extends Component {
             </Group>
           </Panel>
         </SplitCol>
-      </SplitLayout>
+        </SplitLayout>
+      </ConfigProvider>
     )
   }
 }
