@@ -8,9 +8,9 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea, CellButton } from '@vkontakte/vkui'
+import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea, CellButton, Footer, Alert, Placeholder } from '@vkontakte/vkui'
 import React, { Component } from 'react'
-import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon28PaletteOutline } from '@vkontakte/icons';
+import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon28PaletteOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
 import '../../../css/settings.css';
 import bridge from '@vkontakte/vk-bridge';
 
@@ -70,7 +70,7 @@ export default class Settings extends Component {
 
   closeFAQModal() {
     this.setState({
-      activeModal: null,
+      activeModal: "",
     });
   }
 
@@ -153,13 +153,70 @@ export default class Settings extends Component {
       })
   }
 
+  deleteGroup(type) {
+    this.props.req("clubs.remove", {
+      token: this.props.token,
+      always: type === "full"
+    }, (response) => {
+      this.setState({ activeModal: "deleted" });
+    });
+  }
+
+  delete(type) {
+    if (!type) return false;
+
+    if (type == "part") {
+      this.props.setPopout(<Alert
+        actions={[
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: true,
+            action: () => this.deleteGroup(type)
+          },
+          {
+            title: "Отмена",
+            mode: "cancel",
+            autoclose: true
+          }
+        ]}
+        actionsLayout="horizontal"
+        onClose={() => this.props.setPopout(null)}
+        header="Внимание"
+        text="Все данные сообщества будут удалены. У вас будет время, чтобы восстановить их. Продолжить?"
+      />)
+    } else if (type == "full") {
+      this.props.setPopout(<Alert
+        actions={[
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: true,
+            action: () => this.deleteGroup(type)
+          },
+          {
+            title: "Отмена",
+            mode: "cancel",
+            autoclose: true
+          }
+        ]}
+        actionsLayout="horizontal"
+        onClose={() => this.props.setPopout(null)}
+        header="Внимание"
+        text="ВСЕ ДАННЫЕ СООБЩЕСТВА БУДУТ УДАЛЕНЫ НАВСЕГДА. Продолжить?"
+      />)
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
           id="faq"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.faqInfo.title}</ModalPageHeader>}
-          onClose={this.closeFAQModal}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => this.closeFAQModal()}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.faqInfo.title}</ModalPageHeader>}
+          onClose={() => this.closeFAQModal()}
           settlingHeight={100}
         >
           <Div>{this.state.faqInfo.text}</Div>
@@ -170,6 +227,39 @@ export default class Settings extends Component {
               </Button>
             </ButtonGroup>
           </Div>
+        </ModalPage>
+        <ModalPage
+          id="preDelete"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => this.closeFAQModal()}><Icon24Dismiss /></PanelHeaderButton>}>Деактивация</ModalPageHeader>}
+          onClose={() => this.closeFAQModal()}
+          settlingHeight={100}
+        >
+          <Div>
+            <ButtonGroup>
+              <Button stretched onClick={() => this.delete("part")}>
+                Обычная
+              </Button>
+              <Button stretched onClick={() => this.delete("full")}>
+                Полная
+              </Button>
+            </ButtonGroup>
+          </Div>
+          <Footer>
+            for testing purposes only
+          </Footer>
+        </ModalPage>
+        <ModalPage
+          id="deleted"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => this.closeFAQModal()}><Icon24Dismiss /></PanelHeaderButton>}>Деактивация</ModalPageHeader>}
+          onClose={() => this.props.changeMode("office")}
+          settlingHeight={100}
+        >
+          <Placeholder
+            icon={<Icon56CheckCircleOutline fill='var(--button_commerce_background)' />}
+            action={<Button onClick={() => this.props.changeMode("office")}>Личный кабинет</Button>}
+          >
+            Сообщество удалено.
+          </Placeholder>
         </ModalPage>
       </ModalRoot>
     );
@@ -317,6 +407,9 @@ export default class Settings extends Component {
                   Сохранить
                 </Button>
               </Div>
+              <Footer>
+                Вы можете <Link onClick={() => this.setState({ activeModal: "preDelete" })}>удалить свое сообщество</Link>
+              </Footer>
               <br/><br/>
             </SplitCol>
           </SplitLayout>

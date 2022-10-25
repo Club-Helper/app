@@ -174,7 +174,7 @@ export default class ClubInfo extends Component {
     if (this.state.club.status === 1000) {
       this.setState({ autofixBtnWorking: true });
       bridge
-        .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(this.state.club.id), "scope": "messages,manage,app_widget"})
+        .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(this.state.club.id), "scope": "messages,manage,wall"})
         .then(data => {
           this.props.req("utils.setToken", {
             access_token: data.access_token,
@@ -221,6 +221,7 @@ export default class ClubInfo extends Component {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
     bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    this.setState({ autofixBtnWorking: false });
   }
 
   getCode() {
@@ -351,9 +352,11 @@ export default class ClubInfo extends Component {
                 <PanelHeader
                   left={!this.props.isMobile ?
                     <React.Fragment>
-                      <PanelHeaderButton onClick={() => this.openModal("settings")}>
-                        <Icon28SettingsOutline />
-                      </PanelHeaderButton>
+                      {this.props.club_role === "admin" &&
+                        <PanelHeaderButton onClick={() => this.openModal("settings")}>
+                          <Icon28SettingsOutline />
+                        </PanelHeaderButton>
+                      }
                       <PanelHeaderButton onClick={() => this.openModal("support_code")}>
                         <Icon28LifebuoyOutline />
                       </PanelHeaderButton>
@@ -407,15 +410,14 @@ export default class ClubInfo extends Component {
                             header={this.props.startupError.title}
                             subheader={this.props.startupError.text}
                             actions={
-                              <Div>
-                                <ButtonGroup>
+                                <React.Fragment>
                                   {this.props.startupError.autofix &&
                                     <Button
                                       onClick={() => this.startupErrorAutofix()}
                                       disabled={this.state.autofixBtnWorking}
                                       loading={this.state.autofixBtnWorking}
                                     >
-                                      Исправить
+                                      {this.props.startupError.button ? this.props.startupError.button : "Исправить"}
                                     </Button>
                                   }
                                   <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
@@ -425,8 +427,7 @@ export default class ClubInfo extends Component {
                                       Обратиться в Поддержку
                                     </Button>
                                   </Link>
-                                </ButtonGroup>
-                              </Div>
+                              </React.Fragment>
                             }
                           />
                         }
@@ -439,15 +440,17 @@ export default class ClubInfo extends Component {
                   </Group>
                   {this.props.isMobile &&
                     <Group>
-                      <CellButton
+                      {this.props.club_role === "admin" &&
+                        <CellButton
                         onClick={() => this.openModal("settings")}
                         before={
                           <Icon28SettingsOutline />
                         }
                         after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        Настройки
-                      </CellButton>
+                        >
+                          Настройки
+                        </CellButton>
+                      }
                       <CellButton
                         onClick={() => this.openModal("support_code")}
                         before={
