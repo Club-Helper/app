@@ -10,8 +10,8 @@
 
 import React, { Component } from 'react'
 
-import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, List, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Banner, Placeholder, ConfigProvider } from '@vkontakte/vkui'
-import { Icon16Chevron, Icon24ReportOutline, Icon28ReportOutline, Icon56CheckCircleOutline, Icon56ErrorTriangleOutline, Icon28StatisticsOutline } from '@vkontakte/icons'
+import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Placeholder, ConfigProvider } from '@vkontakte/vkui'
+import { Icon16Chevron, Icon24ReportOutline, Icon28ReportOutline, Icon56CheckCircleOutline, Icon56ErrorTriangleOutline } from '@vkontakte/icons'
 import bridge from '@vkontakte/vk-bridge';
 import ClubCardMailings from './ClubCardMailings';
 

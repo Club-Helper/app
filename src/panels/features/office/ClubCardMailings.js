@@ -9,7 +9,7 @@
  *******************************************************/
 
 
-import { Avatar, Cell, Group, List, Panel, PanelHeader, Placeholder, Spacing, IconButton, Snackbar, Alert, Header } from '@vkontakte/vkui'
+import { Avatar, Cell, Group, List, Placeholder, IconButton, Snackbar, Alert, Header } from '@vkontakte/vkui'
 import {Icon12Lock, Icon16Done, Icon24CancelOutline} from '@vkontakte/icons'
 import React, { Component } from 'react'
 

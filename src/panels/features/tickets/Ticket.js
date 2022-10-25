@@ -10,8 +10,8 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard, Spacing } from '@vkontakte/vkui'
-import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon28SmileOutline, Icon28More, Icon28MoreHorizontal, Icon16Done, Icon28AdvertisingOutline } from '@vkontakte/icons';
+import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard } from '@vkontakte/vkui'
+import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon16Done, Icon28AdvertisingOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 import { SystemMessage, UserMessage, ClubMessage } from './partials/Message';
 import TicketActions from './TicketActions';

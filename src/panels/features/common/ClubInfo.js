@@ -8,40 +8,9 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {
-  ConfigProvider,
-  Gradient,
-  Group,
-  Panel,
-  PanelHeader,
-  PanelSpinner,
-  SplitCol,
-  SplitLayout,
-  Avatar,
-  Title,
-  Link,
-  MiniInfoCell,
-  List,
-  ButtonGroup,
-  PullToRefresh,
-  PanelHeaderButton,
-  ModalRoot,
-  ModalPage,
-  ModalPageHeader,
-  Separator,
-  Snackbar,
-  ContentCard,
-  Caption,
-  CardScroll,
-  Banner,
-  Button,
-  Div,
-  Placeholder,
-  CellButton,
-  Spacing
-} from '@vkontakte/vkui'
+import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon28Notification, Icon28NotificationAddOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline, Icon28UserTagOutline } from '@vkontakte/icons';
+import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -378,7 +347,7 @@ export default class ClubInfo extends Component {
                       <>
                         <Gradient
                           style={{
-                            margin: !this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
+                            margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
@@ -404,18 +373,19 @@ export default class ClubInfo extends Component {
                           <Banner
                             before={
                               <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
-                                <span style={{ color: "#fff" }}>!</span>
+                                <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18}/></span>
                               </Avatar>
                             }
                             header={this.props.startupError.title}
                             subheader={this.props.startupError.text}
                             actions={
-                                <React.Fragment>
+                                <div style={{margin: "10px 0px"}}>
                                   {this.props.startupError.autofix &&
                                     <Button
                                       onClick={() => this.startupErrorAutofix()}
                                       disabled={this.state.autofixBtnWorking}
                                       loading={this.state.autofixBtnWorking}
+                                      stretched={this.props.isMobile}
                                     >
                                       {this.props.startupError.button ? this.props.startupError.button : "Исправить"}
                                     </Button>
@@ -423,11 +393,12 @@ export default class ClubInfo extends Component {
                                   <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
                                     <Button
                                       mode={this.props.startupError.autofix ? "secondary" : "primary"}
+                                      stretched={this.props.isMobile}
                                     >
                                       Обратиться в Поддержку
                                     </Button>
                                   </Link>
-                              </React.Fragment>
+                              </div>
                             }
                           />
                         }

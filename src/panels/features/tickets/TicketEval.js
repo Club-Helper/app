@@ -220,7 +220,7 @@ export default class TicketEval extends Component {
    * Возвращает текст причины оценки по её названию
    *
    * @param {string} name - Название причины оценки
-   * @returns {string}
+   * @returns {{text: *, title: string}}
    */
   getMarkTextByMarkName(name) {
     switch (this.getMarkTypeByMarkName(name)) {
@@ -418,7 +418,7 @@ export default class TicketEval extends Component {
                         <br />
                         <div className="marks">
                           <div className="mark">
-                            <img src={bad} style={this.getMarkTypeByMarkName(this.state.initialMark) != "bad" ? { filter: "grayscale(100%)" } : {}} />
+                            <img src={bad} style={this.getMarkTypeByMarkName(this.state.initialMark) != "bad" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "bad" ? {
                                 color: "var(--text_subhead)"
@@ -433,7 +433,7 @@ export default class TicketEval extends Component {
                             </div>
                           </div>
                           <div className="mark">
-                            <img src={normal} style={this.getMarkTypeByMarkName(this.state.initialMark) != "normal" ? { filter: "grayscale(100%)" } : {}} />
+                            <img src={normal} style={this.getMarkTypeByMarkName(this.state.initialMark) != "normal" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "normal" ? {
                                 color: "var(--text_subhead)"
@@ -448,7 +448,7 @@ export default class TicketEval extends Component {
                             </div>
                           </div>
                           <div className="mark">
-                            <img src={good} style={this.getMarkTypeByMarkName(this.state.initialMark) != "good" ? { filter: "grayscale(100%)" } : {}} />
+                            <img src={good} style={this.getMarkTypeByMarkName(this.state.initialMark) != "good" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "good" ? {
                                 color: "var(--text_subhead)"
