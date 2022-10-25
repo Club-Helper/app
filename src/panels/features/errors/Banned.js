@@ -15,7 +15,8 @@ export default class Banned extends Component {
       solution: "",
       activeModal: "",
       modalRoot: null,
-      club_role: null
+      club_role: null,
+      recoveryButtonResult: null
     };
   }
 
@@ -68,6 +69,19 @@ export default class Banned extends Component {
                 Произошла ошибка. <br /> Обратитесь в Поддержку.
               </Placeholder>
             </ModalPage>
+
+            <ModalPage
+              id="club_recovered"
+              header={<ModalPageHeader>Успех</ModalPageHeader>}
+              onClose={() => this.props.changeMode("office")}
+            >
+              <Placeholder
+                icon={<Icon56CheckCircleOutline fill='var(--button_commerce_background)' />}
+                action={<Button onClick={() => this.props.changeMode("office")}>Личный кабинет</Button>}
+              >
+                Сообщество восстановлено.
+              </Placeholder>
+            </ModalPage>
           </ModalRoot>
         )
       })
@@ -112,12 +126,81 @@ export default class Banned extends Component {
     });
   }
 
+  restoreClub() {
+    this.props.req("clubs.recovery" + window.location.search, {}, (response) => {
+      this.setState({ recoveryButtonResult: response.response.recovery });
+    });
+  }
+
   render() {
     return (
       <SplitLayout modal={this.state.modalRoot}>
         {this.props.isDesktop && <SplitCol width={125} maxWidth={125}/>}
         <SplitCol>
           {this.props.isDesktop && <div style={{marginBottom: "50px"}}/>}
+
+          {this.state.ban.reason.type == "remove_club" &&
+            <Panel>
+              {!this.props.isDesktop && <PanelHeader />}
+              <Group>
+                <Div>
+                  {this.props.isDesktop ?
+                    <Title level='2' style={{ marginTop: "5px" }}>Сообщество удалено</Title>
+                    :
+                    <Title level='3' style={{ marginTop: "5px", marginBottom: "10px" }}>Сообщество удалено</Title>
+                  }
+                  <Separator wide style={{ margin: "20px 0" }} />
+                  <Cell
+                    before={<Avatar size={48} src={this.state.ban.reason.club.photo} />}
+                    description="Удалено"
+                    disabled
+                  >
+                    {this.state.ban.reason.club.title}
+                  </Cell>
+                  <Separator wide style={{ margin: "20px 0" }} />
+                  <Text>
+                    Ваше сообщество было удалено одним из его руководителей. {this.state.ban.reason.recovery && "Вы можете восстановить его с помощью кнопки ниже. "}
+                    Если у вас остались какие-либо вопросы, обратитесь в <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("removed_club")} target={"_blank"}>Поддержку Club Helper.</Link>
+                  </Text>
+                </Div>
+                {this.state.ban.reason.recovery && !this.state.recoveryButtonResult &&
+                  <Div>
+                    <center>
+                      <Button
+                        size="l"
+                        stretched={!this.props.isDesktop}
+                        onClick={() => this.restoreClub()}
+                      >
+                        Восстановить сообщество
+                      </Button>
+                    </center>
+                  </Div>
+                }
+                {this.state.recoveryButtonResult === true &&
+                  <>
+                  <Separator style={{ marginTop: "10px" }} />
+                  <Placeholder
+                    icon={<Icon56CheckCircleOutline />}
+                    action={<Link href="https://vk.com/app7938346" target='_blank'><Button>Перезапустить</Button></Link>}
+                  >
+                      Сообщество восстановлено.
+                    </Placeholder>
+                  </>
+                }
+                {this.state.recoveryButtonResult === false &&
+                <>
+                  <Separator style={{ marginTop: "10px" }} />
+                  <Placeholder
+                    icon={<Icon56CancelCircleOutline fill='#e64646' />}
+                    action={<Link href="https://vk.com/app7938346" target='_blank'><Button>Перезапустить</Button></Link>}
+                  >
+                    Произошла ошибка. <br /> Обратитесь в Поддержку.
+                  </Placeholder>
+                </>
+                }
+              </Group>
+            </Panel>
+          }
 
           {this.state.ban.reason.type == "blocked_user" &&
             <Panel id="banned">

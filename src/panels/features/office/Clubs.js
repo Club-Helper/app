@@ -9,7 +9,7 @@
  *******************************************************/
 
 
-import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline } from '@vkontakte/icons';
+import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline, Icon20LockOutline } from '@vkontakte/icons';
 import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh, ScreenSpinner, ConfigProvider } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import bridge from '@vkontakte/vk-bridge';
@@ -29,7 +29,11 @@ export default class Clubs extends Component {
     this.props.setPopout(null);
   }
 
-  handleClick (group_id) {
+  handleClick(group) {
+    if (group.removed) return false;
+
+    let group_id = group.id;
+
     this.props.setPopout(<ScreenSpinner />);
     this.props.req("app.changeClub", {
       token: this.props.token,
@@ -60,12 +64,14 @@ export default class Clubs extends Component {
             this.props.setHistory(["club_info"]);
             this.props.setActiveStory("club_info");
           } else {
+            this.props.toggleShowMenu(false);
             this.props.setHistory(["call_admin"]);
             this.props.setActiveStory("call_admin");
           }
         } else {
           this.props.setStartupError(null);
           if (response.response.setting.messages.status == false && response.response.setting.links.status == false && response.response.setting.comments.status == false && _role != "admin") {
+            this.props.toggleShowMenu(false);
             this.props.setHistory(["call_admin"]);
             this.props.setActiveStory('call_admin');
           } else {
@@ -185,7 +191,7 @@ export default class Clubs extends Component {
                         this.props.office.clubs.length > 0 ?
                           this.props.office?.clubs.map((club, idx) => (
                               <Cell
-                                onClick={() => this.handleClick(club.id)}
+                                onClick={() => this.handleClick(club)}
                                 key={idx}
                                 before={
                                   <Avatar
@@ -193,14 +199,17 @@ export default class Clubs extends Component {
                                     src={club.photo}
                                     badge={
                                       <React.Fragment>
-                                        {club.donut && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20DonateCircleFillYellow /></Avatar>}
-                                        {club.blocked && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon16Block fill='var(--accent)' width={20} height={20} /></Avatar>}
+                                          {club.donut && !club.removed && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20DonateCircleFillYellow /></Avatar>}
+                                          {club.blocked && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon16Block fill='var(--accent)' width={20} height={20} /></Avatar>}
+                                          {club.removed && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20LockOutline /></Avatar>}
                                       </React.Fragment>
                                     }
                                   />
                                 }
-                                description={this.props.formatRole(club.role)}
-                                after={<Icon12Chevron width={16} height={16} />}
+                                description={this.props.formatRole(club.role) + (club.blocked ? " (заблокировано)" : "") + (club.removed ? " (удалено)" : "")}
+                                after={!club.removed && <Icon12Chevron width={16} height={16} />}
+                                style={club.removed ? { opacity: 0.5 } : {}}
+                                disabled={club.removed}
                               >
                                 {club.title}
                               </Cell>

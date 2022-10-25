@@ -149,10 +149,12 @@ function Home({
                         setStartupError(data.response.error)
                         setActiveStory('club_info');
                       } else {
+                        toggleShowMenu(false);
                         setActiveStory('call_admin');
                       }
                     } else {
                       if (data.response.setting.messages.status == false && data.response.setting.links.status == false && data.response.setting.comments.status == false && role != "admin") {
+                        toggleShowMenu(false);
                         setActiveStory('call_admin');
                       } else {
                         setActiveStory('tickets_list');
@@ -180,6 +182,7 @@ function Home({
                 })
 
               setPage("office");
+              setHistory(["office-clubs"]);
               setActiveStory("office-clubs");
             } else if (data.response.page === "club") {
               setIsNew(false);
@@ -618,6 +621,9 @@ function Home({
           setDonutStatus={setDonutStatus}
           setIsNew={setIsNew}
           setActiveStory={setActiveStory}
+          setPopout={setPopout}
+          setBan={setBan}
+          setHistory={setHistory}
         />
       )
     },
@@ -701,7 +707,15 @@ function Home({
           setStartupError={setStartupError}
           setPage={setPage}
           changeMode={changeMode}
+          setPopout={setPopout}
         />
+      )
+    },
+    {
+      id: "banned",
+      panelHeader: null,
+      obj: (
+        <Banned req={req} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
       )
     }
   ];
@@ -787,7 +801,7 @@ function Home({
                     </View>
                   </Epic>
                 </SplitCol>
-                {isDesktop & !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
+                {showMenu && isDesktop & !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
                   <SplitCol fixed width="280px" maxWidth="280px">
                     <Panel>
                       {hasHeader && <PanelHeader />}
@@ -859,7 +873,9 @@ function Home({
                         </Link>
                       </Group>
 
-                      <Footer onClick={() => go("app_info")}>
+                      <Footer onClick={() => {
+                        activeStory !== "app_info" && go("app_info")
+                      }}>
                         v1.0.0-beta
                       </Footer>
                     </Panel>
@@ -1112,7 +1128,9 @@ function Home({
                           </Link>
                         </Group>
 
-                        <Footer onClick={() => go("app_info")}>
+                        <Footer onClick={() => {
+                          activeStory !== "app_info" && go("app_info")
+                        }}>
                           v1.0.0-beta
                         </Footer>
                       </Panel>
@@ -1260,7 +1278,7 @@ function Home({
             id="banned"
             activePanel="banned"
           >
-            <Banned req={req} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
+            <Banned req={req} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
           </View>
         )
       }
