@@ -9,7 +9,7 @@
  *******************************************************/
 
 
-import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline, Icon20LockOutline } from '@vkontakte/icons';
+import { Icon16Block, Icon20DonateCircleFillYellow, Icon12Chevron, Icon28AddCircleOutline, Icon56CheckCircleOutline, Icon56CancelCircleOutline, Icon20LockOutline, Icon12ArrowUpRight } from '@vkontakte/icons';
 import { Avatar, Cell, Group, Link, List, Panel, PanelHeader, PanelSpinner, Placeholder, PanelHeaderButton, SplitLayout, SplitCol, ModalRoot, ModalCard, Button, Div, PullToRefresh, ScreenSpinner, ConfigProvider } from '@vkontakte/vkui'
 import React, { Component } from 'react'
 import bridge from '@vkontakte/vk-bridge';
@@ -190,6 +190,7 @@ export default class Clubs extends Component {
                       {!this.props.office?.clubs ? <PanelSpinner /> :
                         this.props.office.clubs.length > 0 ?
                           this.props.office?.clubs.map((club, idx) => (
+                            <a style={{ textDecoration: "none" }} target='_blank' href={club.removed && "https://vk.com/app7938346_-" + club.id}>
                               <Cell
                                 onClick={() => this.handleClick(club)}
                                 key={idx}
@@ -206,14 +207,14 @@ export default class Clubs extends Component {
                                     }
                                   />
                                 }
-                                description={this.props.formatRole(club.role) + (club.blocked ? " (заблокировано)" : "") + (club.removed ? " (удалено)" : "")}
-                                after={!club.removed && <Icon12Chevron width={16} height={16} />}
-                                style={club.removed ? { opacity: 0.5 } : {}}
-                                disabled={club.removed}
+                                description={this.props.formatRole(club.role) + (club.blocked ? " · Заблокировано" : "") + (club.removed ? " · Удалено" : "")}
+                                after={club.removed ? <Icon12ArrowUpRight /> : <Icon12Chevron width={16} height={16} />}
                               >
                                 {club.title}
                               </Cell>
-                          )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
+                            </a>
+                              )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
+
                     </List>
                   }
                 </Group>
