@@ -24,7 +24,7 @@ export default class ClubInfo extends Component {
 
     this.state = {
       club: {},
-      isClubLoading: false,
+      isClubLoading: true,
       managers: [],
       isManagersLoading: true,
       activeModal: "",
@@ -239,7 +239,7 @@ export default class ClubInfo extends Component {
   }
 
   render() {
-    const club = this.props.club;
+    const { club, isClubLoading } = this.state;
 
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
@@ -323,7 +323,7 @@ export default class ClubInfo extends Component {
       <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
         <SplitLayout modal={modal}>
           <SplitCol>
-            {this.props.isLoading ? <PanelSpinner /> :
+            {isClubLoading ? <PanelSpinner /> :
               <Panel>
                 <PanelHeader
                   left={!this.props.isMobile ?
@@ -350,71 +350,69 @@ export default class ClubInfo extends Component {
                   isFetching={this.state.isFetching}
                 >
                   <Group>
-                    {this.state.isClubLoading ? <PanelSpinner /> :
-                      <>
-                        <Gradient
-                          style={{
-                            margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            padding: 32,
-                          }}
-                          mode={this.props.appearance === "dark" ? 'black' : 'white'}
+                    <Gradient
+                      style={{
+                        margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        padding: 32,
+                      }}
+                      mode={this.props.appearance === "dark" ? 'black' : 'white'}
+                    >
+                      <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
+                      <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                        <Title
+                          style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
+                          level="2"
+                          weight="2"
                         >
-                          <Link target="_blank" href={"https://vk.com/club" + this.state.club.id}><Avatar size={96} src={this.state.club.photo} /></Link>
-                          <Link target="_blank" href={"https://vk.com/club" + this.state.club.id}>
-                            <Title
-                              style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
-                              level="2"
-                              weight="2"
-                            >
-                              {this.state.club.name}
-                            </Title>
-                          </Link>
-                        </Gradient>
-                        {!this.props.startupError && <Separator wide />}
-                        {this.props.startupError &&
-                          <Banner
-                            before={
-                              <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
-                                <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18}/></span>
-                              </Avatar>
-                            }
-                            header={this.props.startupError.title}
-                            subheader={this.props.startupError.text}
-                            actions={
-                                <div style={{margin: "10px 0px"}}>
-                                  {this.props.startupError.autofix &&
-                                    <Button
-                                      onClick={() => this.startupErrorAutofix()}
-                                      disabled={this.state.autofixBtnWorking}
-                                      loading={this.state.autofixBtnWorking}
-                                      stretched={this.props.isMobile}
-                                    >
-                                      {this.props.startupError.button ? this.props.startupError.button : "Исправить"}
-                                    </Button>
-                                  }
-                                  <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
-                                    <Button
-                                      mode={this.props.startupError.autofix ? "secondary" : "primary"}
-                                      stretched={this.props.isMobile}
-                                    >
-                                      Обратиться в Поддержку
-                                    </Button>
-                                  </Link>
-                              </div>
-                            }
-                          />
+                          {club.name}
+                        </Title>
+                      </Link>
+                    </Gradient>
+                    {!club.error && <Separator wide />}
+                    {club.error &&
+                      <Banner
+                        before={
+                          <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
+                            <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18}/></span>
+                          </Avatar>
                         }
-                        <List style={{ paddingTop: "10px" }}>
-                          <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
-                          <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation.time.label}</MiniInfoCell>
-                          <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
-                        </List>
-                      </>}
+                        header={club.error.title}
+                        subheader={club.error.text}
+                        actions={
+                            <div style={{margin: "10px 0px"}}>
+                              {club.error.autofix &&
+                                <Button
+                                  onClick={() => this.startupErrorAutofix()}
+                                  disabled={this.state.autofixBtnWorking}
+                                  loading={this.state.autofixBtnWorking}
+                                  stretched={this.props.isMobile}
+                                  style={this.props.isMoble ? {} : {marginRight: 10}}
+                                >
+                                  {club.error.button ? club.error.button : "Исправить"}
+                                </Button>
+                              }
+                              <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
+                                <Button
+                                  mode={club.error.autofix ? "secondary" : "primary"}
+                                  stretched={this.props.isMobile}
+                                >
+                                  Обратиться в Поддержку
+                                </Button>
+                              </Link>
+                          </div>
+                        }
+                      />
+                    }
+                    <List style={{ paddingTop: "10px" }}>
+                      <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
+                      <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation.time.label}</MiniInfoCell>
+                      <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                    </List>
                   </Group>
                   {this.props.isMobile &&
                     <Group>
