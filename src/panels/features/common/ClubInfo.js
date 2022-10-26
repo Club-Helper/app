@@ -186,6 +186,13 @@ export default class ClubInfo extends Component {
         }
       );
       this.setState({autofixBtnWorking: false});
+    } else if (this.props.club.error.api) {
+      this.props.req(this.props.club.error.api, {
+        token: this.props.token
+      }, (response) => {
+        this.props.setStartupError(null);
+        this.props.setActiveStory("tickets_list");
+      })
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
