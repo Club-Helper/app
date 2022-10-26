@@ -218,7 +218,7 @@ export default class ClubInfo extends Component {
       );
       this.setState({autofixBtnWorking: false});
     } else if (this.props.club.error.api) {
-      this.props.req(this.props.club.error.api + window.location.search, {
+      this.props.req(this.props.club.error.api, {
         token: this.props.token
       }, (response) => {
         this.props.setStartupError(null);
