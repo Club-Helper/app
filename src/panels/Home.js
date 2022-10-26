@@ -502,6 +502,7 @@ function Home({
       setHistory(["office-clubs"]);
       setPage("office");
       setActiveStory("office-clubs");
+      setBan(null);
     }
   }
 
@@ -715,7 +716,7 @@ function Home({
       id: "banned",
       panelHeader: null,
       obj: (
-        <Banned req={req} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
+        <Banned req={req} setToken={setToken} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
       )
     }
   ];
@@ -1278,7 +1279,7 @@ function Home({
             id="banned"
             activePanel="banned"
           >
-            <Banned req={req} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
+            <Banned req={req} setToken={setToken} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
           </View>
         )
       }

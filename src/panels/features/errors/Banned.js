@@ -128,6 +128,7 @@ export default class Banned extends Component {
 
   restoreClub() {
     this.props.req("clubs.recovery" + window.location.search, {}, (response) => {
+      this.props.setToken(response.response.token);
       this.setState({ recoveryButtonResult: response.response.recovery });
     });
   }
@@ -181,7 +182,7 @@ export default class Banned extends Component {
                   <Separator style={{ marginTop: "10px" }} />
                   <Placeholder
                     icon={<Icon56CheckCircleOutline />}
-                    action={<Link href="https://vk.com/app7938346" target='_blank'><Button>Перезапустить</Button></Link>}
+                    action={<Button onClick={() => this.props.changeMode("office")}>Личный кабинет</Button>}
                   >
                       Сообщество восстановлено.
                     </Placeholder>
@@ -192,7 +193,7 @@ export default class Banned extends Component {
                   <Separator style={{ marginTop: "10px" }} />
                   <Placeholder
                     icon={<Icon56CancelCircleOutline fill='#e64646' />}
-                    action={<Link href="https://vk.com/app7938346" target='_blank'><Button>Перезапустить</Button></Link>}
+                    action={<Button onClick={() => this.props.changeMode("office")}>Личный кабинет</Button>}
                   >
                     Произошла ошибка. <br /> Обратитесь в Поддержку.
                   </Placeholder>
