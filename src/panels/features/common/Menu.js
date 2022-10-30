@@ -44,7 +44,7 @@ export default class Menu extends Component {
                     badge={this.props.donutStatus ? <img src={Dount} style={{
                       width: '14px',
                       height: '14px'
-                    }} /> : ""}
+                    }} alt=""/> : ""}
                     style={{ cursor: "pointer" }}
                   />
                 }

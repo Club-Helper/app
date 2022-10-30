@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Node.js ${{ env.NODE_VERSION }}
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
     - run: npm ci
-    - name: 🚀 Развёртывание сервис
-    - run: env MINI_APPS_ACCESS_TOKEN=${{ secrets.SERVICE_TOKEN }} npm run deploy
+    - name: 🚀 Развёртывание сервиса
+      run: env MINI_APPS_ACCESS_TOKEN=${{ secrets.SERVICE_TOKEN }} npm run deploy

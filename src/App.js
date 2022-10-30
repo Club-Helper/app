@@ -11,7 +11,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
-import { AdaptivityProvider, AppRoot, ConfigProvider, Platform, usePlatform, SplitLayout } from '@vkontakte/vkui';
+import {AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Context from './Context/Context';
 
@@ -142,7 +142,7 @@ const App = () => {
         <ConfigProvider platform={platform.current} popout={popout} appearance={appearance}>
           <AdaptivityProvider>
             <AppRoot>
-              <SplitLayout popout={popout}>
+              <SplitLayout activePanel={activePanel} popout={popout}>
                 <Home
                   id='home'
                   log={log}

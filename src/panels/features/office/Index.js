@@ -10,8 +10,8 @@
 
 
 import React, { Component } from 'react'
-import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, Cell, CellButton, RichCell, ConfigProvider, SplitLayout, SplitCol } from '@vkontakte/vkui';
-import { Icon28LaptopOutline, Icon56AndroidDeviceOutline, Icon56AppleDeviceOutline, Icon28CheckShieldOutline, Icon56NotificationOutline } from '@vkontakte/icons';
+import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, CellButton, ConfigProvider, SplitLayout, SplitCol } from '@vkontakte/vkui';
+import { Icon28CheckShieldOutline, Icon56NotificationOutline } from '@vkontakte/icons';
 import Notifies from '../common/Notifies';
 
 export default class Office extends Component {

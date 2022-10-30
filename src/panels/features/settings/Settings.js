@@ -10,7 +10,7 @@
 
 import { Group, SplitLayout, SplitCol, SimpleCell, Avatar, ButtonGroup, Button, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, Cell, Separator, Header, Link, Switch, Banner, PanelSpinner, Spacing, FormItem, Textarea, CellButton, Footer, Alert, Placeholder } from '@vkontakte/vkui'
 import React, { Component } from 'react'
-import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon28PaletteOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
+import { Icon24Linked, Icon28CommentOutline, Icon24Dismiss, Icon28ChatsOutline, Icon28DonateOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
 import '../../../css/settings.css';
 import bridge from '@vkontakte/vk-bridge';
 
