@@ -68,7 +68,7 @@ export default class Mailings extends Component {
         ]}
         onClose={() => this.props.setPopout(null)}
         actionsLayout="vertical"
-        header="Подтвердите действие"
+        header={this.props.t("confirm")}
         text="Вы уверены, что хотите отписаться от этой рассылки? Данное действие необратимо."
       />
     )
@@ -80,55 +80,55 @@ export default class Mailings extends Component {
         <SplitLayout>
           <SplitCol>
             <Panel>
-          <PanelHeader>Мои рассылки</PanelHeader>
-          {!this.props?.mailings?.length > 0 ?
-            <Group>
-              <Placeholder>
-                Вы пока не подписаны ни на одну рассылку.
-              </Placeholder>
-            </Group>
-            :
-            <List>
-              {this.props?.mailings.map((item, idx) => (
-                <Group
-                  header={
-                  <Link target={"_blank"} href={`https://vk.com/club${item.club.id}`}>
-                    <Cell
-                      before={<Avatar size={36} src={item.club.photo} />}
-                    >
-                      {item.club.title}
-                    </Cell>
-                  </Link>
-                  }
-                >
-                  <Spacing size={20} separator />
-                  <List>
-                    {item.items.map((mailing, idx) => (
-                      <Cell
-                        before={
-                          <React.Fragment>
-                            {mailing.lock && (
-                              <Avatar size={28}>
-                                  <Icon12Lock />
-                              </Avatar>
-                            )}
-                          </React.Fragment>
-                        }
-                        after={
-                          <IconButton onClick={() => this.unsubscribe(mailing.id)}>
-                            <Icon24CancelOutline />
-                          </IconButton>
-                        }
-                        description={(this.props?.office?.user.sex == 2 ? "подписался " : "подписалась ") + mailing.subscription.label}
-                      >
-                        {mailing.title}
-                      </Cell>
-                    ))}
-                  </List>
+              <PanelHeader>{this.props.t("office_subscribed_mailings")}</PanelHeader>
+              {!this.props?.mailings?.length > 0 ?
+                <Group>
+                  <Placeholder>
+                    {this.props.t("office_no_mailings_found")}
+                  </Placeholder>
                 </Group>
-              ))}
-            </List>
-          }
+                :
+                <List>
+                  {this.props?.mailings.map((item, idx) => (
+                    <Group
+                      header={
+                      <Link target={"_blank"} href={`https://vk.com/club${item.club.id}`}>
+                        <Cell
+                          before={<Avatar size={36} src={item.club.photo} />}
+                        >
+                          {item.club.title}
+                        </Cell>
+                      </Link>
+                      }
+                    >
+                      <Spacing size={20} separator />
+                      <List>
+                        {item.items.map((mailing, idx) => (
+                          <Cell
+                            before={
+                              <React.Fragment>
+                                {mailing.lock && (
+                                  <Avatar size={28}>
+                                      <Icon12Lock />
+                                  </Avatar>
+                                )}
+                              </React.Fragment>
+                            }
+                            after={
+                              <IconButton onClick={() => this.unsubscribe(mailing.id)}>
+                                <Icon24CancelOutline />
+                              </IconButton>
+                            }
+                            description={(this.props?.office?.user.sex == 2 ? `${this.props.t("office_subscribed_m")}` : `${this.props.t("office_subscribed_f")}`) + mailing.subscription.label}
+                          >
+                            {mailing.title}
+                          </Cell>
+                        ))}
+                      </List>
+                    </Group>
+                  ))}
+                </List>
+              }
             </Panel>
           </SplitCol>
         </SplitLayout>

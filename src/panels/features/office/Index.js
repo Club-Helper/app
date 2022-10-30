@@ -51,7 +51,7 @@ export default class Office extends Component {
               <Group>
                 <Gradient
                   style={{
-                    margin: !this.props.isDesktop ? "-7px -7px -7px -7px" : 0,
+                    margin: this.props.isDesktop ? "-7px -7px -7px -7px" : 0,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",

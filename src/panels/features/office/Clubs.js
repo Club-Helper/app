@@ -21,7 +21,7 @@ export default class Clubs extends Component {
     this.state = {
       activeModal: "",
       bridgeInstallResult: null,
-      isFetching: false
+      isFetching: false,
     }
   }
 
@@ -60,6 +60,7 @@ export default class Clubs extends Component {
 
         if (response.response.error) {
           if (this.props.club_role == "admin") {
+            this.props.toggleShowMenu(false);
             this.props.setStartupError(response.response.error);
             this.props.setHistory(["club_info"]);
             this.props.setActiveStory("club_info");
@@ -181,7 +182,7 @@ export default class Clubs extends Component {
                   </PanelHeaderButton>
                 }
               >
-                Мои сообщества
+                {this.props.t("office_my_communities")}
               </PanelHeader>
               <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh()}>
                 <Group>
@@ -190,7 +191,7 @@ export default class Clubs extends Component {
                       {!this.props.office?.clubs ? <PanelSpinner /> :
                         this.props.office.clubs.length > 0 ?
                           this.props.office?.clubs.map((club, idx) => (
-                            <a style={{ textDecoration: "none" }} target='_blank' href={club.removed && "https://vk.com/app7938346_-" + club.id}>
+                            <a key={idx} style={{ textDecoration: "none" }} target='_blank' href={club.removed ? "https://vk.com/app7938346_-" + club.id : undefined}>
                               <Cell
                                 onClick={() => this.handleClick(club)}
                                 key={idx}

@@ -11,8 +11,8 @@
 import React, { useState, useEffect } from 'react';
 
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner } from '@vkontakte/vkui';
-import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline } from '@vkontakte/icons';
+import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner, ModalRoot, ModalPage, Div } from '@vkontakte/vkui';
+import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline, Icon28HelpCircleOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
@@ -44,9 +44,15 @@ import Mailings from './features/office/Mailings';
 import ClubCard from './features/office/Club';
 import ClubCardMailings from './features/office/ClubCardMailings';
 
+import FAQIndex from './features/faq/Index';
+import FAQTopic from './features/faq/Topic';
+
 import DonutIcon from '../img/donut.png'
 
 import bridge from '@vkontakte/vk-bridge';
+import FAQTriggers from './features/faq/Triggers';
+import FAQSymptoms from './features/faq/Symptoms';
+import FAQSolutions from './features/faq/Solutions';
 
 function Home({
   platform,
@@ -102,6 +108,24 @@ function Home({
   const [startupError, setStartupError] = useState(null);
   const [showMenu, toggleShowMenu] = useState(true);
 
+  const [openedSolution, setOpenedSolution] = useState(null);
+  const [openedProduct, setOpenedProduct] = useState(null);
+  const [openedTrigger, setOpenedTrigger] = useState(null);
+  const [openedTriggerTitle, setOpenedTriggerTitle] = useState([]);
+  const [chooseSymptoms, setChooseSymptoms] = useState(null);
+  const [triggerMode, setTriggerMode] = useState(null);
+  const [openedCategoryId, setOpenedCategoryId] = useState(null);
+  const [openedSymptom, setOpenedSymptom] = useState(null);
+  const [openedTSolution, setOpenedTSolution] = useState(null);
+
+  const [languageCode, setLanguageCode] = useState("ru");
+  const [locale, setLocale] = useState({});
+  const [ruLocale, setRuLocale] = useState({});
+
+  const [needToShowClubStartOnboarding, toggleNeedToShowClubStartOnboarding] = useState(false);
+
+  const [activeModal, setActiveModal] = useState("");
+
   useEffect(() => {
     fetch(api_url + "app.start" + window.location.search)
       .then(response => response.json())
@@ -118,6 +142,24 @@ function Home({
             setUserId(params.get("vk_user_id"));
             setRole(role);
             setToken(data.response.token);
+            setLanguageCode(params.get("vk_language"));
+
+            fetch("https://ch.n1rwana.ml/translation/ru")
+              .then(response => response.json())
+              .then(data => {
+                console.log("RU LOCALE", data);
+                setRuLocale(data);
+                if (languageCode == "ru") setLocale(data);
+              })
+
+            if (languageCode != "ru") {
+              fetch("https://ch.n1rwana.ml/translation/" + languageCode)
+                .then(response => response.json())
+                .then(data => {
+                  console.log(`LOCALE (${languageCode})`, data);
+                  setLocale(data);
+                })
+            }
 
             ym(90794548, 'userParams', {
               uid: data.response.uid
@@ -146,6 +188,7 @@ function Home({
 
                     if (data.response.error) {
                       if (role == "admin") {
+                        toggleShowMenu(false);
                         setStartupError(data.response.error)
                         setActiveStory('club_info');
                       } else {
@@ -192,14 +235,14 @@ function Home({
                 uid: data.response.uid
               });
 
-                fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
-                  .then(response => response.json())
-                  .then(res => {
-                    setClubCard(res.response);
-                    fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${data.response.token}&my=true`)
-                      .then(response => response.json())
-                      .then(cc => setClubCardMailings(cc.response));
-                  })
+              fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
+                .then(response => response.json())
+                .then(res => {
+                  setClubCard(res.response);
+                  fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${data.response.token}&my=true`)
+                    .then(response => response.json())
+                    .then(cc => setClubCardMailings(cc.response));
+                })
 
               setPage("club");
               setActiveStory("club-card");
@@ -210,6 +253,12 @@ function Home({
         }
       })
   }, [])
+
+  const t = (key) => {
+    if (locale[key]) return locale[key];
+    else if (ruLocale[key]) return ruLocale[key];
+    else return `{{${key}}}`;
+  }
 
   const updateOffice = () => {
     fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
@@ -387,7 +436,7 @@ function Home({
     },
     {
       id: "club_info",
-      triggers: ["club_info", "settings", "stats_home"],
+      triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms"],
       name: club?.name,
       before: <Avatar size={28} src={club?.photo} />,
       show: !isDesktop
@@ -405,15 +454,22 @@ function Home({
     {
       id: "office-clubs",
       triggers: ["office-clubs"],
-      name: "Сообщества",
+      name: t("communities"),
       before: <Icon36Users3Outline width={28} height={28} />,
       show: true
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
-      name: "Рассылки",
+      name: t("mailings"),
       before: <Icon32AdvertisingOutline width={28} height={28} />,
+      show: true
+    },
+    {
+      id: "faq",
+      triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms"],
+      name: "Поддержка",
+      before: <Icon28LifebuoyOutline />,
       show: true
     }
   ];
@@ -468,24 +524,30 @@ function Home({
   }
 
   const req = (method, body, callback, onError) => {
-    fetch(`https://ch.n1rwana.ml/api/${method}`, {
-      method: "POST",
-      body: JSON.stringify(body)
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (!data.error) {
-          callback(data);
-        } else {
-          if (!onError) {
-            if (data.error?.error_msg) {
-              createError(data.error?.error_msg)
-            }
-          } else {
-            onError(data);
-          }
-        }
+    if (navigator.onLine) {
+      fetch(`https://ch.n1rwana.ml/api/${method}`, {
+        method: "POST",
+        body: JSON.stringify(body)
       })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.error) {
+            console.log('%c [CH API] ', 'background: #FFCB89; color: #F19263; font-weight: bold', `/${method}`, data);
+            callback(data);
+          } else {
+            console.error('%c [CH API] ', 'background: #FFCB89; color: #F19263; font-weight: bold', `/${method}`, data);
+            if (!onError) {
+              if (data.error?.error_msg) {
+                createError(data.error?.error_msg)
+              }
+            } else {
+              onError(data);
+            }
+          }
+        })
+    } else {
+      setActiveModal("noInternet");
+    }
   }
 
   const [params, setParams] = useState(null);
@@ -524,7 +586,8 @@ function Home({
     generateRefSourceString: generateRefSourceString,
     toggleShowMenu: toggleShowMenu,
     parseLinks: parseLinks,
-    params: params
+    params: params,
+    t: t
   };
 
   const panels = [
@@ -634,6 +697,7 @@ function Home({
       obj: (
         <TicketsList
           {...basicProps}
+          needToShowClubStartOnboarding={needToShowClubStartOnboarding}
           setCookie={setCookie}
           getCookie={getCookie}
           setTicket={setTicket}
@@ -641,6 +705,7 @@ function Home({
           setTicketsState={setTicketsState}
           setActiveStory={setActiveStory}
           setIsNew={setIsNew}
+          parseLinks={parseLinks}
         />
       )
     },
@@ -709,6 +774,8 @@ function Home({
           setPage={setPage}
           changeMode={changeMode}
           setPopout={setPopout}
+          showMenu={showMenu}
+          toggleShowMenu={toggleShowMenu}
         />
       )
     },
@@ -718,8 +785,339 @@ function Home({
       obj: (
         <Banned req={req} setToken={setToken} changeMode={changeMode} id="banned" {...banned} isDesktop={isDesktop} appearance={appearance} generateRefSourceString={generateRefSourceString} />
       )
+    },
+    {
+      id: "faq",
+      panelHeader: null,
+      obj: (
+        <FAQIndex
+          {...basicProps}
+          setOpenedSolution={setOpenedSolution}
+          openedSolution={openedSolution}
+          setOpenedProduct={setOpenedProduct}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-solution",
+      panelHeader: null,
+      obj: (
+        <FAQTopic
+          {...basicProps}
+          openedSolution={openedSolution}
+          setOpenedSolution={setOpenedSolution}
+          topic={openedSolution}
+          setOpenedProduct={setOpenedProduct}
+          openedProduct={openedProduct}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          openedTriggerTitle={openedTriggerTitle}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setChooseSymptoms={setChooseSymptoms}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-triggers",
+      panelHeader: null,
+      obj: (
+        <FAQTriggers
+          {...basicProps}
+          openedProduct={openedProduct}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          openedTriggerTitle={openedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-symptoms",
+      panelHeader: null,
+      obj: (
+        <FAQSymptoms
+          {...basicProps}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          symptoms={chooseSymptoms}
+          openedTriggerTitle={openedTriggerTitle}
+          openedProduct={openedProduct}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-tsolution",
+      panelHeader: null,
+      obj: (
+        <FAQSolutions
+          {...basicProps}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          symptoms={chooseSymptoms}
+          openedTriggerTitle={openedTriggerTitle}
+          openedProduct={openedProduct}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
     }
   ];
+
+  const officePanels = [
+    {
+      id: "office",
+      panelHeader: null,
+      obj: (
+        <Office appearance={appearance} platform={platform} setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+      )
+    },
+    {
+      id: "office-clubs",
+      panelHeader: null,
+      obj: (
+        <Clubs
+          appearance={appearance}
+          platform={platform}
+          setRole={setRole}
+          setGroupId={setGroupId}
+          setPage={setPage}
+          setActiveStory={setActiveStory}
+          toggleShowMenu={toggleShowMenu}
+          setPopout={setPopout}
+          office={office}
+          formatRole={formatRole}
+          req={req}
+          token={token}
+          setOffice={setOffice}
+          setClub={setClub}
+          setToken={setToken}
+          setIsNew={setIsNew}
+          setDonut={setDonut}
+          setDonutStatus={setDonutStatus}
+          setMessagesStatus={setMessagesStatus}
+          setLinksStatus={setLinksStatus}
+          setCommentsStatus={setCommentsStatus}
+          club_role={club_role}
+          setStartupError={setStartupError}
+          setHistory={setHistory}
+          t={t}
+        />
+      )
+    },
+    {
+      id: "office-mailings",
+      panelHeader: null,
+      obj: (
+        <Mailings
+          {...basicProps}
+          appearance={appearance}
+          platform={platform}
+          setPopout={setPopout}
+          office={office}
+          mailings={office?.mailings}
+          formatRole={formatRole}
+          token={token}
+          updateOffice={updateOffice}
+          createError={createError}
+          req={req}
+        />
+      )
+    },
+    {
+      id: "faq",
+      panelHeader: null,
+      obj: (
+        <FAQIndex
+          {...basicProps}
+          setOpenedSolution={setOpenedSolution}
+          openedSolution={openedSolution}
+          setOpenedProduct={setOpenedProduct}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-solution",
+      panelHeader: null,
+      obj: (
+        <FAQTopic
+          {...basicProps}
+          openedSolution={openedSolution}
+          setOpenedSolution={setOpenedSolution}
+          topic={openedSolution}
+          setOpenedProduct={setOpenedProduct}
+          openedProduct={openedProduct}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          openedTriggerTitle={openedTriggerTitle}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setChooseSymptoms={setChooseSymptoms}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-triggers",
+      panelHeader: null,
+      obj: (
+        <FAQTriggers
+          {...basicProps}
+          openedProduct={openedProduct}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          openedTriggerTitle={openedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-symptoms",
+      panelHeader: null,
+      obj: (
+        <FAQSymptoms
+          {...basicProps}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          symptoms={chooseSymptoms}
+          openedTriggerTitle={openedTriggerTitle}
+          openedProduct={openedProduct}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "faq-tsolution",
+      panelHeader: null,
+      obj: (
+        <FAQSolutions
+          {...basicProps}
+          openedSolution={openedSolution}
+          openedTrigger={openedTrigger}
+          setOpenedTrigger={setOpenedTrigger}
+          symptoms={chooseSymptoms}
+          openedTriggerTitle={openedTriggerTitle}
+          openedProduct={openedProduct}
+          setOpenedTriggerTitle={setOpenedTriggerTitle}
+          setTriggerMode={setTriggerMode}
+          triggerMode={triggerMode}
+          openedCategoryId={openedCategoryId}
+          setOpenedCategoryId={setOpenedCategoryId}
+          openedSymptom={openedSymptom}
+          setOpenedSymptom={setOpenedSymptom}
+          openedTSolution={openedTSolution}
+          setOpenedTSolution={setOpenedTSolution}
+        />
+      )
+    },
+    {
+      id: "app_info",
+      panelHeader: null,
+      obj: (
+        <AppInfo {...basicProps} />
+      )
+    }
+  ];
+
+  window.addEventListener('online', () => {
+    console.log('Became online');
+    setActiveModal("");
+  });
+  window.addEventListener('offline', () => {
+    console.log('Became offline');
+    setActiveModal("noInternet");
+  });
+
+  const modal = (
+    <ModalRoot activeModal={activeModal}>
+      <ModalPage
+        id="noInternet"
+        onClose={() => { setActiveModal(""); setActiveModal("noInternet"); } }
+      >
+        <Div>
+          <Placeholder
+            icon={<Icon24BroadcastOutline width={56} height={56} fill="var(--accent)" />}
+          >
+            Упс, похоже, Вы теперь оффлайн.
+            <br />
+            Мы подождём, пока Ваше <br /> соединение вернётся.
+          </Placeholder>
+        </Div>
+      </ModalPage>
+    </ModalRoot>
+  )
 
   if (/^\#mark-ticket\/(0|[1-9][0-9]*)$/.test(window.location.hash)) {
     return (
@@ -758,6 +1156,7 @@ function Home({
           return (
             <ConfigProvider platform={platform.current} appearance={appearance}>
               <SplitLayout
+                modal={modal}
                 header={false && <PanelHeader separator={false} />}
                 style={{ justifyContent: "center", marginTop: "10px" }}
               >
@@ -793,6 +1192,7 @@ function Home({
                     >
                       {panels.map((panel, idx) => (
                         <Panel
+                          key={idx}
                           id={panel.id}
                         >
                           {panel.panelHeader}
@@ -867,7 +1267,7 @@ function Home({
                       <Group>
                         <Link href={"https://vk.me/ch_app?ref_source=" + generateRefSourceString("employee_searching")} target='_blank'>
                           <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-                            Команда Club Helper ищет сотрудников
+                            {t("searching_for_employees")}
                             <br /><br />
                             <Button size="s" stretched mode="secondary">Подробнее</Button>
                           </SimpleCell>
@@ -912,6 +1312,7 @@ function Home({
                     req={req}
                     group_id={group_id}
                     club_role={club_role}
+                    toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
                   />
                 </Panel>
               </View>
@@ -958,6 +1359,7 @@ function Home({
             return (
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
+                  modal={modal}
                   header={false && <PanelHeader separator={false} />}
                   style={{ justifyContent: "center", marginTop: "10px" }}
                 >
@@ -986,75 +1388,20 @@ function Home({
                       </Tabbar>
                     )}>
                       <View
-                        id='office'
-                        activePanel='office'
+                        id={activeStory}
+                        activePanel={activeStory}
+                        history={history}
+                        onSwipeBack={() => goBack()}
                       >
-                        <Panel id='office'>
-                          <Office appearance={appearance} platform={platform} setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
-                        </Panel>
-                      </View>
-
-                      <View
-                        id='office-clubs'
-                        activePanel='office-clubs'
-                      >
-                        <Panel id='office-clubs'>
-                          <Clubs
-                            appearance={appearance}
-                            platform={platform}
-                            setRole={setRole}
-                            setGroupId={setGroupId}
-                            setPage={setPage}
-                            setActiveStory={setActiveStory}
-                            toggleShowMenu={toggleShowMenu}
-                            setPopout={setPopout}
-                            office={office}
-                            formatRole={formatRole}
-                            req={req}
-                            token={token}
-                            setOffice={setOffice}
-                            setClub={setClub}
-                            setToken={setToken}
-                            setIsNew={setIsNew}
-                            setDonut={setDonut}
-                            setDonutStatus={setDonutStatus}
-                            setMessagesStatus={setMessagesStatus}
-                            setLinksStatus={setLinksStatus}
-                            setCommentsStatus={setCommentsStatus}
-                            club_role={club_role}
-                            setStartupError={setStartupError}
-                            setHistory={setHistory}
-                          />
-                        </Panel>
-                      </View>
-
-                      <View
-                        id='office-mailings'
-                        activePanel='office-mailings'
-                      >
-                        <Panel id='office-mailings'>
-                          <Mailings
-                            appearance={appearance}
-                            platform={platform}
-                            setPopout={setPopout}
-                            office={office}
-                            mailings={office?.mailings}
-                            formatRole={formatRole}
-                            token={token}
-                            updateOffice={updateOffice}
-                            createError={createError}
-                            req={req}
-                          />
-                        </Panel>
-                      </View>
-
-                      <View
-                        id='app_info'
-                        activePanel='app_info'
-                      >
-                        <Panel id='app_info'>
-                          <AppInfo {...basicProps} />
-                        </Panel>
+                        {officePanels.map((panel, idx) => (
+                          <Panel
+                            key={idx}
+                            id={panel.id}
+                          >
+                            {panel.panelHeader}
+                            {panel.obj}
+                          </Panel>
+                        ))}
                       </View>
                     </Epic>
                   </SplitCol>
@@ -1067,6 +1414,7 @@ function Home({
                           {office ?
                             <>
                               <Cell
+                                onClick={() => go("office")}
                                 disabled={activeStory === "office"}
                                 before={
                                   <Avatar
@@ -1107,7 +1455,7 @@ function Home({
                               >
                                 {menuItem.name}
                               </Cell>
-                              {/* menuItem.id === "mailing_list" && <Spacing separator /> */}
+                              {menuItem.id === "office-mailings" && <Spacing separator />}
                             </>
                           )}
                         </Group>
@@ -1147,6 +1495,7 @@ function Home({
             return (
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
+                  modal={modal}
                   header={false && <PanelHeader separator={false} />}
                   style={{ justifyContent: "center", marginTop: "10px" }}
                 >
@@ -1156,7 +1505,7 @@ function Home({
                     width={isDesktop ? '660px' : '100%'}
                     maxWidth={isDesktop ? '660px' : '100%'}
                   >
-                    <Epic activeStory={activeStory} tabbar={false && clubCard && (
+                    <Epic activeStory={activeStory} tabbar={false && clubCard && showMenu && (
                       <Tabbar>
                         {clubMenuItems.map(menuItem =>
                           menuItem.show &&

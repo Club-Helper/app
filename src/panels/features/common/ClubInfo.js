@@ -95,21 +95,30 @@ export default class ClubInfo extends Component {
   }
 
   update() {
-    this.setState({ isFetching: true });
-    this.getClub();
-    this.getManagers();
-    this.getStats();
-    this.setState({ isFetching: false });
+    if (!this.props.startupError) {
+      this.setState({ isFetching: true });
+      this.getClub();
+      this.getManagers();
+      this.getStats();
+      this.setState({ isFetching: false });
+    } else {
+      this.setState({ isFetching: false });
+    }
   }
 
   openModal(id) {
     this.setState({ modalLoading: true, activeModal: id });
-    document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
+    if (id == "donut") {
+      document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
+    }
   }
 
   closeModal() {
+    let id = this.state.activeModal;
     this.setState({ activeModal: "" });
-    document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
+    if (id == "donut") {
+      document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
+    }
   }
 
   settingsWasChanged() {
@@ -143,19 +152,20 @@ export default class ClubInfo extends Component {
     if (this.state.club.status === 1000) {
       this.setState({ autofixBtnWorking: true });
       bridge
-        .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(this.state.club.id), "scope": "messages,manage,wall"})
+        .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(this.state.club.id), "scope": "messages,manage,wall" })
         .then(data => {
           this.props.req("utils.setToken", {
             access_token: data.access_token,
             token: this.props.token
           },
             (data) => {
+              this.props.toggleShowMenu(true);
               this.props.setStartupError(null);
               this.props.setActiveStory("tickets_list");
             }
           );
           this.setState({ autofixBtnWorking: false });
-          }
+        }
         )
         .catch(error => {
           this.props.createError(error.error_data?.error_reason);
@@ -169,27 +179,30 @@ export default class ClubInfo extends Component {
         token: this.props.token
       },
         (data) => {
+          this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
           this.props.setActiveStory("tickets_list");
         }
       );
       this.setState({ autofixBtnWorking: false });
     } else if (this.state.club.status === 5004) {
-      this.setState({autofixBtnWorking: true});
+      this.setState({ autofixBtnWorking: true });
 
       this.props.req("utils.callbackSetting", {
         token: this.props.token
       },
         (data) => {
+          this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
           this.props.setActiveStory("tickets_list");
         }
       );
-      this.setState({autofixBtnWorking: false});
+      this.setState({ autofixBtnWorking: false });
     } else if (this.props.club.error.api) {
       this.props.req(this.props.club.error.api, {
         token: this.props.token
       }, (response) => {
+        this.props.toggleShowMenu(true);
         this.props.setStartupError(null);
         this.props.setActiveStory("tickets_list");
       })
@@ -223,7 +236,7 @@ export default class ClubInfo extends Component {
       (data) => {
         this.setState({ notifiesFetching: false, notifies: data.response });
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
-    })
+      })
   }
 
   componentDidMount() {
@@ -309,10 +322,10 @@ export default class ClubInfo extends Component {
         >
           {this.state.notifiesFetching ? <PanelSpinner /> :
             this.state.notifies.count > 0 ?
-            <Notifies notifies={this.state.notifies.items} />
-            : <Placeholder icon={<Icon56NotificationOutline />}>
+              <Notifies notifies={this.state.notifies.items} />
+              : <Placeholder icon={<Icon56NotificationOutline />}>
                 Здесь будут уведомления...
-            </Placeholder>
+              </Placeholder>
           }
         </ModalPage>
       </ModalRoot>
@@ -323,75 +336,82 @@ export default class ClubInfo extends Component {
       <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
         <SplitLayout modal={modal}>
           <SplitCol>
-            {isClubLoading ? <PanelSpinner /> :
-              <Panel>
-                <PanelHeader
-                  left={!this.props.isMobile ?
-                    <React.Fragment>
-                      {this.props.club_role === "admin" &&
-                        <PanelHeaderButton onClick={() => this.openModal("settings")}>
-                          <Icon28SettingsOutline />
-                        </PanelHeaderButton>
-                      }
-                      <PanelHeaderButton onClick={() => this.openModal("support_code")}>
-                        <Icon28LifebuoyOutline />
+            <Panel>
+              <PanelHeader
+                left={!this.props.isMobile && !isClubLoading ?
+                  <React.Fragment>
+                    {this.props.club_role === "admin" &&
+                      <PanelHeaderButton onClick={() => this.openModal("settings")}>
+                        <Icon28SettingsOutline />
                       </PanelHeaderButton>
-                      <PanelHeaderButton>
-                        <Icon24NotificationOutline onClick={() => this.openNotifies()} width={28} height={28} />
-                      </PanelHeaderButton>
-                    </React.Fragment>
-                    : <></>
-                  }
-                >
-                  Сообщество
-                </PanelHeader>
-                <PullToRefresh
-                  onRefresh={this.update}
-                  isFetching={this.state.isFetching}
-                >
+                    }
+                    <PanelHeaderButton onClick={() => this.openModal("support_code")}>
+                      <Icon28LifebuoyOutline />
+                    </PanelHeaderButton>
+                    <PanelHeaderButton>
+                      <Icon24NotificationOutline onClick={() => this.openNotifies()} width={28} height={28} />
+                    </PanelHeaderButton>
+                  </React.Fragment>
+                  : <></>
+                }
+              >
+                Сообщество
+              </PanelHeader>
+              <PullToRefresh
+                onRefresh={this.update}
+                isFetching={this.state.isFetching}
+              >
+                {isClubLoading ?
                   <Group>
-                    <Gradient
-                      style={{
-                        margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        padding: 32,
-                      }}
-                      mode={this.props.appearance === "dark" ? 'black' : 'white'}
-                    >
-                      <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
-                      <Link target="_blank" href={"https://vk.com/club" + club.id}>
-                        <Title
-                          style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
-                          level="2"
-                          weight="2"
-                        >
-                          {club.name}
-                        </Title>
-                      </Link>
-                    </Gradient>
-                    {!club.error && <Separator wide />}
-                    {club.error &&
-                      <Banner
-                        before={
-                          <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
-                            <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18}/></span>
-                          </Avatar>
-                        }
-                        header={club.error.title}
-                        subheader={club.error.text}
-                        actions={
-                            <div style={{margin: "10px 0px"}}>
+                    <Placeholder>
+                      <PanelSpinner />
+                    </Placeholder>
+                  </Group>
+                  :
+                  <>
+                    <Group>
+                      <Gradient
+                        style={{
+                          margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          padding: 32,
+                        }}
+                        mode={this.props.appearance === "dark" ? 'black' : 'white'}
+                      >
+                        <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
+                        <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                          <Title
+                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
+                            level="2"
+                            weight="2"
+                          >
+                            {club.name}
+                          </Title>
+                        </Link>
+                      </Gradient>
+                      {!club.error && <Separator wide />}
+                      {club.error &&
+                        <Banner
+                          before={
+                            <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
+                              <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18} /></span>
+                            </Avatar>
+                          }
+                          header={club.error.title}
+                          subheader={club.error.text}
+                          actions={
+                            <div style={{ margin: "10px 0px" }}>
                               {club.error.autofix &&
                                 <Button
                                   onClick={() => this.startupErrorAutofix()}
                                   disabled={this.state.autofixBtnWorking}
                                   loading={this.state.autofixBtnWorking}
                                   stretched={this.props.isMobile}
-                                  style={this.props.isMoble ? {} : {marginRight: 10}}
+                                  style={this.props.isMoble ? {} : { marginRight: 10 }}
                                 >
                                   {club.error.button ? club.error.button : "Исправить"}
                                 </Button>
@@ -404,129 +424,145 @@ export default class ClubInfo extends Component {
                                   Обратиться в Поддержку
                                 </Button>
                               </Link>
-                          </div>
-                        }
-                      />
-                    }
-                    <List style={{ paddingTop: "10px" }}>
-                      <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
-                      <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation.time.label}</MiniInfoCell>
-                      <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
-                    </List>
-                  </Group>
-                  {this.props.isMobile &&
-                    <Group>
-                      {this.props.club_role === "admin" &&
-                        <CellButton
-                        onClick={() => this.openModal("settings")}
-                        before={
-                          <Icon28SettingsOutline />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                        >
-                          Настройки
-                        </CellButton>
+                            </div>
+                          }
+                        />
                       }
-                      <CellButton
-                        onClick={() => this.openModal("support_code")}
-                        before={
-                          <Icon28LifebuoyOutline />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        PIN-код для Поддержки
-                      </CellButton>
-                      <CellButton
-                        onClick={() => this.openNotifies()}
-                        before={
-                          <Icon24NotificationOutline width={28} height={28} />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        Уведомления
-                      </CellButton>
-                      <Spacing separator />
-                      <CellButton
-                        onClick={() => this.props.changeMode("office")}
-                        before={<Icon28UserTagOutline />}
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        Личный кабинет
-                      </CellButton>
+                      <List style={{ paddingTop: "10px" }}>
+                        <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                      </List>
                     </Group>
-                  }
-                  {!this.state.isStatsHidden &&
-                    <>
-                      <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)"}}>Статистика</Title>
-                      {this.props.club_role == "admin" &&
-                        <Group header={<Title level='3' style={{padding: "10px", marginLeft: "5px"}}>Руководители</Title>}>
-                          <CardScroll>
-                            {this.state.isManagersLoading ? <PanelSpinner /> :
-                              this.state.managers?.map((item, idx) => (
-                                  <ContentCard
-                                    mode="tint"
-                                    key={idx}
-                                    subtitle={<Avatar size={28} src={item.photo} />}
-                                  header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">{item.first_name} {item.last_name}</Title>}
-                                  caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.props.formatRole(item.role)}</Caption>}
-                                  />
-                                )
-                              )}
-                          </CardScroll>
-                        </Group>
-                      }
+                    {!this.props.isMobile && !this.props.showMenu &&
+                      <Group>
+                        <CellButton
+                          onClick={() => this.props.changeMode("office")}
+                          before={<Icon28UserTagOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Личный кабинет
+                        </CellButton>
+                      </Group>
+                    }
+                    {this.props.isMobile &&
+                      <Group>
+                        {this.props.club_role === "admin" &&
+                          <CellButton
+                            onClick={() => this.openModal("settings")}
+                            before={
+                              <Icon28SettingsOutline />
+                            }
+                            after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                          >
+                            Настройки
+                          </CellButton>
+                        }
+                        <CellButton
+                          onClick={() => this.openModal("support_code")}
+                          before={
+                            <Icon28LifebuoyOutline />
+                          }
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          PIN-код для Поддержки
+                        </CellButton>
+                        <CellButton
+                          onClick={() => this.openNotifies()}
+                          before={
+                            <Icon24NotificationOutline width={28} height={28} />
+                          }
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Уведомления
+                        </CellButton>
+                        <Spacing separator />
+                        <CellButton
+                          onClick={() => this.props.changeMode("office")}
+                          before={<Icon28UserTagOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Личный кабинет
+                        </CellButton>
+                        <CellButton
+                          onClick={() => this.props.go("faq")}
+                          before={<Icon28LifebuoyOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Поддержка
+                        </CellButton>
+                      </Group>
+                    }
+                  </>
+                }
+                {!this.state.isStatsHidden &&
+                  <>
+                    <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)" }}>Статистика</Title>
+                    {this.props.club_role == "admin" &&
+                      <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Руководители</Title>}>
+                        <CardScroll>
+                          {this.state.isManagersLoading ? <PanelSpinner /> :
+                            this.state.managers?.map((item, idx) => (
+                              <ContentCard
+                                mode="tint"
+                                key={idx}
+                                subtitle={<Avatar size={28} src={item.photo} />}
+                                header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">{item.first_name} {item.last_name}</Title>}
+                                caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.props.formatRole(item.role)}</Caption>}
+                              />
+                            )
+                            )}
+                        </CardScroll>
+                      </Group>
+                    }
                     <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Обращения</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
                         <CardScroll>
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
-                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.all}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Всего</Title>}
+                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.all}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Ожидающих специалиста</Title>}
-                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state?.stats.tickets?.waiting_specialist}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Ожидающих специалиста</Title>}
+                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state?.stats.tickets?.waiting_specialist}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">В работе</Title>}
-                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.work}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">В работе</Title>}
+                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.work}</Caption>}
                           />
                           <ContentCard
                             mode="tint"
                             subtitle={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Закрыты</Title>}
-                            caption={<Caption style={{fontSize: "18px"}} weight={1}>{this.state.stats?.tickets?.closed}</Caption>}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Закрыты</Title>}
+                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.closed}</Caption>}
                           />
                         </CardScroll>
                       }
-                      </Group>
-                      <Group header={<Title level='3' style={{padding: "10px", marginLeft: "5px"}}>Ссылки</Title>}>
-                        {this.state.isStatsLoading ? <PanelSpinner /> :
-                          <CardScroll>
-                            <ContentCard
-                              mode="tint"
-                              subtitle={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
-                              header={<Title style={{fontSize: "16px", color: "var(--text_secondary)"}} weight="3">Всего</Title>}
-                            caption={<Caption style={{ fontSize: "18px"}} weight={1}>{this.state.stats.links?.all}</Caption>}
-                            />
-                          </CardScroll>
-                        }
-                      </Group>
-                    </>
-                  }
-                </PullToRefresh>
+                    </Group>
+                    <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Ссылки</Title>}>
+                      {this.state.isStatsLoading ? <PanelSpinner /> :
+                        <CardScroll>
+                          <ContentCard
+                            mode="tint"
+                            subtitle={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
+                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Всего</Title>}
+                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats.links?.all}</Caption>}
+                          />
+                        </CardScroll>
+                      }
+                    </Group>
+                  </>
+                }
+              </PullToRefresh>
 
-                {this.state.snackbar}
-              </Panel>
-            }
-          </SplitCol>
-        </SplitLayout>
-      </ConfigProvider>
-    )
+              {this.state.snackbar}
+            </Panel>
+          </SplitCol></SplitLayout></ConfigProvider>)
   }
 }

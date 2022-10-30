@@ -10,7 +10,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import {AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';

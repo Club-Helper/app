@@ -10,10 +10,11 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Tabs, TabsItem, Placeholder, List, Avatar, SimpleCell, Search, ScreenSpinner, PullToRefresh, HorizontalScroll, Spacing, Cell, PanelSpinner, Link, Spinner } from '@vkontakte/vkui'
+import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Tabs, TabsItem, Placeholder, List, Avatar, SimpleCell, Search, ScreenSpinner, PullToRefresh, HorizontalScroll, Spacing, Cell, PanelSpinner, Link, Spinner, RichCell, Text } from '@vkontakte/vkui'
 import { Icon24Dismiss, Icon24MoreHorizontal, Icon56MessagesOutline, Icon28RecentOutline, Icon56InboxOutline } from '@vkontakte/icons';
 
 import '../../../css/tickets/list.css';
+import '../../../css/landings/donut.css';
 
 import bridge from '@vkontakte/vk-bridge';
 
@@ -36,7 +37,8 @@ export default class TicketsList extends Component {
       options: [],
       ticketsLoading: false,
       ticketButtonsID: 0,
-      currentMessages: []
+      currentMessages: [],
+      onboarding: []
     }
 
     this.state = this.props.ticketsState !== null ? this.props.ticketsState : initialState
@@ -131,6 +133,15 @@ export default class TicketsList extends Component {
     this.props.setPopout(null);
 
     this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
+
+    if (this.props.needToShowClubStartOnboarding) {
+      this.props.req("utils.welcomeClub", {
+        token: this.props.token
+      }, (response) => {
+        this.setState({ onboarding: response.response });
+      })
+      this.setState({ activeModal: "onboarding" });
+    }
   }
 
   componentWillUnmount() {
@@ -198,6 +209,35 @@ export default class TicketsList extends Component {
               {this.state.options.includes("get_support") && <Button mode="secondary" size="m" stretched>Написать в Поддержку</Button>}
             </ButtonGroup>
           </Div>
+        </ModalPage>
+
+        <ModalPage
+          id="onboarding"
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>Добро пожаловать!</ModalPageHeader>}
+          onClose={this.closeFAQModal}
+          settlingHeight={100}
+        >
+          <Panel className='clubHelper-donut_panel'>
+            {this.state.onboarding.length > 0 ? this.state.onboarding.map((item, idx) => (
+              item.type === "icon" &&
+              <RichCell
+                before={item.icon ?
+                    <div className="clubHelper--donut_block-icon" dangerouslySetInnerHTML={{ __html: item.icon }}></div> : undefined}
+                text={item.subtitle}
+                multiline
+              >
+                {item.title}
+                </RichCell>
+              ||
+              item.type === "spacing" && <Spacing separator />
+              ||
+              item.type === "note" &&
+              <Text
+                  style={{ padding: 16 }}
+                  dangerouslySetInnerHTML={{ __html: this.props.parseLinks(item.text) }}
+              ></Text>
+            )) : <Placeholder>Ошибка</Placeholder>}
+          </Panel>
         </ModalPage>
       </ModalRoot>
     );
