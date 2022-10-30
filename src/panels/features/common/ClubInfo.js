@@ -8,40 +8,9 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {
-  ConfigProvider,
-  Gradient,
-  Group,
-  Panel,
-  PanelHeader,
-  PanelSpinner,
-  SplitCol,
-  SplitLayout,
-  Avatar,
-  Title,
-  Link,
-  MiniInfoCell,
-  List,
-  ButtonGroup,
-  PullToRefresh,
-  PanelHeaderButton,
-  ModalRoot,
-  ModalPage,
-  ModalPageHeader,
-  Separator,
-  Snackbar,
-  ContentCard,
-  Caption,
-  CardScroll,
-  Banner,
-  Button,
-  Div,
-  Placeholder,
-  CellButton,
-  Spacing
-} from '@vkontakte/vkui'
+import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon28Notification, Icon28NotificationAddOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline, Icon28UserTagOutline } from '@vkontakte/icons';
+import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -55,7 +24,7 @@ export default class ClubInfo extends Component {
 
     this.state = {
       club: {},
-      isClubLoading: false,
+      isClubLoading: true,
       managers: [],
       isManagersLoading: true,
       activeModal: "",
@@ -126,21 +95,30 @@ export default class ClubInfo extends Component {
   }
 
   update() {
-    this.setState({ isFetching: true });
-    this.getClub();
-    this.getManagers();
-    this.getStats();
-    this.setState({ isFetching: false });
+    if (!this.props.startupError) {
+      this.setState({ isFetching: true });
+      this.getClub();
+      this.getManagers();
+      this.getStats();
+      this.setState({ isFetching: false });
+    } else {
+      this.setState({ isFetching: false });
+    }
   }
 
   openModal(id) {
     this.setState({ modalLoading: true, activeModal: id });
-    document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
+    if (id == "donut") {
+      document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
+    }
   }
 
   closeModal() {
+    let id = this.state.activeModal;
     this.setState({ activeModal: "" });
-    document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
+    if (id == "donut") {
+      document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
+    }
   }
 
   settingsWasChanged() {
@@ -181,6 +159,7 @@ export default class ClubInfo extends Component {
             token: this.props.token
           },
             (data) => {
+              this.props.toggleShowMenu(true);
               this.props.setStartupError(null);
               this.props.setActiveStory("tickets_list");
             }
@@ -200,6 +179,7 @@ export default class ClubInfo extends Component {
         token: this.props.token
       },
         (data) => {
+          this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
           this.props.setActiveStory("tickets_list");
         }
@@ -212,6 +192,7 @@ export default class ClubInfo extends Component {
         token: this.props.token
       },
         (data) => {
+          this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
           this.props.setActiveStory("tickets_list");
         }
@@ -221,6 +202,7 @@ export default class ClubInfo extends Component {
       this.props.req(this.props.club.error.api, {
         token: this.props.token
       }, (response) => {
+        this.props.toggleShowMenu(true);
         this.props.setStartupError(null);
         this.props.setActiveStory("tickets_list");
       })
@@ -270,7 +252,7 @@ export default class ClubInfo extends Component {
   }
 
   render() {
-    const club = this.props.club;
+    const { club, isClubLoading } = this.state;
 
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
@@ -354,10 +336,9 @@ export default class ClubInfo extends Component {
       <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
         <SplitLayout modal={modal}>
           <SplitCol>
-            {this.props.isLoading ? <PanelSpinner /> :
               <Panel>
                 <PanelHeader
-                  left={!this.props.isMobile ?
+                  left={!this.props.isMobile && !isClubLoading ?
                     <React.Fragment>
                       {this.props.club_role === "admin" &&
                         <PanelHeaderButton onClick={() => this.openModal("settings")}>
@@ -379,113 +360,141 @@ export default class ClubInfo extends Component {
                 <PullToRefresh
                   onRefresh={this.update}
                   isFetching={this.state.isFetching}
-                >
+              >
+                {isClubLoading ?
                   <Group>
-                    {this.state.isClubLoading ? <PanelSpinner /> :
-                      <>
-                        <Gradient
-                          style={{
-                            margin: !this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            textAlign: "center",
-                            padding: 32,
-                          }}
-                          mode={this.props.appearance === "dark" ? 'black' : 'white'}
-                        >
-                          <Link target="_blank" href={"https://vk.com/club" + this.state.club.id}><Avatar size={96} src={this.state.club.photo} /></Link>
-                          <Link target="_blank" href={"https://vk.com/club" + this.state.club.id}>
-                            <Title
-                              style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
-                              level="2"
-                              weight="2"
-                            >
-                              {this.state.club.name}
-                            </Title>
-                          </Link>
-                        </Gradient>
-                        {!this.props.startupError && <Separator wide />}
-                        {this.props.startupError &&
-                          <Banner
-                            before={
-                              <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
-                                <span style={{ color: "#fff" }}>!</span>
-                              </Avatar>
-                            }
-                            header={this.props.startupError.title}
-                            subheader={this.props.startupError.text}
-                            actions={
-                                <React.Fragment>
-                                  {this.props.startupError.autofix &&
-                                    <Button
-                                      onClick={() => this.startupErrorAutofix()}
-                                      disabled={this.state.autofixBtnWorking}
-                                      loading={this.state.autofixBtnWorking}
-                                    >
-                                      {this.props.startupError.button ? this.props.startupError.button : "Исправить"}
-                                    </Button>
-                                  }
-                                  <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
-                                    <Button
-                                      mode={this.props.startupError.autofix ? "secondary" : "primary"}
-                                    >
-                                      Обратиться в Поддержку
-                                    </Button>
-                                  </Link>
-                              </React.Fragment>
-                            }
-                          />
-                        }
-                        <List style={{ paddingTop: "10px" }}>
-                          <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
-                          <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation.time.label}</MiniInfoCell>
-                          <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
-                        </List>
-                      </>}
+                    <Placeholder>
+                      <PanelSpinner />
+                    </Placeholder>
                   </Group>
-                  {this.props.isMobile &&
+                  :
+                  <>
                     <Group>
-                      {this.props.club_role === "admin" &&
-                        <CellButton
-                        onClick={() => this.openModal("settings")}
-                        before={
-                          <Icon28SettingsOutline />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                        >
-                          Настройки
-                        </CellButton>
+                      <Gradient
+                        style={{
+                          margin: this.props.isMobile ? "-7px -7px 0 -7px" : 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          padding: 32,
+                        }}
+                        mode={this.props.appearance === "dark" ? 'black' : 'white'}
+                      >
+                        <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
+                        <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                          <Title
+                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
+                            level="2"
+                            weight="2"
+                          >
+                            {club.name}
+                          </Title>
+                        </Link>
+                      </Gradient>
+                      {!club.error && <Separator wide />}
+                      {club.error &&
+                        <Banner
+                          before={
+                            <Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
+                              <span style={{ color: "#fff", fontWeight: 600 }}><Icon24Error width={18} height={18}/></span>
+                            </Avatar>
+                          }
+                          header={club.error.title}
+                          subheader={club.error.text}
+                          actions={
+                              <div style={{margin: "10px 0px"}}>
+                                {club.error.autofix &&
+                                  <Button
+                                    onClick={() => this.startupErrorAutofix()}
+                                    disabled={this.state.autofixBtnWorking}
+                                    loading={this.state.autofixBtnWorking}
+                                    stretched={this.props.isMobile}
+                                    style={this.props.isMoble ? {} : {marginRight: 10}}
+                                  >
+                                    {club.error.button ? club.error.button : "Исправить"}
+                                  </Button>
+                                }
+                                <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
+                                  <Button
+                                    mode={club.error.autofix ? "secondary" : "primary"}
+                                    stretched={this.props.isMobile}
+                                  >
+                                    Обратиться в Поддержку
+                                  </Button>
+                                </Link>
+                            </div>
+                          }
+                        />
                       }
-                      <CellButton
-                        onClick={() => this.openModal("support_code")}
-                        before={
-                          <Icon28LifebuoyOutline />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        PIN-код для Поддержки
-                      </CellButton>
-                      <CellButton
-                        onClick={() => this.openNotifies()}
-                        before={
-                          <Icon24NotificationOutline width={28} height={28} />
-                        }
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        Уведомления
-                      </CellButton>
-                      <Spacing separator />
-                      <CellButton
-                        onClick={() => this.props.changeMode("office")}
-                        before={<Icon28UserTagOutline />}
-                        after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
-                      >
-                        Личный кабинет
-                      </CellButton>
+                      <List style={{ paddingTop: "10px" }}>
+                        <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                      </List>
                     </Group>
-                  }
+                    {!this.props.isMobile && !this.props.showMenu &&
+                      <Group>
+                        <CellButton
+                          onClick={() => this.props.changeMode("office")}
+                          before={<Icon28UserTagOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Личный кабинет
+                        </CellButton>
+                      </Group>
+                    }
+                    {this.props.isMobile &&
+                      <Group>
+                        {this.props.club_role === "admin" &&
+                          <CellButton
+                          onClick={() => this.openModal("settings")}
+                          before={
+                            <Icon28SettingsOutline />
+                          }
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                          >
+                            Настройки
+                          </CellButton>
+                        }
+                        <CellButton
+                          onClick={() => this.openModal("support_code")}
+                          before={
+                            <Icon28LifebuoyOutline />
+                          }
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          PIN-код для Поддержки
+                        </CellButton>
+                        <CellButton
+                          onClick={() => this.openNotifies()}
+                          before={
+                            <Icon24NotificationOutline width={28} height={28} />
+                          }
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Уведомления
+                        </CellButton>
+                        <Spacing separator />
+                        <CellButton
+                          onClick={() => this.props.changeMode("office")}
+                          before={<Icon28UserTagOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Личный кабинет
+                        </CellButton>
+                        <CellButton
+                          onClick={() => this.props.go("faq")}
+                          before={<Icon28LifebuoyOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Поддержка
+                        </CellButton>
+                      </Group>
+                    }
+                  </>
+                }
                   {!this.state.isStatsHidden &&
                     <>
                       <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)"}}>Статистика</Title>
@@ -554,10 +563,8 @@ export default class ClubInfo extends Component {
 
                 {this.state.snackbar}
               </Panel>
+ </PullToRefresh>
+
+                {this.state.snackbar}
+              </Panel>
             }
-          </SplitCol>
-        </SplitLayout>
-      </ConfigProvider>
-    )
-  }
-}

@@ -143,7 +143,7 @@ const App = () => {
         <ConfigProvider platform={platform.current} popout={popout} appearance={appearance}>
           <AdaptivityProvider>
             <AppRoot>
-              <View activePanel={activePanel} popout={popout}>
+              <SplitLayout popout={popout}>
                 <Home
                   id='home'
                   log={log}
@@ -163,7 +163,7 @@ const App = () => {
                   history={history}
                   setHistory={setHistory}
                 />
-              </View>
+              </SplitLayout>
             </AppRoot>
           </AdaptivityProvider>
         </ConfigProvider>

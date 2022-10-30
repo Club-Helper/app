@@ -136,6 +136,7 @@ class StartPage extends React.Component {
 
         this.props.setPage("app");
         this.props.setIsNew(false);
+        this.props.toggleNeedToShowClubStartOnboarding(true);
         this.props.setActiveStory("tickets_list")
       },
       () => {
