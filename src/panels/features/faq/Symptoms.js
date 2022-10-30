@@ -12,14 +12,8 @@ export default class FAQSymptoms extends Component {
     }
   }
 
-  componentDidMount() {
-    console.log(this.props.openedTrigger);
-  }
-
   getTrigger(symptom) {
-    console.log("openedTrigger", this.props);
     this.props.setOpenedSymptom(symptom);
-    console.log("OGR", symptom);
     this.props.setPopout(<ScreenSpinner />);
     this.props.req("support.triggers", {
       superGroupId: this.props.openedProduct.id,
@@ -28,11 +22,9 @@ export default class FAQSymptoms extends Component {
       token: this.props.token
     }, (response) => {
       if (response.response.count > 0) {
-        console.log(response);
         this.props.setPopout(null);
         this.props.setOpenedTriggerTitle([...this.props.openedTriggerTitle, symptom.name]);
         this.props.setOpenedTrigger(response.response);
-        console.log("setOpenedTrigger", response.response);
         this.props.setTriggerMode("panel");
         this.props.go("faq-triggers");
       } else {
