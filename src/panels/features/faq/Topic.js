@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing } from '@vkontakte/vkui';
+import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Title, Spacing } from '@vkontakte/vkui';
 import { Icon12Chevron } from '@vkontakte/icons';
 import FAQTriggers from './Triggers';
 import FAQSymptoms from './Symptoms';

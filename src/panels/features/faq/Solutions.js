@@ -1,5 +1,5 @@
 import { Icon28ChatsOutline, Icon28DocumentOutline, Icon28LifebuoyOutline } from '@vkontakte/icons';
-import { ConfigProvider, Panel, PanelHeader, PanelHeaderBack, SplitCol, SplitLayout, Group, Link, Button, Title, Placeholder, Avatar, ContentCard, Div, Cell, List, Text, CardScroll, Card, Spacing, Gallery, Banner } from '@vkontakte/vkui';
+import { ConfigProvider, Panel, PanelHeader, PanelHeaderBack, SplitCol, SplitLayout, Group, Link, Button, Title, Placeholder, Avatar, ContentCard, Div, Cell, List, Text, Card, Spacing, Gallery, Banner } from '@vkontakte/vkui';
 import React, { Component } from 'react';
 
 import './GalleryFix.css';

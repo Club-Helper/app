@@ -10,11 +10,42 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Tabs, TabsItem, Placeholder, List, Avatar, SimpleCell, Search, ScreenSpinner, PullToRefresh, HorizontalScroll, Spacing, Cell, PanelSpinner, Link, Spinner, RichCell, Text } from '@vkontakte/vkui'
+import {
+  ConfigProvider,
+  ModalPage,
+  ModalPageHeader,
+  ModalRoot,
+  Panel,
+  PanelHeader,
+  PanelHeaderButton,
+  Div,
+  Button,
+  ButtonGroup,
+  Group,
+  SplitLayout,
+  SplitCol,
+  Tabs,
+  TabsItem,
+  Placeholder,
+  List,
+  Avatar,
+  SimpleCell,
+  Search,
+  ScreenSpinner,
+  PullToRefresh,
+  HorizontalScroll,
+  Spacing,
+  Cell,
+  PanelSpinner,
+  Link,
+  Spinner,
+  Text,
+  Title
+} from '@vkontakte/vkui'
 import { Icon24Dismiss, Icon24MoreHorizontal, Icon56MessagesOutline, Icon28RecentOutline, Icon56InboxOutline } from '@vkontakte/icons';
 
 import '../../../css/tickets/list.css';
-import '../../../css/landings/donut.css';
+import '../../../css/landings/onboarding.css';
 
 import bridge from '@vkontakte/vk-bridge';
 
@@ -44,7 +75,7 @@ export default class TicketsList extends Component {
     this.state = this.props.ticketsState !== null ? this.props.ticketsState : initialState
 
     this.openFAQModal = this.openFAQModal.bind(this);
-    this.closeFAQModal = this.closeFAQModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.getTickets = this.getTickets.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.openTicketButtonsModal = this.openTicketButtonsModal.bind(this);
@@ -63,7 +94,7 @@ export default class TicketsList extends Component {
     });
   }
 
-  closeFAQModal() {
+  closeModal() {
     this.setState({
       activeModal: null,
     });
@@ -73,6 +104,7 @@ export default class TicketsList extends Component {
    * Возвращает список обращений с фильтром filter
    *
    * @param {string} filter
+   * @param needLoading
    */
   getTickets(filter, needLoading) {
     this.setState({ fetching: true });
@@ -144,10 +176,6 @@ export default class TicketsList extends Component {
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
   openTicketButtonsModal(id, options) {
     this.setState({
       options: options,
@@ -182,8 +210,8 @@ export default class TicketsList extends Component {
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
           id='faq'
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.faqInfo.title}</ModalPageHeader>}
-          onClose={this.closeFAQModal}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>{this.state.faqInfo.title}</ModalPageHeader>}
+          onClose={this.closeModal}
           settlingHeight={100}
         >
           <Div>{this.state.faqInfo.text}</Div>
@@ -198,7 +226,7 @@ export default class TicketsList extends Component {
 
         <ModalPage
           id='buttons'
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>Действия с обращением</ModalPageHeader>}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Действия с обращением</ModalPageHeader>}
           onClose={this.closeTicketButtonsModal}
           settlingHeight={100}
         >
@@ -213,30 +241,30 @@ export default class TicketsList extends Component {
 
         <ModalPage
           id="onboarding"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeFAQModal}><Icon24Dismiss /></PanelHeaderButton>}>Добро пожаловать!</ModalPageHeader>}
-          onClose={this.closeFAQModal}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Добро пожаловать!</ModalPageHeader>}
+          onClose={this.closeModal}
           settlingHeight={100}
         >
-          <Panel className='clubHelper-donut_panel'>
-            {this.state.onboarding.length > 0 ? this.state.onboarding.map((item, idx) => (
-              item.type === "icon" &&
-              <RichCell
-                before={item.icon ?
-                    <div className="clubHelper--donut_block-icon" dangerouslySetInnerHTML={{ __html: item.icon }}></div> : undefined}
-                text={item.subtitle}
-                multiline
-              >
-                {item.title}
-                </RichCell>
-              ||
-              item.type === "spacing" && <Spacing separator />
-              ||
-              item.type === "note" &&
-              <Text
-                  style={{ padding: 16 }}
-                  dangerouslySetInnerHTML={{ __html: this.props.parseLinks(item.text) }}
-              ></Text>
-            )) : <Placeholder>Ошибка</Placeholder>}
+          <Panel className='clubHelper-onboarding_panel'>
+            <div className="clubHelper--onboarding">
+              <Title>Добро пожаловать!</Title>
+              <Title level="3">Команда Club Helper рада приведстовать новых пользователелй! Давайте мы коротко напомним о функциях сервиса.</Title>
+              {this.state.onboarding.map((element) => {
+                if (element.type == "icon") {
+                  return (<div className="clubHelper--onboarding_block">
+                    <div className="clubHelper--onboarding_block-icon" dangerouslySetInnerHTML={{__html: element.icon}}/>
+                    <div>
+                      <div className="clubHelper--onboarding_block-title" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.title)}}/>
+                      {element.subtitle && <div className="clubHelper--onboarding_block-subtitle" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.subtitle)}}/>}
+                    </div>
+                  </div>);
+                }else if (element.type == "spacing") {
+                  return (<Spacing size={15}/>);
+                }else if (element.type == "note") {
+                  return (<Text className="clubHelper--onboarding_note" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.text)}}/>);
+                }
+              })}
+            </div>
           </Panel>
         </ModalPage>
       </ModalRoot>

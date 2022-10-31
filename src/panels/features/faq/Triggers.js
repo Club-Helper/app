@@ -1,5 +1,5 @@
 import { Icon12Chevron, Icon28LifebuoyOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
-import { ConfigProvider, Text, Group, Panel, SplitCol, SplitLayout, PanelHeader, PanelHeaderBack, PanelHeaderButton, List, Placeholder, PanelHeaderClose, Cell, Avatar, ModalPageHeader, ButtonGroup, Button, Div, Link, ModalCard, ModalCardBase, Title, ContentCard } from '@vkontakte/vkui';
+import { ConfigProvider, Text, Group, Panel, SplitCol, SplitLayout, PanelHeader, PanelHeaderBack, List, Placeholder, PanelHeaderClose, Cell, Avatar, ModalPageHeader, ButtonGroup, Button, Div, Link, Title, ContentCard } from '@vkontakte/vkui';
 import React, { Component } from 'react';
 
 export default class FAQTriggers extends Component {

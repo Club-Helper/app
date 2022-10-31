@@ -45,7 +45,7 @@ export default class Notifies extends Component {
                 {icons[item.type] ? icons[item.type] : <Icon24NotificationOutline />}
               </Avatar>
             }
-            text={<div dangerouslySetInnerHTML={{ __html: this.parseBrakesLinks(item.text) }}></div>}
+            text={<div dangerouslySetInnerHTML={{__html: this.parseBrakesLinks(item.text)}}/>}
             subtitle={item.title}
             multiline
             caption={item.time.label}

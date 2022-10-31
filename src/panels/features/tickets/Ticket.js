@@ -357,7 +357,7 @@ export default class TicketsList extends Component {
                                 user={item.message.user.id}
                                 photoUser={item.message.user.photo}
                                 time={item.time}
-                                sticker={item.message.text ? false : true}
+                                sticker={!item.message.text}
                               >
                                 {item.message.text ? item.message.text : item.message.sticker}
                               </UserMessage>
@@ -369,7 +369,7 @@ export default class TicketsList extends Component {
                                 user={item.message.user.id}
                                 photoUser={item.message.user.photo}
                                 time={item.time}
-                                sticker={item.message.text ? false : true}
+                                sticker={!item.message.text}
                               >
                                 {item.message.text ? item.message.text : item.message.sticker}
                               </ClubMessage>

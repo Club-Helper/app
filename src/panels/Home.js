@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner, ModalRoot, ModalPage, Div } from '@vkontakte/vkui';
-import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline, Icon28HelpCircleOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
+import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
@@ -162,7 +162,7 @@ function Home({
             }
 
             ym(90794548, 'userParams', {
-              uid: data.response.uid
+              session_id: data.response.session_id
             });
 
             console.log("Session ID", data.response.session_id);
@@ -232,7 +232,7 @@ function Home({
               setToken(data.response.token)
 
               ym(90794548, 'userParams', {
-                uid: data.response.uid
+                session_id: data.response.session_id
               });
 
               fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
@@ -436,7 +436,7 @@ function Home({
     },
     {
       id: "club_info",
-      triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms"],
+      triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: club?.name,
       before: <Avatar size={28} src={club?.photo} />,
       show: !isDesktop
@@ -467,7 +467,7 @@ function Home({
     },
     {
       id: "faq",
-      triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms"],
+      triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
       before: <Icon28LifebuoyOutline />,
       show: true
@@ -1228,7 +1228,7 @@ function Home({
                                   badge={donutStatus ? <img src={DonutIcon} style={{
                                     width: '14px',
                                     height: '14px'
-                                  }} /> : ""}
+                                  }}  alt=""/> : ""}
                                 />
                               }
                               style={activeStory == "club_info" ? {
@@ -1424,7 +1424,7 @@ function Home({
                                     badge={donutStatus ? <img src={DonutIcon} style={{
                                       width: '14px',
                                       height: '14px'
-                                    }} /> : ""}
+                                    }}  alt=""/> : ""}
                                     style={{ cursor: "pointer" }}
                                   />
                                 }
