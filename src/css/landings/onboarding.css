@@ -1,0 +1,203 @@
+/*******************************************************
+ * Авторское право (C) 2021-2022 Club Helper
+ *
+ * Этот файл является частью мини-приложения Club Helper, размещенного
+ * в сети Интернет по адресу https://www.vk.com/app7938346
+ *
+ * Несанкционированное копирование, инженерный анализ, передача,
+ * распространение кода приложения запрещены
+ *******************************************************/
+
+#onboarding .vkuiPanel__in {
+  background-color: rgb(63, 138, 224);
+}
+
+#onboarding:not(.ModalPage--sizeX-compact) .vkuiModalPage__header {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#onboarding.vkuiModalPage--desktop .vkuiModalPage__in {
+  max-height: 95vh;
+  width: 600px;
+  color: #fff;
+}
+
+#onboarding .vkuiModalPage__in {
+  background-color: rgb(63, 138, 224);
+}
+
+#onboarding.ModalPage--sizeX-compact .vkuiModalPage__in.ModalPage__in {
+  width: 100%;
+}
+
+#onboarding.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in {
+  background-color: rgb(63, 138, 224);
+}
+
+#onboarding.ModalPage--sizeX-compact:not(.ModalPage--vkcom) .vkuiPanelHeader__in.PanelHeader__in {
+  border-radius: 14px 14px 0 0;
+}
+
+#onboarding.ModalPage--sizeX-compact .vkuiPanelHeader__in.PanelHeader__in .vkuiPanelHeader__content.PanelHeader__content {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#onboarding.ModalPage--sizeX-compact .vkuiModalPage__header.ModalPage__header .vkuiSeparator {
+  display: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#onboarding.vkuiModalPage--desktop .vkuiModalPage__content-wrap {
+  border-radius: 8px;
+}
+
+#onboarding .vkuiModalPageHeader .vkuiIcon--dismiss_24 {
+  color: #fff;
+}
+
+.clubHelper-onboarding_panel.vkuiPanel--vkcom .vkuiPanel__in {
+  padding-bottom: 0;
+}
+
+.clubHelper-onboarding_panel:not(.vkuiPanel--vkcom) .vkuiPanel__in {
+  padding-bottom: calc(var(--safe-area-inset-bottom) + var(--tabbar_height) * 4);
+}
+
+#onboarding:not(.vkuiModalPage--desktop) .clubHelper--onboarding {
+  padding-top: 20px;
+}
+
+.clubHelper--onboarding {
+  color: #fff;
+  background: rgb(63, 138, 224);
+  padding: calc(var(--safe-area-inset-bottom) + var(--tabbar_height)) 20px;
+}
+
+#onboarding.ModalPage--sizeX-compact .clubHelper--onboarding {
+  height: calc(100vh - var(--panelheader_height_vkcom));
+  box-sizing: border-box;
+}
+
+.clubHelper--onboarding h1 {
+  font-size: 50px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.clubHelper--onboarding h3 {
+  opacity: .8;
+  font-size: 20px;
+  line-height: 1;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
+.clubHelper--onboarding_block {
+  display: flex;
+  margin: 20px 0;
+  column-gap: 20px;
+}
+
+.clubHelper--onboarding_block + a {
+  margin-top: 40px;
+  display: block;
+}
+
+.clubHelper--onboarding_block-icon {
+  background: radial-gradient(98.05% 261.61% at 16.38% 3.59%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 100%);
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  box-sizing: border-box;
+  padding: 5px;
+  display: block;
+  border-radius: 50%;
+}
+
+.clubHelper--onboarding_block-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.clubHelper--onboarding_block-subtitle {
+  opacity: .5;
+}
+
+.clubHelper--onboarding a[style*="color: #2688eb"] {
+  color: #fff !important;
+  text-decoration: underline !important;
+}
+
+.clubHelper--onboarding_button {
+  text-decoration: none;
+  color: inherit;
+  max-width: 300px;
+  margin: 50px auto 0;
+  padding: 0 20px;
+  display: block;
+}
+
+.clubHelper--onboarding .vkuiGroup {
+  padding: 10px 0;
+}
+
+.clubHelper--onboarding .vkuiGroup .vkuiGroup__inner {
+  padding: 0 !important;
+}
+
+.clubHelper--onboarding .vkuiHeader--vkcom {
+  height: auto;
+  padding: 0;
+}
+
+.clubHelper--onboarding .vkuiHeader--vkcom .vkuiHeader__main {
+  color: #fff;
+}
+
+.clubHelper--onboarding .vkuiHeader--vkcom .vkuiHeadline--w-regular {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.clubHelper--onboarding .vkuiHeader--vkcom.vkuiHeader--mode-secondary {
+  font-size: 13px;
+  font-weight: normal;
+  opacity: .5;
+}
+
+.clubHelper--onboarding .vkuiGroup .vkuiSimpleCell {
+  padding: 10px 0 !important;
+  color: #fff;
+}
+
+.clubHelper--onboarding_note {
+  font-size: 13px;
+  opacity: .3;
+}
+
+#onboarding .vkuiHeader--ios .vkuiHeader__main,
+#onboarding .vkuiHeader--android .vkuiHeader__main  {
+  padding: 0;
+  color: #fff;
+}
+
+#onboarding .vkuiHeader--ios,
+#onboarding .vkuiHeader--android {
+  padding: 0;
+}
+
+#onboarding .vkuiHeader--mode-secondary .vkuiHeader__main {
+  margin: 0;
+  color: #fff;
+  opacity: .5;
+}
+
+#onboarding .vkuiHeader--mode-secondary .vkuiHeader__main .vkuiHeader__content-in {
+  text-transform: initial;
+  white-space: normal;
+}

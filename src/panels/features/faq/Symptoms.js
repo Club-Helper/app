@@ -1,7 +1,6 @@
 import { Icon12Chevron, Icon28LifebuoyOutline } from '@vkontakte/icons';
-import { Avatar, Cell, ConfigProvider, Div, Group, List, Panel, PanelHeader, PanelHeaderBack, ScreenSpinner, PanelHeaderClose, Placeholder, SplitCol, SplitLayout, ModalRoot, ModalPage, ModalPageHeader } from '@vkontakte/vkui';
+import { Avatar, Cell, ConfigProvider, Group, List, Panel, PanelHeader, PanelHeaderBack, ScreenSpinner, PanelHeaderClose, Placeholder, SplitCol, SplitLayout, ModalPageHeader } from '@vkontakte/vkui';
 import React, { Component } from 'react';
-import FAQTriggers from './Triggers';
 
 export default class FAQSymptoms extends Component {
   constructor(props) {
