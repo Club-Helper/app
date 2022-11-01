@@ -803,6 +803,7 @@ function Home({
           setOpenedSymptom={setOpenedSymptom}
           openedTSolution={openedTSolution}
           setOpenedTSolution={setOpenedTSolution}
+          showMenu={showMenu}
         />
       )
     },
@@ -982,6 +983,7 @@ function Home({
           setOpenedSymptom={setOpenedSymptom}
           openedTSolution={openedTSolution}
           setOpenedTSolution={setOpenedTSolution}
+          showMenu={showMenu}
         />
       )
     },
@@ -1343,6 +1345,7 @@ function Home({
                     req={req}
                     group_id={group_id}
                     club_role={club_role}
+                    toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
                   />
                 </Panel>
               </View>;

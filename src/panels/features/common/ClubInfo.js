@@ -8,7 +8,7 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing } from '@vkontakte/vkui'
+import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing, Cell } from '@vkontakte/vkui'
 import React, { Component } from 'react';
 import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
 
@@ -141,10 +141,18 @@ export default class ClubInfo extends Component {
     });
   }
 
-  startupErrorAutofix() {
+  startupErrorAutofix(error) {
     this.setState({ autofixBtnWorking: true });
 
-    if (!this.props.startupError.autofix) {
+    if (error) {
+      if (this.state.club.error) {
+        error = this.state.club.error;
+      } else {
+        this.props.createError("Произошла ошибка при автоисправлении. Откройте приложение в сообществе заново.");
+      }
+    }
+
+    if (!error.autofix) {
       this.props.createError("Автоисправление для данной ошибки недоступно.");
       this.setState({ autofixBtnWorking: false });
     }
@@ -182,9 +190,12 @@ export default class ClubInfo extends Component {
           this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
           this.props.setActiveStory("tickets_list");
+          this.setState({ autofixBtnWorking: false });
+        }, (error) => {
+          this.props.createError(error.error_data?.error_reason);
+          this.setState({ autofixBtnWorking: false });
         }
       );
-      this.setState({ autofixBtnWorking: false });
     } else if (this.state.club.status === 5004) {
       this.setState({ autofixBtnWorking: true });
 
@@ -194,18 +205,25 @@ export default class ClubInfo extends Component {
         (data) => {
           this.props.toggleShowMenu(true);
           this.props.setStartupError(null);
+          this.setState({ autofixBtnWorking: false });
           this.props.setActiveStory("tickets_list");
+        }, (error) => {
+          this.props.createError(error.error_data?.error_reason);
+          this.setState({ autofixBtnWorking: false });
         }
       );
-      this.setState({ autofixBtnWorking: false });
     } else if (this.props.club.error.api) {
       this.props.req(this.props.club.error.api, {
         token: this.props.token
       }, (response) => {
         this.props.toggleShowMenu(true);
         this.props.setStartupError(null);
+        this.setState({ autofixBtnWorking: false });
         this.props.setActiveStory("tickets_list");
-      })
+      }), (error) => {
+        this.props.createError(error.error_data?.error_reason);
+        this.setState({ autofixBtnWorking: false });
+      }
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
@@ -407,7 +425,7 @@ export default class ClubInfo extends Component {
                             <div style={{ margin: "10px 0px" }}>
                               {club.error.autofix &&
                                 <Button
-                                  onClick={() => this.startupErrorAutofix()}
+                                  onClick={() => this.startupErrorAutofix(club.error)}
                                   disabled={this.state.autofixBtnWorking}
                                   loading={this.state.autofixBtnWorking}
                                   stretched={this.props.isMobile}
@@ -442,6 +460,17 @@ export default class ClubInfo extends Component {
                           after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
                         >
                           Личный кабинет
+                        </CellButton>
+                      </Group>
+                    }
+                    {!this.props.isMobile &&
+                      <Group>
+                        <CellButton
+                          onClick={() => this.props.go("faq")}
+                          before={<Icon28LifebuoyOutline />}
+                          after={<Icon20ChevronRightOutline fill="var(--dynamic_gray)" />}
+                        >
+                          Поддержка
                         </CellButton>
                       </Group>
                     }

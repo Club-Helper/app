@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing } from '@vkontakte/vkui';
-import { Icon12Chevron } from '@vkontakte/icons';
+import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing, Placeholder } from '@vkontakte/vkui';
+import { Icon12Chevron, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTriggers from './Triggers';
 import FAQSymptoms from './Symptoms';
 
@@ -92,13 +92,12 @@ export default class FAQTopic extends Component {
 
   componentDidMount() {
     this.props.setPopout(null);
-    if (this.props.openedProduct?.id) {
-      this.onRefresh();
-    }
+
   }
 
   componentWillUnmount() {
     this.props.setOpenedSolution(null);
+    // this.props.setOpenedProduct(null);
   }
 
   render() {
@@ -134,7 +133,7 @@ export default class FAQTopic extends Component {
                   header={
                     <Title
                       level="2"
-                      style={{ marginLeft: "15px" }}
+                      style={{ marginLeft: "15px", marginTop: "10px" }}
                     >
                       Расскажите нам больше о проблеме
                     </Title>
@@ -144,24 +143,31 @@ export default class FAQTopic extends Component {
                   {this.state.isLoading ? <PanelSpinner /> :
                     <List>
                       {this.props.topic ?
-                        this.props.topic.items.map((item, idx) => (
-                          <Cell
-                            key={idx}
-                            before={item.icon ?
-                              <Avatar
-                                src={item.icon && item.icon}
-                                size={36}
-                                mode="image"
-                                style={{ background: "none" }}
-                                shadow={false}
-                              />
-                            : undefined}
-                            after={<Icon12Chevron width={16} height={16} />}
-                            onClick={() => this.getTrigger(item)}
+                        this.props.topic.count > 0 ?
+                          this.props.topic.items.map((item, idx) => (
+                            <Cell
+                              key={idx}
+                              before={item.icon ?
+                                <Avatar
+                                  src={item.icon && item.icon}
+                                  size={36}
+                                  mode="image"
+                                  style={{ background: "none" }}
+                                  shadow={false}
+                                />
+                              : undefined}
+                              after={<Icon12Chevron width={16} height={16} />}
+                              onClick={() => this.getTrigger(item)}
+                            >
+                              {item.name}
+                            </Cell>
+                          )) :
+                          <Placeholder
+                              icon={<Icon28LifebuoyOutline width={56} height={56} />}
                           >
-                            {item.name}
-                          </Cell>
-                        )) : <PanelSpinner />}
+                            Здесь пока ничего нет.
+                          </Placeholder>
+                        : <PanelSpinner />}
                     </List>
                   }
                 </Group>
