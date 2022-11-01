@@ -62,12 +62,11 @@ export default class FAQSolutions extends Component {
                   >
                     {item.subtitle && <Title level="3">{item.subtitle}</Title>}
                     <Spacing separator size={30} />
-                    <Gallery style={{ padding: 16 }} withSpaces={true} align="left" size="s" showArrows slideWidth={"80%"}>
+                    <Gallery className="clubHelper--solutions" style={{ padding: 16 }} withSpaces={true} size="s" showArrows slideWidth={"70%"}>
                       {item.solutions.map((solution, idx) => (
                         !solution.isHero && (
                           <Card
                             mode="shadow"
-                            style={{ padding: 16, marginRight: "3%" }}
                             key={idx}
                             header={solution.title}
                             icon={
@@ -89,7 +88,7 @@ export default class FAQSolutions extends Component {
                                 shadow={false}
                               />
                               <Title level="3">{solution.title}</Title>
-                              <Text style={{ maxWidth: "90%" }}>{solution.subtitle}</Text>
+                              <Text style={{ maxWidth: "90%", padding: 16 }}>{solution.subtitle}</Text>
                               {solution.button && solution.url &&
                                 <Link target='_blank' href={solution.url} style={{ marginTop: "5%" }}>
                                   <Button style={{ marginTop: "5%" }}>{solution.button}</Button>

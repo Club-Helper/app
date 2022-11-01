@@ -92,7 +92,7 @@ export default class FAQTopic extends Component {
 
   componentDidMount() {
     this.props.setPopout(null);
-
+    this.onRefresh();
   }
 
   componentWillUnmount() {
