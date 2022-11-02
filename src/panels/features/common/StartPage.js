@@ -135,8 +135,8 @@ class StartPage extends React.Component {
         )
 
         this.props.setPage("app");
-        this.props.setIsNew(false);
         this.props.toggleNeedToShowClubStartOnboarding(true);
+        this.props.setIsNew(false);
         this.props.setActiveStory("tickets_list")
       },
       () => {
@@ -195,6 +195,7 @@ class StartPage extends React.Component {
                   console.log('Сообщество создано в базе');
                   console.log(response);
 
+                  this.props.toggleNeedToShowClubStartOnboarding(true);
                   this.props.setIsNew(false);
                   console.log(this.props.activeStory)
 

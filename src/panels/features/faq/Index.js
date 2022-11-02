@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Avatar, Cell, ConfigProvider, Div, Group, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
+import { Avatar, Cell, ConfigProvider, Div, Group, Header, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderBack, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
+
 import { Icon12Chevron, Icon24Dismiss, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTopic from './Topic';
 
@@ -33,9 +34,9 @@ export default class FAQIndex extends Component {
       superGroupId: product.id,
       token: this.props.token
     }, (response) => {
-      this.props.go("faq-solution");
       this.props.setOpenedProduct(product);
       this.props.setOpenedSolution(response.response);
+      this.props.go("faq-solution");
     }, (error) => {
       this.props.setPopout(null);
       this.props.createError(error.error?.error_msg);
@@ -94,7 +95,13 @@ export default class FAQIndex extends Component {
         <SplitLayout modal={modal}>
           <SplitCol>
             <Panel>
-              <PanelHeader>Помощь</PanelHeader>
+              <PanelHeader
+                left={
+                  !this.props.showMenu && <PanelHeaderBack onClick={() => this.props.goBack()} />
+                }
+              >
+                Помощь
+              </PanelHeader>
               <PullToRefresh
                 onRefresh={() => this.getProduct(true)}
                 isFetching={this.state.isFetching}
@@ -103,7 +110,7 @@ export default class FAQIndex extends Component {
                     header={
                     <Title
                       level="2"
-                      style={{ marginLeft: "15px" }}
+                      style={{ marginLeft: "15px", marginTop: "10px" }}
                     >
                         Выберите раздел, с которым Вам требуется помощь
                       </Title>
