@@ -141,6 +141,7 @@ export default class FAQTriggers extends Component {
                         </Group>
                           :
                         <Cell
+                          multiline
                           before={
                             this.props.openedTrigger[0]?.icon ?
                               <Avatar
@@ -294,6 +295,7 @@ export default class FAQTriggers extends Component {
                         </Group>
                           :
                         <Cell
+                          multiline
                           before={
                             this.props.openedTrigger[0]?.icon ?
                             <Avatar

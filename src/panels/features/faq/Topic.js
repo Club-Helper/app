@@ -146,6 +146,7 @@ export default class FAQTopic extends Component {
                         this.props.topic.count > 0 ?
                           this.props.topic.items.map((item, idx) => (
                             <Cell
+                              multiline
                               key={idx}
                               before={item.icon ?
                                 <Avatar

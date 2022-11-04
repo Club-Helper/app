@@ -76,6 +76,7 @@ export default class FAQSymptoms extends Component {
                       {this.props.symptoms.length > 0 ?
                       this.props.symptoms.map((item, idx) => (
                         <Cell
+                          multiline
                           key={idx}
                           before={item.icon ?
                             <Avatar
@@ -104,6 +105,7 @@ export default class FAQSymptoms extends Component {
                     {this.props.symptoms.length > 0 ?
                       this.props.symptoms.map((item, idx) => (
                         <Cell
+                          multiline
                           key={idx}
                           before={item.icon ?
                             <Avatar
