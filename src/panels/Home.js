@@ -149,14 +149,14 @@ function Home({
               .then(data => {
                 console.log("RU LOCALE", data);
                 setRuLocale(data);
-                if (languageCode == "ru") setLocale(data);
+                if (params.get("vk_language") == "ru") setLocale(data);
               })
 
-            if (languageCode != "ru") {
-              fetch("https://ch.n1rwana.ml/translation/" + languageCode)
+            if (params.get("vk_language") != "ru") {
+              fetch("https://ch.n1rwana.ml/translation/" + params.get("vk_language"))
                 .then(response => response.json())
                 .then(data => {
-                  console.log(`LOCALE (${languageCode})`, data);
+                  console.log(`LOCALE (${params.get("vk_language")})`, data);
                   setLocale(data);
                 })
             }
