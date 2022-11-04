@@ -1,5 +1,5 @@
 import { Icon28ChatsOutline, Icon28DocumentOutline, Icon28LifebuoyOutline } from '@vkontakte/icons';
-import { ConfigProvider, Panel, PanelHeader, PanelHeaderBack, SplitCol, SplitLayout, Group, Link, Button, Title, Placeholder, Avatar, ContentCard, Div, Cell, List, Text, Card, Spacing, Gallery, Banner } from '@vkontakte/vkui';
+import { ConfigProvider, Panel, PanelHeader, PanelHeaderBack, SplitCol, SplitLayout, Group, Link, Button, Title, Placeholder, Avatar, ContentCard, Div, Cell, List, Text, Card, Gallery, Banner } from '@vkontakte/vkui';
 import React, { Component } from 'react';
 
 import './GalleryFix.css';
@@ -61,14 +61,12 @@ export default class FAQSolutions extends Component {
                     header={<Title style={{ marginLeft: "15px" }} level="2">{item.title}</Title>}
                   >
                     {item.subtitle && <Title level="3">{item.subtitle}</Title>}
-                    <Spacing separator size={30} />
-                    <Gallery className="clubHelper--solutions" style={{ padding: 16 }} withSpaces={true} size="s" showArrows slideWidth={"70%"}>
+                    <Gallery className="clubHelper--solutions" style={{ padding: 16 }} withSpaces={true} size="s" showArrows slideWidth={"90%"}>
                       {item.solutions.map((solution, idx) => (
                         !solution.isHero && (
                           <Card
-                            mode="shadow"
+                            mode="outline"
                             key={idx}
-                            header={solution.title}
                             icon={
                               <Avatar
                                 src={solution.imgUrl}
@@ -80,20 +78,25 @@ export default class FAQSolutions extends Component {
                             }
                           >
                             <center>
-                              <Avatar
-                                src={solution.imgUrl}
-                                size={36}
-                                mode="image"
-                                style={{ background: "none" }}
-                                shadow={false}
-                              />
-                              <Title level="3">{solution.title}</Title>
-                              <Text style={{ maxWidth: "90%", padding: 16 }}>{solution.subtitle}</Text>
-                              {solution.button && solution.url &&
-                                <Link target='_blank' href={solution.url} style={{ marginTop: "5%" }}>
-                                  <Button style={{ marginTop: "5%" }}>{solution.button}</Button>
-                                </Link>
+                              <Placeholder
+                                icon={
+                                  <Avatar
+                                    src={solution.imgUrl}
+                                    size={36}
+                                    mode="image"
+                                    style={{ background: "none" }}
+                                    shadow={false}
+                                  />
+                                }
+                                header={<Title style={{ maxWidth: "80%", marginLeft: "9.5%" }} level="3">{solution.title}</Title>}
+                                action={solution.button && solution.url &&
+                                  <Link target='_blank' href={solution.url} style={{ marginTop: "5%" }}>
+                                    <Button style={{ marginTop: "5%" }}>{solution.button}</Button>
+                                  </Link>
                               }
+                              >
+                                <Text style={{ maxWidth: "90%", padding: 16 }}>{solution.subtitle}</Text>
+                              </Placeholder>
                             </center>
                           </Card>
                         )
@@ -111,7 +114,6 @@ export default class FAQSolutions extends Component {
                             }
                             height={150}
                             mode="outline"
-                            sizes="36"
                           />
                         )
                     ))}
@@ -124,7 +126,6 @@ export default class FAQSolutions extends Component {
                     header={<Title style={{ marginLeft: "15px" }} level="2">{item.title}</Title>}
                     key={idx}
                   >
-                      <Spacing separator size={30} />
                       <List>
                         {item.solutions.map((solution, idx) => (
                           <Link
@@ -161,7 +162,6 @@ export default class FAQSolutions extends Component {
                     header={<Title style={{ marginLeft: "15px" }} level="2">{item.title}</Title>}
                     key={idx}
                   >
-                      <Spacing separator size={30} />
                       <Div>
                         {item.solutions.map((solution, idx) => (
                           <Link href={solution.url ?? undefined} key={idx} target="_blank">

@@ -11,3 +11,7 @@
   height: 48px;
   margin: 0 45%;
 }
+
+.clubHelper--solutions .vkuiPlaceholder__in {
+  padding: 16px 0;
+}
