@@ -422,19 +422,18 @@ export default class ClubInfo extends Component {
                           header={club.error.title}
                           subheader={club.error.text}
                           actions={
-                            <div style={{ margin: "10px 0px" }}>
+                            <div style={{ margin: "10px 0px", display: "flex", flexWrap: "wrap", columnGap: "10px", rowGap: "10px" }}>
                               {club.error.autofix &&
                                 <Button
                                   onClick={() => this.startupErrorAutofix(club.error)}
                                   disabled={this.state.autofixBtnWorking}
                                   loading={this.state.autofixBtnWorking}
                                   stretched={this.props.isMobile}
-                                  style={this.props.isMoble ? {} : { marginRight: 10 }}
                                 >
                                   {club.error.button ? club.error.button : "Исправить"}
                                 </Button>
                               }
-                              <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"}>
+                              <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("callback_error")} target={"_blank"} style={{ width: "100%" }}>
                                 <Button
                                   mode={club.error.autofix ? "secondary" : "primary"}
                                   stretched={this.props.isMobile}

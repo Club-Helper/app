@@ -1,9 +1,24 @@
-.clubHelper--solutions .vkuiGallery__slide>* {
-  width: 95%;
+
+.clubHelper--solutions {
+  padding: 16px 0;
 }
 
 .clubHelper--solutions .vkuiGallery__slide {
-  width: 95%;
+  padding: 0 16px;
+  max-width: 450px;
+}
+
+.clubHelper--solutions .vkuiCard {
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.clubHelper--solution-contact {
+  width: 250px;
+}
+
+.clubHelper--solution-contact .vkuiPlaceholder__in {
+  padding: 15px 0;
 }
 
 .clubHelper--solutions .vkuiContentCard__img {
