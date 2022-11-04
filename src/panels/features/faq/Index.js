@@ -122,6 +122,7 @@ export default class FAQIndex extends Component {
                         {this.state.product.count > 0 ?
                           this.state.product.items.map((item, idx) => (
                             <Cell
+                              multiline
                               key={idx}
                               before={
                                 <Avatar

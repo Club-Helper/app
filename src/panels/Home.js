@@ -564,6 +564,7 @@ function Home({
       setHistory(["office-clubs"]);
       setPage("office");
       setActiveStory("office-clubs");
+      toggleShowMenu(true);
       setBan(null);
     }
   }
