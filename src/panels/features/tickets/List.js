@@ -242,7 +242,10 @@ export default class TicketsList extends Component {
         <ModalPage
           id="onboarding"
           header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Добро пожаловать!</ModalPageHeader>}
-          onClose={this.closeModal}
+          onClose={() => {
+            this.props.toggleNeedToShowClubStartOnboarding(false);
+            this.closeModal();
+          }}
           settlingHeight={100}
         >
           <Panel className='clubHelper-onboarding_panel'>
