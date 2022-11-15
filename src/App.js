@@ -123,8 +123,10 @@ const App = () => {
     if (history.length === 1) {
       bridge.send("VKWebAppClose", { "status": "success" });
     } else if (history.length > 1) {
+      let target = history[history.length - 1];
+      window.history.pushState({ panel: target }, target);
       history.pop();
-      setActiveStory(history[history.length - 1]);
+      setActiveStory(target);
     }
   }
 
@@ -133,7 +135,7 @@ const App = () => {
    * навигационных кнопок.
    */
   useEffect(() => {
-    window.addEventListener('popstate', () => goBack());
+    window.addEventListener('popstate', (e) => { e.preventDefault(); goBack(); });
   })
 
   if (token != null) {
