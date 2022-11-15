@@ -8,7 +8,7 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {ConfigProvider, Panel, Spacing, Spinner, Text, Title} from '@vkontakte/vkui'
+import {Button, ConfigProvider, Panel, PanelHeader, Spacing, Spinner, Text, Title} from '@vkontakte/vkui'
 import React, { Component } from 'react'
 
 import '../../../css/landings/onboarding.css';
@@ -45,13 +45,14 @@ export default class Welcome extends Component {
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            height: "100%",
+            height: "auto",
             width: "100%",
-            paddingTop: "calc(var(--safe-area-inset-bottom) + var(--tabbar_height))"
-          }}><Spinner size="large" style={{margin: "20px 0"}}/></div>}
+          }}>
+          <Spinner size="large" style={{ margin: "20px 0" }} /></div>}
+          {this.props.isMobile && <div className="clubHelper--onboarding_PanelHeader"><PanelHeader separator={false} fixed={false}></PanelHeader></div>}
           {!loading && <div className="clubHelper--onboarding">
             <Title>Добро пожаловать!</Title>
-            <Title level="3">Команда Club Helper рада приведстовать новых пользователелй! Давайте мы коротко напомним о
+            <Title level="3">Команда Club Helper рада приветствовать новых пользователелй! Давайте мы коротко напомним о
               функциях сервиса.</Title>
             {this.state.content.map((element) => {
               if (element.type == "icon") {
@@ -71,9 +72,21 @@ export default class Welcome extends Component {
                               dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.text)}}/>);
               }
             })}
+            <br/>
+            <Button
+              stretched
+              size="l"
+              onClick={() => {
+                this.props.toggleNeedToShowClubStartOnboarding(false);
+                this.props.toggleShowMenu(true);
+                this.props.setActiveStory("tickets_list");
+              }}
+            >
+              Продолжить
+            </Button>
           </div>}
         </Panel>
-      </ConfigProvider>
+        </ConfigProvider>
     );
   }
 }

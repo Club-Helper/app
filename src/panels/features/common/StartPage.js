@@ -137,7 +137,8 @@ class StartPage extends React.Component {
         this.props.setPage("app");
         this.props.toggleNeedToShowClubStartOnboarding(true);
         this.props.setIsNew(false);
-        this.props.setActiveStory("tickets_list")
+        this.props.toggleShowMenu(false);
+        this.props.setActiveStory("club_start_onboarding")
       },
       () => {
         this.setState({
@@ -196,6 +197,7 @@ class StartPage extends React.Component {
                   console.log(response);
 
                   this.props.toggleNeedToShowClubStartOnboarding(true);
+                  this.props.toggleShowMenu(false);
                   this.props.setIsNew(false);
                   console.log(this.props.activeStory)
 
@@ -217,7 +219,7 @@ class StartPage extends React.Component {
                     this.settingClub(groupID, this.props.token);
                   }
 
-                  this.props.setActiveStory("tickets_list")
+                  this.props.setActiveStory("club_start_onboarding")
                 } else {
                   console.log('Сообщество не удалось создать в базе');
                   console.log(response.error)

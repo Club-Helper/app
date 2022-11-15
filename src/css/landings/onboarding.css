@@ -9,6 +9,7 @@
  *******************************************************/
 
 #onboarding .vkuiPanel__in {
+  height: 100%;
   background-color: rgb(63, 138, 224);
 }
 
@@ -71,7 +72,7 @@
 .clubHelper--onboarding {
   color: #fff;
   background: rgb(63, 138, 224);
-  padding: calc(var(--safe-area-inset-bottom) + var(--tabbar_height)) 20px;
+  padding: 20px;
 }
 
 #onboarding.ModalPage--sizeX-compact:not(.vkuiModalPage--android):not(.vkuiModalPage--iphone) .clubHelper--onboarding {
@@ -206,4 +207,8 @@
 #onboarding .vkuiHeader--mode-secondary .vkuiHeader__main .vkuiHeader__content-in {
   text-transform: initial;
   white-space: normal;
+}
+
+.clubHelper--onboarding_PanelHeader * {
+  background: rgb(63, 138, 224);
 }

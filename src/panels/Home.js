@@ -123,7 +123,7 @@ function Home({
   const [locale, setLocale] = useState({});
   const [ruLocale, setRuLocale] = useState({});
 
-  const [needToShowClubStartOnboarding, toggleNeedToShowClubStartOnboarding] = useState(true);
+  const [needToShowClubStartOnboarding, toggleNeedToShowClubStartOnboarding] = useState(false);
 
   const [activeModal, setActiveModal] = useState("");
 
@@ -596,10 +596,13 @@ function Home({
   const panels = [
     {
       id: "club_start_onboarding",
-      panelHeader: isMobile && <PanelHeader/>,
+      panelHeader: null,
       obj: (
         <Welcome
           {...basicProps}
+          toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+          toggleShowMenu={toggleShowMenu}
+          setActiveStory={setActiveStory}
         />
       )
     },
@@ -1165,20 +1168,25 @@ function Home({
     if (signCheckStatus == true) {
       if (banned == null) {
         if (isNew == false && page == "app") {
-          activeStory = needToShowClubStartOnboarding ? "club_start_onboarding" : activeStory;
-
           return (
             <ConfigProvider platform={platform.current} appearance={appearance}>
               <SplitLayout
                 modal={modal}
                 header={false && <PanelHeader separator={false} />}
-                style={{ justifyContent: "center", marginTop: "10px" }}
+                style={needToShowClubStartOnboarding ? {
+                    justifyContent: "center",
+                    background: "rgb(63, 138, 224)",
+                    height: "auto"
+                } : {
+                    justifyContent: "center",
+                    marginTop: "10px"
+                }}
               >
                 <SplitCol
                   animate={true}
-                  spaced={isDesktop}
-                  width={isDesktop ? '660px' : '100%'}
-                  maxWidth={isDesktop ? '660px' : '100%'}
+                  spaced={!needToShowClubStartOnboarding && isDesktop}
+                  width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                  maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
                 >
                   <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && (
                     <Tabbar>
@@ -1327,6 +1335,7 @@ function Home({
                     group_id={group_id}
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+                    toggleShowMenu={toggleShowMenu}
                   />
                 </Panel>
               </View>
@@ -1356,6 +1365,7 @@ function Home({
                     group_id={group_id}
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+                    toggleShowMenu={toggleShowMenu}
                   />
                 </Panel>
               </View>;
