@@ -232,6 +232,10 @@ export default class CommentsList extends Component {
     this.getComments(value);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
     const modal = (
       <ModalRoot

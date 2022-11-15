@@ -355,7 +355,7 @@ class StartPage extends React.Component {
                 <li className="clubHelper--info">
                   <Icon24MessagesOutline width={46} height={46} fill="#FFFFFF" />
                   <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Автоматизируйте процесс запроса информации через комментарии</Text>
-                  <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Вы отправялете команду, а всё остальное сделает робот</Text>
+                  <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Вы отправляете команду, а всё остальное сделает робот</Text>
                 </li>
                 <li className="clubHelper--imageInfo">
                   <div className="clubHelper--comment clubHelper--comment__user">
@@ -407,7 +407,7 @@ class StartPage extends React.Component {
                       <Icon28UserOutline fill="#2787f5" />
                     </div>
                     <div className="clubHelper--message__content">
-                      <Text weight="regular">Здраствуйте, я хотела заказть платье в вашем интернет-магазине. Но нужного размера не оказалось, мне предложили связаться с Вами, чтобы подобрать похожую модель по цвету и материалу ткани</Text>
+                      <Text weight="regular">Здравствуйте, я хотела заказать платье в вашем интернет-магазине, но нужного размера не оказалось.Мне предложили связаться с Вами, чтобы подобрать модель, похожую по цвету и материалу ткани</Text>
                     </div>
                   </div>
                   <div className="clubHelper--message clubHelper--message__club">
@@ -434,7 +434,7 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info" style={{ maxWidth: "80%" }}>
                     <Icon24LifebuoyOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Чат с поддержкой</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Ваши сотрудники будут общаться с подписичками также, через личные сообщения сообщества. Но в дополнение к обычным возможностям диалога, Club Helper дополнит диалог множеством полезных функций для обработки обращений<br /><br />Вы сможете присваивать статус обращениям, использовать умные шаблоны, переадресовывать обращение другим сотрудникам и многое другое!</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Ваши сотрудники будут общаться с подписчиками так же, через личные сообщения сообщества, но в дополнение к обычным возможностям диалога Club Helper дополнит диалог множеством полезных функций для обработки обращений<br /><br />Вы сможете присваивать статус обращениям, использовать умные шаблоны, переадресовывать обращение другим сотрудникам и многое другое!</Text>
                   </li>
                 </ul>
               </div>
@@ -473,7 +473,7 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info">
                     <Icon28DownloadCloudOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Установите</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живет в сообществах. Давайте поселим его в Ваше сообщество, и завершим настройку сервиса прямо там!</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живёт в сообществах. Давайте поселим его в Ваше сообщество, и завершим настройку сервиса прямо там!</Text>
                   </li>
                   <li className="clubHelper--info">
                     <Icon28SettingsOutline width={46} height={46} fill="#FFF" />
@@ -531,7 +531,7 @@ class StartPage extends React.Component {
           </Button>
           {this.state.textNoButton && <div className="clubHelper--instalApp">
             <Text weight="medium">Club Helper установлен!</Text>
-            <Text>Завершите настройки в <Link href={"https://vk.com/app7938346_-" + newGroupID} target="_blank">сообществе</Link></Text>
+            <Text>Завершите настройку в <Link href={"https://vk.com/app7938346_-" + newGroupID} target="_blank">сообществе</Link></Text>
           </div>}
         </div>
       </div>
