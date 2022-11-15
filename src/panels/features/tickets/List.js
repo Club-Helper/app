@@ -39,13 +39,10 @@ import {
   PanelSpinner,
   Link,
   Spinner,
-  Text,
-  Title
 } from '@vkontakte/vkui'
 import { Icon24Dismiss, Icon24MoreHorizontal, Icon56MessagesOutline, Icon28RecentOutline, Icon56InboxOutline } from '@vkontakte/icons';
 
 import '../../../css/tickets/list.css';
-import '../../../css/landings/onboarding.css';
 
 import bridge from '@vkontakte/vk-bridge';
 
@@ -69,7 +66,6 @@ export default class TicketsList extends Component {
       ticketsLoading: false,
       ticketButtonsID: 0,
       currentMessages: [],
-      onboarding: []
     }
 
     this.state = this.props.ticketsState !== null ? this.props.ticketsState : initialState
@@ -112,9 +108,9 @@ export default class TicketsList extends Component {
     let timeout = setTimeout(() => this.props.setPopout(<ScreenSpinner />), 10000);
 
     this.props.req("tickets.get", {
-      token: this.props.token,
-      filter: filter
-    },
+        token: this.props.token,
+        filter: filter
+      },
       (data) => {
         this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
       },
@@ -131,10 +127,10 @@ export default class TicketsList extends Component {
 
   performAction(id, action) {
     this.props.req("ticket.action", {
-      id: id,
-      action: action,
-      token: this.props.token
-    },
+        id: id,
+        action: action,
+        token: this.props.token
+      },
       (data) => {
         this.closeTicketButtonsModal();
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
@@ -151,7 +147,7 @@ export default class TicketsList extends Component {
     this.props.req("tickets.get", {
         token: this.props.token,
         filter: this.state.activeTab
-    },
+      },
       (data) => {
         this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
       },
@@ -165,15 +161,6 @@ export default class TicketsList extends Component {
     this.props.setPopout(null);
 
     this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
-
-    if (this.props.needToShowClubStartOnboarding) {
-      this.props.req("utils.welcomeClub", {
-        token: this.props.token
-      }, (response) => {
-        this.setState({ onboarding: response.response });
-      })
-      this.setState({ activeModal: "onboarding" });
-    }
   }
 
   openTicketButtonsModal(id, options) {
@@ -195,7 +182,7 @@ export default class TicketsList extends Component {
       this.setState({ currentMessages: [] });
     } else {
       this.setState({ currentMessages: this.state.messages.filter(({ preview }) => preview.toLowerCase().indexOf(e.target.value) > -1)
-    })
+      })
     }
   }
 
@@ -238,35 +225,6 @@ export default class TicketsList extends Component {
             </ButtonGroup>
           </Div>
         </ModalPage>
-
-        <ModalPage
-          id="onboarding"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Добро пожаловать!</ModalPageHeader>}
-          onClose={this.closeModal}
-          settlingHeight={100}
-        >
-          <Panel className='clubHelper-onboarding_panel'>
-            <div className="clubHelper--onboarding">
-              <Title>Добро пожаловать!</Title>
-              <Title level="3">Команда Club Helper рада приведстовать новых пользователелй! Давайте мы коротко напомним о функциях сервиса.</Title>
-              {this.state.onboarding.map((element) => {
-                if (element.type == "icon") {
-                  return (<div className="clubHelper--onboarding_block">
-                    <div className="clubHelper--onboarding_block-icon" dangerouslySetInnerHTML={{__html: element.icon}}/>
-                    <div>
-                      <div className="clubHelper--onboarding_block-title" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.title)}}/>
-                      {element.subtitle && <div className="clubHelper--onboarding_block-subtitle" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.subtitle)}}/>}
-                    </div>
-                  </div>);
-                }else if (element.type == "spacing") {
-                  return (<Spacing size={15}/>);
-                }else if (element.type == "note") {
-                  return (<Text className="clubHelper--onboarding_note" dangerouslySetInnerHTML={{__html: this.props.parseLinks(element.text)}}/>);
-                }
-              })}
-            </div>
-          </Panel>
-        </ModalPage>
       </ModalRoot>
     );
 
@@ -294,79 +252,79 @@ export default class TicketsList extends Component {
                 onRefresh={this.onRefresh}
                 isFetching={this.state.fetching}
               >
-              <Panel>
-                {!this.props.isMobile &&
-                  <PanelHeader>
-                    <Tabs mode="default" style={{ padding: "0 15px 0 15px" }}>
-                      <TabsItem
-                        onClick={() => { this.getTickets("all", false); this.setState({ activeTab: "all" }) }}
-                        selected={this.state.activeTab === "all"}
-                      >
-                        Все
-                      </TabsItem>
-                      <TabsItem
-                        onClick={() => { this.getTickets("waiting_specialist", false); this.setState({ activeTab: "waiting_specialist" }) }}
-                        selected={this.state.activeTab === "waiting_specialist"}
-                      >
-                        Ожидают специалиста
-                      </TabsItem>
-                      <TabsItem
-                        onClick={() => { this.getTickets("work", false); this.setState({ activeTab: "work" }) }}
-                        selected={this.state.activeTab === "work"}
-                      >
-                        В работе
-                      </TabsItem>
-                      <TabsItem
-                        onClick={() => { this.getTickets("closed", false); this.setState({ activeTab: "closed" }) }}
-                        selected={this.state.activeTab === "closed"}
-                      >
-                        Закрыты
-                      </TabsItem>
-                      {this.state.fetching &&
+                <Panel>
+                  {!this.props.isMobile &&
+                    <PanelHeader>
+                      <Tabs mode="default" style={{ padding: "0 15px 0 15px" }}>
                         <TabsItem
-                          style={{
-                            position: "absolute",
-                            right: 15
-                          }}
-                        >
-                          <Spinner />
-                        </TabsItem>
-                      }
-                    </Tabs>
-                  </PanelHeader>
-                }
-                <Group>
-
-                  {this.props.isMobile &&
-                    <Tabs mode="default">
-                      <HorizontalScroll>
-                        <TabsItem
-                          onClick={() => { this.getTickets("all", true); this.setState({ activeTab: "all" }) }}
+                          onClick={() => { this.getTickets("all", false); this.setState({ activeTab: "all" }) }}
                           selected={this.state.activeTab === "all"}
                         >
                           Все
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("waiting_specialist", true); this.setState({ activeTab: "waiting_specialist" }) }}
+                          onClick={() => { this.getTickets("waiting_specialist", false); this.setState({ activeTab: "waiting_specialist" }) }}
                           selected={this.state.activeTab === "waiting_specialist"}
                         >
                           Ожидают специалиста
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("work", true); this.setState({ activeTab: "work" }) }}
+                          onClick={() => { this.getTickets("work", false); this.setState({ activeTab: "work" }) }}
                           selected={this.state.activeTab === "work"}
                         >
                           В работе
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("closed", true); this.setState({ activeTab: "closed" }) }}
+                          onClick={() => { this.getTickets("closed", false); this.setState({ activeTab: "closed" }) }}
                           selected={this.state.activeTab === "closed"}
                         >
                           Закрыты
                         </TabsItem>
-                      </HorizontalScroll>
-                    </Tabs>
+                        {this.state.fetching &&
+                          <TabsItem
+                            style={{
+                              position: "absolute",
+                              right: 15
+                            }}
+                          >
+                            <Spinner />
+                          </TabsItem>
+                        }
+                      </Tabs>
+                    </PanelHeader>
                   }
+                  <Group>
+
+                    {this.props.isMobile &&
+                      <Tabs mode="default">
+                        <HorizontalScroll>
+                          <TabsItem
+                            onClick={() => { this.getTickets("all", true); this.setState({ activeTab: "all" }) }}
+                            selected={this.state.activeTab === "all"}
+                          >
+                            Все
+                          </TabsItem>
+                          <TabsItem
+                            onClick={() => { this.getTickets("waiting_specialist", true); this.setState({ activeTab: "waiting_specialist" }) }}
+                            selected={this.state.activeTab === "waiting_specialist"}
+                          >
+                            Ожидают специалиста
+                          </TabsItem>
+                          <TabsItem
+                            onClick={() => { this.getTickets("work", true); this.setState({ activeTab: "work" }) }}
+                            selected={this.state.activeTab === "work"}
+                          >
+                            В работе
+                          </TabsItem>
+                          <TabsItem
+                            onClick={() => { this.getTickets("closed", true); this.setState({ activeTab: "closed" }) }}
+                            selected={this.state.activeTab === "closed"}
+                          >
+                            Закрыты
+                          </TabsItem>
+                        </HorizontalScroll>
+                      </Tabs>
+                    }
 
                     <Group mode='plain'>
                       <SplitLayout modal={modal} popout={this.state.popout}>
@@ -375,7 +333,7 @@ export default class TicketsList extends Component {
                           {this.state.ticketsLoading ? <PanelSpinner /> :
                             <List>
                               {this.state.activeTab && this.state.count != 0 &&
-                                this.state.currentMessages.length <= 0 ?
+                              this.state.currentMessages.length <= 0 ?
                                 this.state.messages.map((item, id) => (
                                   <div key={item.id}>
                                     {this.props.isMobile &&
@@ -549,13 +507,13 @@ export default class TicketsList extends Component {
                         </SplitCol>
                       </SplitLayout>
                     </Group>
-                </Group>
-              </Panel>
+                  </Group>
+                </Panel>
               </PullToRefresh>
             }
           </SplitCol>
         </SplitLayout>
       </ConfigProvider >
-    )
+    );
   }
 }
