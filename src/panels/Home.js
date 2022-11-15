@@ -712,6 +712,8 @@ function Home({
       obj: (
         <TicketsList
           {...basicProps}
+          needToShowClubStartOnboarding={needToShowClubStartOnboarding}
+          toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
           setCookie={setCookie}
           getCookie={getCookie}
           setTicket={setTicket}

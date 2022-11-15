@@ -220,7 +220,6 @@ export default class TicketsList extends Component {
   }
 
   render() {
-
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
