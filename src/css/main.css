@@ -153,8 +153,8 @@ body {
   position: relative;
   font-size: 14px;
   white-space: pre-wrap;
-  background-color: var(--content_placeholder_icon);
-  color: var(--text_primary);
+  background-color: #DEDEE3;
+  color: #000;
 }
 
 body[scheme="space_gray"] .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
