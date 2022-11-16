@@ -16,6 +16,7 @@ import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28Comme
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
+import Welcome from './features/landings/Welcome';
 
 import AppInfo from './features/common/AppInfo';
 import ClubInfo from './features/common/ClubInfo';
@@ -55,21 +56,21 @@ import FAQSymptoms from './features/faq/Symptoms';
 import FAQSolutions from './features/faq/Solutions';
 
 function Home({
-  platform,
-  popout,
-  setPopout,
-  api_url,
-  setHistory,
-  appearance,
-  setAppearance,
-  activeStory,
-  setActiveStory,
-  isLoading,
-  setLoading,
-  go,
-  goBack,
-  history
-}) {
+                platform,
+                popout,
+                setPopout,
+                api_url,
+                setHistory,
+                appearance,
+                setAppearance,
+                activeStory,
+                setActiveStory,
+                isLoading,
+                setLoading,
+                go,
+                goBack,
+                history
+              }) {
   const viewWidth = useAdaptivity().viewWidth;
   const isDesktop = viewWidth >= ViewWidth.SMALL_TABLET;
   const isMobile = !isDesktop;
@@ -127,6 +128,26 @@ function Home({
   const [activeModal, setActiveModal] = useState("");
 
   useEffect(() => {
+    let queryString = window.location.search;
+    let params = new URLSearchParams(queryString);
+
+    fetch("https://ch.n1rwana.ml/translation/ru")
+      .then(response => response.json())
+      .then(data => {
+        console.log("RU LOCALE", data);
+        setRuLocale(data);
+        if (params.get("vk_language") == "ru") setLocale(data);
+      })
+
+    if (params.get("vk_language") != "ru") {
+      fetch("https://ch.n1rwana.ml/translation/" + params.get("vk_language"))
+        .then(response => response.json())
+        .then(data => {
+          console.log(`LOCALE (${params.get("vk_language")})`, data);
+          setLocale(data);
+        })
+    }
+
     fetch(api_url + "app.start" + window.location.search)
       .then(response => response.json())
       .then(data => {
@@ -135,31 +156,12 @@ function Home({
           if (data.response.status == "fail") {
             setBan(data.response)
           } else {
-            let queryString = window.location.search;
-            let params = new URLSearchParams(queryString);
             let role = params.get("vk_viewer_group_role");
             setGroupId(params.get("vk_group_id"));
             setUserId(params.get("vk_user_id"));
             setRole(role);
             setToken(data.response.token);
             setLanguageCode(params.get("vk_language"));
-
-            fetch("https://ch.n1rwana.ml/translation/ru")
-              .then(response => response.json())
-              .then(data => {
-                console.log("RU LOCALE", data);
-                setRuLocale(data);
-                if (params.get("vk_language") == "ru") setLocale(data);
-              })
-
-            if (params.get("vk_language") != "ru") {
-              fetch("https://ch.n1rwana.ml/translation/" + params.get("vk_language"))
-                .then(response => response.json())
-                .then(data => {
-                  console.log(`LOCALE (${params.get("vk_language")})`, data);
-                  setLocale(data);
-                })
-            }
 
             ym(90794548, 'userParams', {
               session_id: data.response.session_id
@@ -592,6 +594,18 @@ function Home({
   };
 
   const panels = [
+    {
+      id: "club_start_onboarding",
+      panelHeader: null,
+      obj: (
+        <Welcome
+          {...basicProps}
+          toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+          toggleShowMenu={toggleShowMenu}
+          setActiveStory={setActiveStory}
+        />
+      )
+    },
     {
       id: "comments_list",
       panelHeader: isMobile && <PanelHeader>Комментарии</PanelHeader>,
@@ -1156,19 +1170,25 @@ function Home({
     if (signCheckStatus == true) {
       if (banned == null) {
         if (isNew == false && page == "app") {
-
           return (
             <ConfigProvider platform={platform.current} appearance={appearance}>
               <SplitLayout
                 modal={modal}
                 header={false && <PanelHeader separator={false} />}
-                style={{ justifyContent: "center", marginTop: "10px" }}
+                style={needToShowClubStartOnboarding ? {
+                    justifyContent: "center",
+                    background: "rgb(63, 138, 224)",
+                    height: "auto"
+                } : {
+                    justifyContent: "center",
+                    marginTop: "10px"
+                }}
               >
                 <SplitCol
                   animate={true}
-                  spaced={isDesktop}
-                  width={isDesktop ? '660px' : '100%'}
-                  maxWidth={isDesktop ? '660px' : '100%'}
+                  spaced={!needToShowClubStartOnboarding && isDesktop}
+                  width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                  maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
                 >
                   <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && (
                     <Tabbar>
@@ -1206,7 +1226,7 @@ function Home({
                     </View>
                   </Epic>
                 </SplitCol>
-                {showMenu && isDesktop & !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
+                {showMenu && isDesktop && !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
                   <SplitCol fixed width="280px" maxWidth="280px">
                     <Panel>
                       {hasHeader && <PanelHeader />}
@@ -1317,13 +1337,12 @@ function Home({
                     group_id={group_id}
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+                    toggleShowMenu={toggleShowMenu}
                   />
                 </Panel>
               </View>
             );
           } else if (page == "landing_setting") {
-            console.log(page, isNew, club_role);
-
             if (club_role == "admin") {
               return <View
                 id='start_page'
@@ -1348,6 +1367,7 @@ function Home({
                     group_id={group_id}
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
+                    toggleShowMenu={toggleShowMenu}
                   />
                 </Panel>
               </View>;
@@ -1620,7 +1640,7 @@ function Home({
                 </SplitLayout>
               </ConfigProvider>
             )
-          } else {
+          }else {
             return <br />
           }
         }

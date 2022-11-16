@@ -108,17 +108,15 @@ export default class ClubInfo extends Component {
 
   openModal(id) {
     this.setState({ modalLoading: true, activeModal: id });
-    if (id == "donut") {
-      document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
-    }
+
+    if (id == "donut") document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
   }
 
   closeModal() {
     let id = this.state.activeModal;
     this.setState({ activeModal: "" });
-    if (id == "donut") {
-      document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
-    }
+
+    if (id == "donut") document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
   }
 
   settingsWasChanged() {
