@@ -58,10 +58,10 @@ export default class FAQSolutions extends Component {
                 item.groupType === "TILE_GROUP" && (
                   <Group
                     key={idx}
-                    header={<Title style={{ marginLeft: "15px" }} level="2">{item.title}</Title>}
+                    header={<Title style={{ marginLeft: "15px", marginTop: "15px" }} level="2">{item.title}</Title>}
                   >
                     {item.subtitle && <Title level="3">{item.subtitle}</Title>}
-                    <Gallery className="clubHelper--solutions" style={{ padding: 16 }} withSpaces={true} size="s" showArrows slideWidth={"90%"}>
+                    <Gallery className="clubHelper--solutions" withSpaces={true} showArrows slideWidth={"90%"}>
                       {item.solutions.map((solution, idx) => (
                         !solution.isHero && (
                           <Card
@@ -77,27 +77,25 @@ export default class FAQSolutions extends Component {
                               />
                             }
                           >
-                            <center>
-                              <Placeholder
-                                icon={
-                                  <Avatar
-                                    src={solution.imgUrl}
-                                    size={36}
-                                    mode="image"
-                                    style={{ background: "none" }}
-                                    shadow={false}
-                                  />
-                                }
-                                header={<Title style={{ maxWidth: "80%", marginLeft: "9.5%" }} level="3">{solution.title}</Title>}
-                                action={solution.button && solution.url &&
-                                  <Link target='_blank' href={solution.url} style={{ marginTop: "5%" }}>
-                                    <Button style={{ marginTop: "5%" }}>{solution.button}</Button>
-                                  </Link>
+                            <Placeholder
+                              icon={
+                                <Avatar
+                                  src={solution.imgUrl}
+                                  size={36}
+                                  mode="image"
+                                  style={{ background: "none" }}
+                                  shadow={false}
+                                />
                               }
-                              >
-                                <Text style={{ maxWidth: "90%", padding: 16 }}>{solution.subtitle}</Text>
-                              </Placeholder>
-                            </center>
+                              header={<Title style={{ maxWidth: "80%", marginLeft: "9.5%" }} level="3">{solution.title}</Title>}
+                              action={solution.button && solution.url &&
+                                <Link target='_blank' href={solution.url} style={{ marginTop: "5%" }}>
+                                  <Button style={{ marginTop: "5%" }}>{solution.button}</Button>
+                                </Link>
+                            }
+                            >
+                              <Text style={{ maxWidth: "90%", padding: 16 }}>{solution.subtitle}</Text>
+                            </Placeholder>
                           </Card>
                         )
                         ||
@@ -159,17 +157,28 @@ export default class FAQSolutions extends Component {
                 ||
                 item.groupType === "CONTACT_GROUP" && (
                   <Group
-                    header={<Title style={{ marginLeft: "15px" }} level="2">{item.title}</Title>}
+                    header={<Title style={{ marginLeft: "15px", marginTop: "15px", marginBottom: "5px" }} level="2">{item.title}</Title>}
                     key={idx}
                   >
                       <Div>
                         {item.solutions.map((solution, idx) => (
                           <Link href={solution.url ?? undefined} key={idx} target="_blank">
-                            <Button
-                              before={<Icon28ChatsOutline />}
+                            <Card
+                              className="clubHelper--solution-contact"
+                              mode="outline"
+                              key={idx}
+                              icon={
+                                <Icon28ChatsOutline width={40} height={40} />
+                              }
                             >
-                              {solution.title}
-                            </Button>
+                              <Placeholder
+                                icon={
+                                  <Icon28ChatsOutline width={40} height={40} />
+                                }
+                                style={{padding: "0"}}
+                                header={<Title style={{ maxWidth: "80%", marginLeft: "9.5%" }} level="3">{solution.title}</Title>}
+                              />
+                            </Card>
                           </Link>
                         ))}
                       </Div>

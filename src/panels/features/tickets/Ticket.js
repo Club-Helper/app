@@ -36,7 +36,8 @@ export default class TicketsList extends Component {
       fetching: false,
       buttonLoading: null,
       fetchingHeader: false,
-      snackbar: null
+      snackbar: null,
+      sendHelloMsgBtnWorking: false
     }
 
     this.openModal = this.openModal.bind(this);
@@ -129,6 +130,7 @@ export default class TicketsList extends Component {
   }
 
   sendHelloMsg() {
+    this.setState({ sendHelloMsgBtnWorking: true });
     this.props.req("ticket.action", {
       id: this.state.ticket.id,
       action: "hello",
@@ -151,10 +153,17 @@ export default class TicketsList extends Component {
               Сообщение отправлено
             </Snackbar>
           ),
-          activeModal: ""
+          activeModal: "",
+          sendHelloMsgBtnWorking: false
         });
         this.updateTicket();
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+      },
+      (error) => {
+        this.setState({
+          activeModal: "",
+          sendHelloMsgBtnWorking: false
+        });
       }
     );
   }
@@ -242,7 +251,7 @@ export default class TicketsList extends Component {
           actions={
             <ButtonGroup stretched>
               <Button mode={"secondary"} onClick={this.closeModal}>Нет</Button>
-              <Button onClick={() => this.sendHelloMsg()}>Да</Button>
+              <Button onClick={() => this.sendHelloMsg()} disabled={this.state.sendHelloMsgBtnWorking} loading={this.state.sendHelloMsgBtnWorking}>Да</Button>
             </ButtonGroup>
           }
         >

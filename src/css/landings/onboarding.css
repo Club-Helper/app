@@ -9,6 +9,7 @@
  *******************************************************/
 
 #onboarding .vkuiPanel__in {
+  height: 100%;
   background-color: rgb(63, 138, 224);
 }
 
@@ -36,7 +37,7 @@
   background-color: rgb(63, 138, 224);
 }
 
-#onboarding.ModalPage--sizeX-compact:not(.ModalPage--vkcom) .vkuiPanelHeader__in.PanelHeader__in {
+#onboarding.ModalPage--sizeX-compact:not(.ModalPage--vkcom):not(.ModalPage--android) .vkuiPanelHeader__in.PanelHeader__in {
   border-radius: 14px 14px 0 0;
 }
 
@@ -64,10 +65,6 @@
   padding-bottom: 0;
 }
 
-.clubHelper-onboarding_panel:not(.vkuiPanel--vkcom) .vkuiPanel__in {
-  padding-bottom: calc(var(--safe-area-inset-bottom) + var(--tabbar_height) * 4);
-}
-
 #onboarding:not(.vkuiModalPage--desktop) .clubHelper--onboarding {
   padding-top: 20px;
 }
@@ -75,10 +72,10 @@
 .clubHelper--onboarding {
   color: #fff;
   background: rgb(63, 138, 224);
-  padding: calc(var(--safe-area-inset-bottom) + var(--tabbar_height)) 20px;
+  padding: 20px;
 }
 
-#onboarding.ModalPage--sizeX-compact .clubHelper--onboarding {
+#onboarding.ModalPage--sizeX-compact:not(.vkuiModalPage--android):not(.vkuiModalPage--iphone) .clubHelper--onboarding {
   height: calc(100vh - var(--panelheader_height_vkcom));
   box-sizing: border-box;
 }
@@ -89,12 +86,22 @@
   font-weight: 700;
 }
 
+.Panel--android .clubHelper--onboarding h1 {
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
 .clubHelper--onboarding h3 {
   opacity: .8;
   font-size: 20px;
   line-height: 1;
   margin-top: 5px;
   margin-bottom: 40px;
+}
+
+#onboarding:not(.vkuiModalPage--desktop) .clubHelper--onboarding h3 {
+  font-size: 18px;
+  text-align: justify;
 }
 
 .clubHelper--onboarding_block {
@@ -200,4 +207,8 @@
 #onboarding .vkuiHeader--mode-secondary .vkuiHeader__main .vkuiHeader__content-in {
   text-transform: initial;
   white-space: normal;
+}
+
+.clubHelper--onboarding_PanelHeader * {
+  background: rgb(63, 138, 224);
 }
