@@ -153,7 +153,7 @@ body {
   position: relative;
   font-size: 14px;
   white-space: pre-wrap;
-  background-color: var(--content_placeholder_icon);
+  background-color: #DEDEE3;
   color: var(--text_primary);
 }
 
