@@ -260,7 +260,94 @@ class StartPage extends React.Component {
               });
           })
           .catch((error) => {
-            console.log('Разрешение не было получено');
+            console.log('Разрешение не было получено, пробуем еще раз', error, { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" });
+
+            bridge
+              .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" })
+              .then(data => {
+                console.log('Получено разрешение на права доступа');
+
+                this.props.req("clubs.creat", {
+                  'access_token': data.access_token,
+                  'token': this.props.token
+                },
+                  (response) => {
+                    if (response.error == null) {
+                      console.log('Сообщество создано в базе');
+                      console.log(response);
+
+                      this.props.toggleNeedToShowClubStartOnboarding(true);
+                      this.props.toggleShowMenu(false);
+                      this.props.setIsNew(false);
+                      console.log(this.props.activeStory)
+
+                      this.setState({
+                        load: {
+                          isLoad: false
+                        }
+                      });
+
+                      localStorage.setItem('checkEduceation', groupID);
+                      localStorage.setItem('checkToken', 'true');
+
+                      if (response['response']) {
+                        this.setState({
+                          slideIndex: newSlideIndex,
+                          noButton: true
+                        });
+
+                        this.settingClub(groupID, this.props.token);
+                      }
+
+                      this.props.setActiveStory("club_start_onboarding")
+                    } else {
+                      console.log('Сообщество не удалось создать в базе');
+                      console.log(response.error)
+
+                      this.setState({
+                        load: {
+                          isLoad: false,
+                          isError: true
+                        }
+                      });
+
+                      this.props.setPopout(
+                        <Alert
+                          actions={[
+                            {
+                              title: "Закрыть",
+                              autoclose: true,
+                              mode: "cancel",
+                            }
+                          ]}
+                          actionsLayout="vertical"
+                          onClose={() => this.props.setPopout(null)}
+                          header="Ошибка"
+                          text={response.error.error_msg}
+                        />
+                      )
+                    }
+                  },
+                  (error) => {
+                    console.log('Сообщество неудалось создать в базе');
+
+                    this.setState({
+                      load: {
+                        isLoad: false,
+                        isError: true
+                      }
+                    });
+                  });
+              })
+              .catch((error) => {
+                console.log('Разрешение не было получено (2)', error, { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" });
+
+                this.setState({
+                  load: {
+                    isLoad: false,
+                  }
+                });
+              });
 
             this.setState({
               load: {
