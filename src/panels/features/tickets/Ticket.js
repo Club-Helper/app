@@ -240,7 +240,12 @@ export default class TicketsList extends Component {
         <ModalPage
           id="actions"
           header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Приглашение в рассылку</ModalPageHeader>}
-          onClose={this.closeModal}
+          onClose={() => {
+            this.setState({
+              activeModal: "",
+              buttonLoading: null
+            })
+          }}
           settlingHeight={100}
         >
           <TicketActions {...this.props} close={this.closeModal} send={this.mailingInviteSend} />
@@ -337,7 +342,19 @@ export default class TicketsList extends Component {
                             loading={this.state.buttonLoading === "close"}
                           >
                             Закрыть обращение
-                          </Button>}
+                        </Button>}
+                        {this.state.ticketOptions.includes("invitation_mailing") &&
+                          <Button
+                            mode="outline"
+                            onClick={() => this.setState({
+                              activeModal: "actions",
+                              buttonLoading: "invitation_mailing"
+                            })}
+                            loading={this.state.buttonLoading === "invitation_mailing"}
+                          >
+                            Пригласить в рассылку
+                          </Button>
+                        }
                         {this.state.ticketOptions.includes("get_support") &&
                           <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
                             <Button
