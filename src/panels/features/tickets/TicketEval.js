@@ -131,62 +131,71 @@ export default class TicketEval extends Component {
     }
   }
 
+  setMarks() {
+    fetch("https://ch.n1rwana.ml/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
+      .then(response => response.json())
+      .then(data => {
+          console.log(data)
+          if (data.error) {
+            this.props.createError(data.error.error_msg);
+          } else {
+            fetch("https://ch.n1rwana.ml/api/app.setMarks", {
+              method: "POST",
+              body: JSON.stringify({
+                "token": data.response.token,
+                "ticket": window.location.hash.split("/")[1],
+                "mark": this.state.selectedReason,
+                "info": this.state.customReasonText ? this.state.customReasonText : null
+              })
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+                if (data.error) {
+                  this.props.createError(data.error.error_msg);
+                } else {
+                  this.openSentModal();
+                }
+              });
+          }
+        }
+      );
+
+    this.setState({ buttonLoading: false });
+  }
+
   handleSendReport() {
     this.setState({ buttonLoading: true });
 
-    bridge.send("VKWebAppAllowMessagesFromGroup", { "group_id": 207049707, "key": this.state.token })
-      .then(data => {
-        console.log(data)
-        fetch("https://ch.n1rwana.ml/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
-          .then(response => response.json())
-          .then(data => {
-            console.log(data)
-            if (data.error) {
-              this.props.createError(data.error.error_msg);
-            } else {
-              fetch("https://ch.n1rwana.ml/api/app.setMarks", {
-                method: "POST",
-                body: JSON.stringify({
-                  "token": data.response.token,
-                  "ticket": window.location.hash.split("/")[1],
-                  "mark": this.state.selectedReason,
-                  "info": this.state.customReasonText ? this.state.customReasonText : null
-                })
-              })
-                .then(response => response.json())
-                .then(data => {
-                  console.log(data);
-                  if (data.error) {
-                    this.props.createError(data.error.error_msg);
-                  } else {
-                    this.openSentModal();
-                  }
-                });
-            }
-          }
-          );
-        this.setState({ buttonLoading: false });
-      })
-      .catch(error => {
-        this.props.setPopout(
-          <Alert
-            actions={[
-              {
-                title: "Закрыть",
-                autoclose: true,
-                mode: "cancel",
-              }
-            ]}
-            actionsLayout="vertical"
-            onClose={() => this.props.setPopout(null)}
-            header="Ошибка"
-            text="Для отправки жалобы Вы должны разрешить Команде поддержки Club Helper отправлять Вам сообщения"
-          />
-        )
-        this.setState({ buttonLoading: false });
+    if (this.getMarkTypeByMarkName(this.state.selectedReason) == "bad") {
+      bridge.send("VKWebAppAllowMessagesFromGroup", { "group_id": 207049707, "key": this.state.token })
+        .then(data => {
+          console.log(data)
+          this.setMarks();
+        })
+        .catch(error => {
+          this.props.setPopout(
+            <Alert
+              actions={[
+                {
+                  title: "Закрыть",
+                  autoclose: true,
+                  mode: "cancel",
+                }
+              ]}
+              actionsLayout="vertical"
+              onClose={() => this.props.setPopout(null)}
+              header="Ошибка"
+              text="Для отправки жалобы Вы должны разрешить Команде поддержки Club Helper отправлять Вам сообщения"
+            />
+          )
+          this.setState({ buttonLoading: false });
 
-        console.error(error);
-      });
+          console.error(error);
+        });
+    }else {
+      this.setMarks();
+    }
   }
 
   openSentModal() {
@@ -236,10 +245,6 @@ export default class TicketEval extends Component {
   }
 
   componentDidMount() {
-    /**
-     * Я так заебался это фиксить. Надеюсь, что
-     * разработчики реакта сдохнут нахуй в канаве.
-     */
     bridge.send("VKWebAppGetGroupInfo", { "group_id": parseInt(this.state.groupID) })
       .then((data) => this.setState({ club_name: data.name }))
       .catch((error) => console.error(error));
