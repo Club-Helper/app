@@ -45,7 +45,7 @@ export default class Welcome extends Component {
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            height: "auto",
+            height: "100%",
             width: "100%",
           }}>
           <Spinner size="large" style={{ margin: "20px 0" }} /></div>}
@@ -75,6 +75,7 @@ export default class Welcome extends Component {
             <br/>
             <Button
               stretched
+              mode="overlay_primary"
               size="l"
               onClick={() => {
                 this.props.toggleNeedToShowClubStartOnboarding(false);
