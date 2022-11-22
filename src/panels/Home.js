@@ -1389,7 +1389,13 @@ function Home({
                 <SplitLayout
                   modal={modal}
                   header={false && <PanelHeader separator={false} />}
-                  style={{ justifyContent: "center", marginTop: "10px" }}
+                  style={isDesktop ? {
+                    justifyContent: "center",
+                    paddingTop: "10px",
+                    boxSizing: "border-box"
+                  } : {
+                    justifyContent: "center"
+                  }}
                 >
                   <SplitCol
                     animate={true}
@@ -1525,7 +1531,13 @@ function Home({
                 <SplitLayout
                   modal={modal}
                   header={false && <PanelHeader separator={false} />}
-                  style={{ justifyContent: "center", marginTop: "10px" }}
+                  style={isDesktop ? {
+                    justifyContent: "center",
+                    paddingTop: "10px",
+                    boxSizing: "border-box"
+                  } : {
+                    justifyContent: "center"
+                  }}
                 >
                   <SplitCol
                     animate={true}
