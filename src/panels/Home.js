@@ -1178,11 +1178,14 @@ function Home({
                 style={needToShowClubStartOnboarding ? {
                     justifyContent: "center",
                     background: "rgb(63, 138, 224)",
-                    height: "auto"
-                } : {
+                    height: "100%"
+                } : (isDesktop ? {
                     justifyContent: "center",
-                    marginTop: "10px"
-                }}
+                    paddingTop: "10px",
+                    boxSizing: "border-box"
+                } : {
+                  justifyContent: "center"
+                })}
               >
                 <SplitCol
                   animate={true}
