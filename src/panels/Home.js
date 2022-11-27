@@ -56,21 +56,21 @@ import FAQSymptoms from './features/faq/Symptoms';
 import FAQSolutions from './features/faq/Solutions';
 
 function Home({
-                platform,
-                popout,
-                setPopout,
-                api_url,
-                setHistory,
-                appearance,
-                setAppearance,
-                activeStory,
-                setActiveStory,
-                isLoading,
-                setLoading,
-                go,
-                goBack,
-                history
-              }) {
+  platform,
+  popout,
+  setPopout,
+  api_url,
+  setHistory,
+  appearance,
+  setAppearance,
+  activeStory,
+  setActiveStory,
+  isLoading,
+  setLoading,
+  go,
+  goBack,
+  history
+}) {
   const viewWidth = useAdaptivity().viewWidth;
   const isDesktop = viewWidth >= ViewWidth.SMALL_TABLET;
   const isMobile = !isDesktop;
@@ -108,6 +108,7 @@ function Home({
 
   const [startupError, setStartupError] = useState(null);
   const [showMenu, toggleShowMenu] = useState(true);
+  const [showMobileMenu, toggleShowMobileMenu] = useState(true);
 
   const [openedSolution, setOpenedSolution] = useState(null);
   const [openedProduct, setOpenedProduct] = useState(null);
@@ -526,6 +527,10 @@ function Home({
   }
 
   const req = (method, body, callback, onError) => {
+    if (this?.fetchFailRetryTimeout) {
+      clearTimeout(this.fetchFailRetryTimeout);
+    }
+
     if (navigator.onLine) {
       fetch(`https://ch.n1rwana.ml/api/${method}`, {
         method: "POST",
@@ -546,6 +551,21 @@ function Home({
               onError(data);
             }
           }
+        })
+        .catch((error) => {
+          if (onError) {
+            onError();
+          } else {
+            console.error("CRITICAL FETCH ERROR", error);
+          }
+          setPopout(<ScreenSpinner />);
+          this.fetchFailRetryTimeout = setTimeout(() => {
+            req(method, body, callback, onError);
+            setPopout(null);
+            let _activeStory = activeStory;
+            setActiveStory("");
+            setActiveStory(_activeStory);
+          }, 10000);
         })
     } else {
       setActiveModal("noInternet");
@@ -792,6 +812,7 @@ function Home({
           setPopout={setPopout}
           showMenu={showMenu}
           toggleShowMenu={toggleShowMenu}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -1190,7 +1211,7 @@ function Home({
                   width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
                   maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
                 >
-                  <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && (
+                  <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && showMobileMenu && (
                     <Tabbar>
                       {menuItems.map(menuItem =>
                         menuItem.show &&
@@ -1215,14 +1236,14 @@ function Home({
                       onSwipeBack={() => goBack()}
                     >
                       {panels.map((panel, idx) => (
-                        <Panel
-                          key={idx}
-                          id={panel.id}
-                        >
-                          {panel.panelHeader}
-                          {panel.obj}
-                        </Panel>
-                      ))}
+                          <Panel
+                            key={idx}
+                            id={panel.id}
+                          >
+                            {panel.panelHeader}
+                            {panel.obj}
+                          </Panel>
+                        ))}
                     </View>
                   </Epic>
                 </SplitCol>

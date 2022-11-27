@@ -11,6 +11,8 @@
 import React from 'react';
 
 import { GrayText } from '../../common/partials/GrayText';
+import { Gallery, Spinner, Card, Placeholder } from '@vkontakte/vkui';
+import { Icon48PictureOutline } from '@vkontakte/icons';
 
 /**
 * Системное сообщение
@@ -40,7 +42,7 @@ export const SystemMessage = ({ noLast, children }) => {
 * @param children - Содержимое сообщения
 */
 
-export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, children }) => {
+export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, children, attachments }) => {
   if (!sticker && !children[0]) return false;
 
   return (
@@ -54,7 +56,24 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
           </div>
           :
           <div className="clubHelper--textContentMessage" style={{ maxWidth: "90%" }}>
-            <div className="clubHelper--textMessage">{children}</div>
+            <div className="clubHelper--textMessage">
+              {children}
+              {attachments.length > 0 &&
+                <Gallery slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows style={{ marginTop: "1vh" }}>
+                  {attachments.map((item, idx) => (
+                    item.type === "photo" && item.photo.url ?
+                      <img key={idx} src={item.photo.url} style={{
+                        maxHeight: "20vh",
+                        borderRadius: "10px"
+                      }} />
+                      :
+                      <Card mode={"shadow"}>
+                        <Placeholder icon={<Icon48PictureOutline />} />
+                      </Card>
+                  ))}
+                </Gallery>
+              }
+            </div>
             <GrayText fontSize={11}>{time}</GrayText>
           </div>
         }
@@ -73,7 +92,7 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
 * @param sticker - Сообщение - стикер
 * @param children - Содержимое сообщения
 */
-export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, children }) => {
+export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, children, attachments }) => {
   if (!sticker && !children) return false;
 
   return (
@@ -86,7 +105,24 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
           </div>
           :
           <div className="clubHelper--textContentMessage" style={{ maxWidth: "90%" }}>
-            <div className="clubHelper--textMessage">{children}</div>
+            <div className="clubHelper--textMessage">
+              {children}
+              {attachments.length > 0 &&
+                <Gallery slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows style={{ marginTop: "1vh" }}>
+                  {attachments.map((item, idx) => (
+                    item.type === "photo" && item.photo.url ?
+                      <img key={idx} src={item.photo.url} style={{
+                        maxHeight: "20vh",
+                        borderRadius: "10px"
+                      }} />
+                      :
+                      <Card mode={"shadow"}>
+                        <Placeholder icon={<Icon48PictureOutline />} />
+                      </Card>
+                  ))}
+                </Gallery>
+              }
+            </div>
             <GrayText fontSize={11}>{time}</GrayText>
           </div>
         }

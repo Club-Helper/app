@@ -235,6 +235,7 @@ export default class ClubInfo extends Component {
       token: this.props.token
     },
       (data) => {
+        this.props.toggleShowMobileMenu(false);
         this.setState({ supportCode: data.response });
         this.openModal("support_code_result");
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
@@ -298,9 +299,14 @@ export default class ClubInfo extends Component {
         </ModalPage>
         <ModalPage
           id="support_code"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Поддержка</ModalPageHeader>}
-          onClose={this.closeModal}
-          settlingHeight={100}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.closeModal();
+            this.props.toggleShowMobileMenu(true);
+          }}><Icon24Dismiss /></PanelHeaderButton>}>Поддержка</ModalPageHeader>}
+          onClose={() => {
+            this.closeModal();
+            this.props.toggleShowMobileMenu(true);
+          }}
         >
           <Div>
             При обращении в <b>Службу Поддержки Club Helper</b> Вам может понадобиться 4-значный PIN-код для подтверждения личности.
@@ -318,9 +324,14 @@ export default class ClubInfo extends Component {
         </ModalPage>
         <ModalPage
           id="support_code_result"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>PIN-код</ModalPageHeader>}
-          onClose={this.closeModal}
-          settlingHeight={100}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.closeModal();
+            this.props.toggleShowMobileMenu(true);
+          }}><Icon24Dismiss /></PanelHeaderButton>}>PIN-код</ModalPageHeader>}
+          onClose={() => {
+            this.closeModal();
+            this.props.toggleShowMobileMenu(true);
+          }}
         >
           <Placeholder icon={<Icon56CheckShieldOutline fill="var(--button_commerce_background)" />} header="Ваш PIN-код">
             {this.state.supportCode?.code}
@@ -485,7 +496,10 @@ export default class ClubInfo extends Component {
                           </CellButton>
                         }
                         <CellButton
-                          onClick={() => this.openModal("support_code")}
+                          onClick={() => {
+                            this.props.toggleShowMobileMenu(false);
+                            this.openModal("support_code");
+                          }}
                           before={
                             <Icon28LifebuoyOutline />
                           }
