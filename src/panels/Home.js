@@ -552,21 +552,6 @@ function Home({
             }
           }
         })
-        .catch((error) => {
-          if (onError) {
-            onError();
-          } else {
-            console.error("CRITICAL FETCH ERROR", error);
-          }
-          setPopout(<ScreenSpinner />);
-          this.fetchFailRetryTimeout = setTimeout(() => {
-            req(method, body, callback, onError);
-            setPopout(null);
-            let _activeStory = activeStory;
-            setActiveStory("");
-            setActiveStory(_activeStory);
-          }, 10000);
-        })
     } else {
       setActiveModal("noInternet");
     }
