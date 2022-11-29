@@ -8,13 +8,30 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-.marks {
-    display: flex;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fit, 75px);
-    grid-gap: 50px;
+#ticket_eval {
+  height: auto;
+  background-color: var(--background_content);
+  min-height: 100vh;
 }
 
-.mark-text {
-    color: var(--text_subhead);
+.clubHelper--marks {
+  display: flex;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 75px);
+  grid-gap: 50px;
+}
+
+.clubHelper--marks .clubHelper--mark {
+  cursor: pointer;
+}
+
+.clubHelper--mark-text {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.clubHelper--mark-footer {
+  text-align: left;
+  margin: 10px auto 30px;
+  width: 95%;
 }

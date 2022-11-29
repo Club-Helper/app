@@ -1163,7 +1163,6 @@ function Home({
       <View
         id='ticket_eval'
         activePanel='ticket_eval'
-        style={!isMobile ? { backgroundColor: "var(--background_content)", height: "100vh" } : {}}
         history={history}
         onSwipeBack={() => goBack()}
       >

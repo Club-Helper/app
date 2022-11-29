@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, CustomSelectOption, FormItem, FormLayout, Group, Headline, Select, SplitCol, SplitLayout, Title, Textarea, Banner, Link, Button, Alert, AdaptivityProvider, AppRoot, Placeholder, ModalRoot, ModalPage, Div, Spacing } from '@vkontakte/vkui'
+import { ConfigProvider, CustomSelectOption, FormItem, FormLayout, Group, Headline, Select, SplitCol, SplitLayout, Title, Textarea, Banner, Link, Button, Alert, AdaptivityProvider, AppRoot, Placeholder, ModalRoot, ModalPage, Div, Spacing, Footer } from '@vkontakte/vkui'
 import { Icon28WarningTriangleOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -35,7 +35,6 @@ export default class TicketEval extends Component {
       initialMark: null,
       initialError: false,
       initialErrorText: null,
-      club_name: "...",
       token: this.props.token,
       mark: null,
       markFormText: null,
@@ -167,7 +166,7 @@ export default class TicketEval extends Component {
   handleSendReport() {
     this.setState({ buttonLoading: true });
 
-    if (this.getMarkTypeByMarkName(this.state.selectedReason) == "bad") {
+    if (this.state.mark == "bad") {
       bridge.send("VKWebAppAllowMessagesFromGroup", { "group_id": 207049707, "key": this.state.token })
         .then(data => {
           console.log(data)
@@ -244,13 +243,6 @@ export default class TicketEval extends Component {
     }
   }
 
-  componentDidMount() {
-    bridge.send("VKWebAppGetGroupInfo", { "group_id": parseInt(this.state.groupID) })
-      .then((data) => this.setState({ club_name: data.name }))
-      .catch((error) => console.error(error));
-    this.props.setPopout(null);
-  }
-
   render() {
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
@@ -268,7 +260,6 @@ export default class TicketEval extends Component {
     if (this.state.groupID != 0) {
       if (!this.state.initialError) {
         if (!this.state.initialMark) {
-
           return (
             <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
               <AdaptivityProvider>
@@ -280,15 +271,15 @@ export default class TicketEval extends Component {
                       <Group mode='plain' separator='hide'>
                         <div style={!this.props.isMobile ? { padding: "10px" } : {}}>
                           <center>
-                            <Title style={{ marginTop: "10px" }}>Как Вам наш ответ?</Title>
-                            <Headline style={{ marginTop: "10px", marginBottom: "20px", maxWidth: "80%" }}>Ваши оценки помогут сообществу «{this.state.club_name}» стать лучше.</Headline>
+                            <Title style={!this.props.isMobile ? { marginTop: "10px" } : { marginTop: "100px" }}>Как Вам наш ответ?</Title>
+                            <Headline style={{ marginTop: "10px", marginBottom: "20px", maxWidth: "80%" }}>Ваши оценки помогут сообществу{this.props.club ? " «" + this.props.club.name + "»" : ""} стать лучше.</Headline>
                             <br />
 
-                            <div className="marks">
-                              <div onClick={() => this.setMark("bad")} className="mark">
+                            <div className="clubHelper--marks">
+                              <div onClick={() => this.setMark("bad")} className="clubHelper--mark">
                                 {this.state.mark == "bad" && <Bad />}
                                 {this.state.mark != "bad" && <BadGray />}
-                                <div style={
+                                <div className="clubHelper--mark-text" style={
                                   this.state.mark != "bad" ? {
                                     color: "var(--text_subhead)"
                                   }
@@ -301,10 +292,10 @@ export default class TicketEval extends Component {
                                   Плохо
                                 </div>
                               </div>
-                              <div onClick={() => this.setMark("normal")} className="mark">
+                              <div onClick={() => this.setMark("normal")} className="clubHelper--mark">
                                 {this.state.mark == "normal" && <Normal />}
                                 {this.state.mark != "normal" && <NormalGray />}
-                                <div style={
+                                <div className="clubHelper--mark-text" style={
                                   this.state.mark != "normal" ? {
                                     color: "var(--text_subhead)"
                                   }
@@ -317,10 +308,10 @@ export default class TicketEval extends Component {
                                   Нормально
                                 </div>
                               </div>
-                              <div onClick={() => this.setMark("good")} className="mark">
+                              <div onClick={() => this.setMark("good")} className="clubHelper--mark">
                                 {this.state.mark == "good" && <Good />}
                                 {this.state.mark != "good" && <GoodGray />}
-                                <div style={
+                                <div className="clubHelper--mark-text" style={
                                   this.state.mark != "good" ? {
                                     color: "var(--text_subhead)"
                                   }
@@ -371,6 +362,9 @@ export default class TicketEval extends Component {
                                 />
                               </FormItem>
                             }
+                            {this.state.mark == "bad" &&
+                              <Footer className="clubHelper--mark-footer">Плохую оценку мы рассматриваем как возможное нарушение правил сервиса, поэтому вместе с оценкой будет сформирована жалоба</Footer>
+                            }
                             <FormItem>
                               <Button
                                 stretched
@@ -394,7 +388,7 @@ export default class TicketEval extends Component {
                                 header={"Эта жалоба будет рассмотрена Командой Club Helper"}
                                 subheader={
                                   <React.Fragment>
-                                    В случае одобрения Вашей жалобы мы можем лишь ограничить сообществу использование нашего сервиса.
+                                    Вместе с отправкой жалобы, Вы передадите Команде Club Helper право просмотра данного обращения. В случае одобрения Вашей жалобы мы можем лишь ограничить сообществу использование нашего сервиса.
                                     <br /><br />
                                     Если сообщество нарушает Правила ВКонтакте, Вам следует <Link href="https://vk.com/support?act=faqs_moderation&c=1" target='_blank'>отправить жалобу ВКонтакте</Link>.
                                   </React.Fragment>
@@ -421,8 +415,8 @@ export default class TicketEval extends Component {
                       <Placeholder header="Вы уже оценили это обращение">
                         <Div style={{ marginTop: "-20px", marginBottom: "20px" }}>Ваш отзыв помогает сообществу стать лучше</Div>
                         <br />
-                        <div className="marks">
-                          <div className="mark">
+                        <div className="clubHelper--marks">
+                          <div className="clubHelper--mark">
                             <img src={bad} style={this.getMarkTypeByMarkName(this.state.initialMark) != "bad" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "bad" ? {
@@ -437,7 +431,7 @@ export default class TicketEval extends Component {
                               Плохо
                             </div>
                           </div>
-                          <div className="mark">
+                          <div className="clubHelper--mark">
                             <img src={normal} style={this.getMarkTypeByMarkName(this.state.initialMark) != "normal" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "normal" ? {
@@ -452,7 +446,7 @@ export default class TicketEval extends Component {
                               Нормально
                             </div>
                           </div>
-                          <div className="mark">
+                          <div className="clubHelper--mark">
                             <img src={good} style={this.getMarkTypeByMarkName(this.state.initialMark) != "good" ? { filter: "grayscale(100%)" } : {}}  alt=""/>
                             <div style={
                               this.getMarkTypeByMarkName(this.state.initialMark) != "good" ? {
