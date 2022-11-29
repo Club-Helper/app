@@ -63,7 +63,6 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
                   {attachments.map((item, idx) => (
                     item.type === "photo" && item.photo.url ?
                       <img key={idx} src={item.photo.url} style={{
-                        maxHeight: "20vh",
                         borderRadius: "10px"
                       }} />
                       :
@@ -112,7 +111,6 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
                   {attachments.map((item, idx) => (
                     item.type === "photo" && item.photo.url ?
                       <img key={idx} src={item.photo.url} style={{
-                        maxHeight: "20vh",
                         borderRadius: "10px"
                       }} />
                       :
