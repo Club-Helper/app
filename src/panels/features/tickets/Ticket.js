@@ -248,7 +248,12 @@ export default class TicketsList extends Component {
           }}
           settlingHeight={100}
         >
-          <TicketActions {...this.props} close={this.closeModal} send={this.mailingInviteSend} />
+          <TicketActions {...this.props} close={() => {
+            this.setState({
+              activeModal: "",
+              buttonLoading: null
+            })
+          }} send={this.mailingInviteSend} />
         </ModalPage>
         <ModalCard
           id={"send-hello-msg"}
@@ -351,6 +356,7 @@ export default class TicketsList extends Component {
                               buttonLoading: "invitation_mailing"
                             })}
                             loading={this.state.buttonLoading === "invitation_mailing"}
+                            disabled={this.state.buttonLoading === "invitation_mailing"}
                           >
                             Пригласить в рассылку
                           </Button>
