@@ -402,7 +402,7 @@ export default class TicketsList extends Component {
                                             <ButtonGroup>
                                               {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
                                               {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
-                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
+                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
                                               {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
                                                 <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
                                                 : ""}
@@ -482,7 +482,7 @@ export default class TicketsList extends Component {
                                             <ButtonGroup>
                                               {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
                                               {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
-                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
+                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
                                               {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
                                                 <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
                                                 : ""}

@@ -33,7 +33,7 @@ export default function CallAdmin(props) {
         </Placeholder>
         <Separator />
         <Footer>
-          Если Вы уверены, что так не должно быть, пожалуйста, <Link href={"https://vk.me/ch_app?ref_source=" + props.generateRefSourceString("call_admin")} target='_blank'>свяжитесь с нами</Link>
+          Если Вы уверены, что так не должно быть, пожалуйста, <Link href={"https://vk.me/ch_app?ref=" + props.generateRefSourceString("call_admin")} target='_blank'>свяжитесь с нами</Link>
         </Footer>
       </Group>
     </ConfigProvider>

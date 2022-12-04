@@ -362,7 +362,7 @@ export default class TicketsList extends Component {
                           </Button>
                         }
                         {this.state.ticketOptions.includes("get_support") &&
-                          <Link href={"https://vk.me/ch_app?ref_source=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                          <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
                             <Button
                               mode="secondary"
                               size="m"
