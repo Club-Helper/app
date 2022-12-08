@@ -127,12 +127,33 @@ function Home({
   const [needToShowClubStartOnboarding, toggleNeedToShowClubStartOnboarding] = useState(false);
 
   const [activeModal, setActiveModal] = useState("");
+  const [apiScheme, setScheme] = useState("https");
+
+  const checkVersion = (a, b) => {
+
+    const [majorA, minorA] = String(a).split('.').map(v => Number.parseInt(v));
+    const [majorB, minorB] = String(b).split('.').map(v => Number.parseInt(v));
+
+    if (majorA !== majorB) {
+       return majorA > majorB;
+    }
+
+    return minorA > minorB;
+
+  };
+
+  let queryString = window.location.search;
+  const params = new URLSearchParams(queryString);
 
   useEffect(() => {
-    let queryString = window.location.search;
-    let params = new URLSearchParams(queryString);
+    bridge.send("VKWebAppGetClientVersion")
+      .then((data) => {
+        if (param.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
+           setapiScheme('vkcors');
+         }
+      })
 
-    fetch("https://ch.n1rwana.ml/translation/ru")
+    fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
       .then(response => response.json())
       .then(data => {
         console.log("RU LOCALE", data);
@@ -141,7 +162,7 @@ function Home({
       })
 
     if (params.get("vk_language") != "ru") {
-      fetch("https://ch.n1rwana.ml/translation/" + params.get("vk_language"))
+      fetch(`${apiScheme}://ch.n1rwana.ml/translation/${params.get("vk_language")}`)
         .then(response => response.json())
         .then(data => {
           console.log(`LOCALE (${params.get("vk_language")})`, data);
@@ -149,7 +170,7 @@ function Home({
         })
     }
 
-    fetch(api_url + "app.start" + window.location.search)
+    fetch(`${apiScheme}://ch.n1rwana.ml/api/app.start${window.location.search}`)
       .then(response => response.json())
       .then(data => {
         if (data.error == null) {
@@ -177,7 +198,7 @@ function Home({
               setRole(role)
               setIsNew(false);
 
-              fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
+              fetch(`${apiScheme}://ch.n1rwana.ml/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(data => {
                   if (!data.error) {
@@ -221,7 +242,7 @@ function Home({
             } else if (data.response.page === "office") {
               setIsNew(false);
 
-              fetch("https://ch.n1rwana.ml/api/office.get?token=" + data.response.token)
+              fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(data => {
                   setOffice(data.response);
@@ -238,11 +259,11 @@ function Home({
                 session_id: data.response.session_id
               });
 
-              fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + data.response.token)
+              fetch(`${apiScheme}://ch.n1rwana.ml/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(res => {
                   setClubCard(res.response);
-                  fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${data.response.token}&my=true`)
+                  fetch(`${apiScheme}://ch.n1rwana.ml/api/mailings.get?token=${data.response.token}&my=true`)
                     .then(response => response.json())
                     .then(cc => setClubCardMailings(cc.response));
                 })
@@ -264,7 +285,7 @@ function Home({
   }
 
   const updateOffice = () => {
-    fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
+    fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${token}`)
       .then(response => response.json())
       .then(data => {
         setOffice(data.response);
@@ -272,7 +293,7 @@ function Home({
   }
 
   const updateCCMailings = () => {
-    fetch(`https://ch.n1rwana.ml/api/mailings.get?token=${token}&my=true`)
+    fetch(`${apiScheme}://ch.n1rwana.ml/api/mailings.get?token=${token}&my=true`)
       .then(response => response.json())
       .then(cc => setClubCardMailings(cc.response));
   }
@@ -532,7 +553,7 @@ function Home({
     }
 
     if (navigator.onLine) {
-      fetch(`https://ch.n1rwana.ml/api/${method}`, {
+      fetch(`${apiScheme}://ch.n1rwana.ml/api/${method}`, {
         method: "POST",
         body: JSON.stringify(body)
       })
@@ -572,12 +593,10 @@ function Home({
     }
   }
 
-  const [params, setParams] = useState(null);
-
   const changeMode = (mode) => {
     if (mode == "office") {
       setPopout(<ScreenSpinner />);
-      fetch("https://ch.n1rwana.ml/api/office.get?token=" + token)
+      fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${token}`)
         .then(response => response.json())
         .then(data => {
           setOffice(data.response);
@@ -948,7 +967,7 @@ function Home({
       id: "office",
       panelHeader: null,
       obj: (
-        <Office appearance={appearance} platform={platform} setParams={setParams} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+        <Office appearance={appearance} platform={platform} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
       )
     },
     {

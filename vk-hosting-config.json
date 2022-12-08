@@ -3,8 +3,8 @@
   "app_id": 7938346,
   "noprompt": true,
   "endpoints": {
-    "mobile": "index.html",
-    "mvk": "index.html",
-    "web": "index.html"
+    "mobile": "./index.html",
+    "mvk": "./index.html",
+    "web": "./index.html"
   }
 }

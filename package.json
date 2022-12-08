@@ -1,6 +1,7 @@
 {
   "name": "club-helper",
   "version": "1.0.0",
+  "homepage": "./",
   "scripts": {
     "start": "cross-env PORT=10888 HTTPS=true react-scripts start",
     "build": "react-scripts build",
