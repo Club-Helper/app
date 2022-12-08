@@ -148,8 +148,8 @@ function Home({
   useEffect(() => {
     bridge.send("VKWebAppGetClientVersion")
       .then((data) => {
-        if (param.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
-           setapiScheme('vkcors');
+        if (params.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
+           setScheme('vkcors');
          }
       })
 
