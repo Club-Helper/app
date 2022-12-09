@@ -567,7 +567,7 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info">
                     <Icon28SettingsOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Или сразу настройте</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Если Club Helper уже есть в Вашем сооществе, его можно просто настроить.</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Если Club Helper уже есть в Вашем сообществе, его можно просто настроить.</Text>
                   </li>
                 </ul>
               </div>
