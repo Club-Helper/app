@@ -562,7 +562,7 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info">
                     <Icon28DownloadCloudOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Установите</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живёт в сообществах. Давайте поселим его в Ваше сообщество, и завершим настройку сервиса прямо там!</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живёт в сообществах. Давайте поселим его в Ваше сообщество и завершим настройку сервиса прямо там!</Text>
                   </li>
                   <li className="clubHelper--info">
                     <Icon28SettingsOutline width={46} height={46} fill="#FFF" />
