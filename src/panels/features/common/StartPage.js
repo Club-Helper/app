@@ -496,7 +496,7 @@ class StartPage extends React.Component {
                       <Icon28UserOutline fill="#2787f5" />
                     </div>
                     <div className="clubHelper--message__content">
-                      <Text weight="regular">Здравствуйте, я хотела заказать платье в вашем интернет-магазине, но нужного размера не оказалось.Мне предложили связаться с Вами, чтобы подобрать модель, похожую по цвету и материалу ткани</Text>
+                      <Text weight="regular">Здравствуйте, я хотела заказать платье в вашем интернет-магазине, но нужного размера не оказалось. Мне предложили связаться с Вами, чтобы подобрать модель, похожую по цвету и материалу ткани</Text>
                     </div>
                   </div>
                   <div className="clubHelper--message clubHelper--message__club">
@@ -523,7 +523,7 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info" style={{ maxWidth: "80%" }}>
                     <Icon24LifebuoyOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Чат с поддержкой</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Ваши сотрудники будут общаться с подписчиками так же, через личные сообщения сообщества, но в дополнение к обычным возможностям диалога Club Helper дополнит диалог множеством полезных функций для обработки обращений<br /><br />Вы сможете присваивать статус обращениям, использовать умные шаблоны, переадресовывать обращение другим сотрудникам и многое другое!</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Ваши сотрудники будут общаться с подписчиками так же, через личные сообщения сообщества, но в дополнение к обычным возможностям диалога, Club Helper дополнит диалог множеством полезных функций для обработки обращений.<br /><br />Вы сможете присваивать статус обращениям, использовать умные шаблоны, переадресовывать обращение другим сотрудникам и многое другое!</Text>
                   </li>
                 </ul>
               </div>
@@ -540,12 +540,12 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info">
                     <Icon28KeySquareOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Управление сообществом</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Приложение будет взаимодейстовать с подписчиками от имени Вашего сообщества, поэтому нам необходимо получить от Вас право управления сообществом. Это единоразовая процедура, необходимая только при установке приложения</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Приложение будет взаимодейстовать с подписчиками от имени Вашего сообщества, поэтому нам необходимо получить от Вас право управления сообществом. Это единоразовая процедура, необходимая только при установке приложения.</Text>
                   </li>
                   <li className="clubHelper--info">
                     <Icon28LockOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Беспокоиться не о чем</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>После того, как Вы разрешите нам управлять сообществом, мы получим уникальный ключ, который мы надёжно сохраним и обещаем использовать только для выбранных Вами возможностей</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>После того, как Вы разрешите нам управлять сообществом, мы получим уникальный ключ, который мы надёжно сохраним и обещаем использовать только для выбранных Вами возможностей.</Text>
                   </li>
                 </ul>
               </div>
@@ -562,12 +562,12 @@ class StartPage extends React.Component {
                   <li className="clubHelper--info">
                     <Icon28DownloadCloudOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Установите</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живёт в сообществах. Давайте поселим его в Ваше сообщество, и завершим настройку сервиса прямо там!</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Club Helper живёт в сообществах. Давайте поселим его в Ваше сообщество и завершим настройку сервиса прямо там!</Text>
                   </li>
                   <li className="clubHelper--info">
                     <Icon28SettingsOutline width={46} height={46} fill="#FFF" />
                     <Text weight="medium" style={{ fontSize: 18, color: "#FFFFFF" }}>Или сразу настройте</Text>
-                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Если Club Helper уже есть в Вашем сооществе, его можно просто настроить</Text>
+                    <Text weight="medium" style={{ marginTop: 5, opacity: .5 }}>Если Club Helper уже есть в Вашем сообществе, его можно просто настроить.</Text>
                   </li>
                 </ul>
               </div>

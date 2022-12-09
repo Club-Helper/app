@@ -52,7 +52,7 @@ export default class Welcome extends Component {
           {this.props.isMobile && <div className="clubHelper--onboarding_PanelHeader"><PanelHeader separator={false} fixed={false}></PanelHeader></div>}
           {!loading && <div className="clubHelper--onboarding">
             <Title>Добро пожаловать!</Title>
-            <Title level="3">Команда Club Helper рада приветствовать новых пользователелй! Давайте мы коротко напомним о
+            <Title level="3">Команда Club Helper рада приветствовать новых пользователей! Давайте мы коротко напомним о
               функциях сервиса.</Title>
             {this.state.content.map((element) => {
               if (element.type == "icon") {
