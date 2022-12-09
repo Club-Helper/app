@@ -199,16 +199,16 @@ export default class CommentsList extends Component {
       <Alert
         actions={[
           {
-            title: "Удалить",
-            mode: "destructive",
-            autoclose: true,
-            action: () => { this.deleteComment() }
-          },
-          {
             title: "Отмена",
             autoclose: true,
             mode: "cancel",
           },
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: true,
+            action: () => { this.deleteComment() }
+          }
         ]}
         onClose={() => this.props.setPopout(null)}
         actionsLayout="vertical"

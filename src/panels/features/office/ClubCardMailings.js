@@ -55,16 +55,16 @@ export default class ClubCardMailings extends Component {
       <Alert
         actions={[
           {
-            title: "Отписаться",
-            mode: "destructive",
-            autoclose: true,
-            action: () => { this.doUnsubscribe(id) }
-          },
-          {
             title: "Отмена",
             autoclose: true,
             mode: "cancel",
           },
+          {
+            title: "Отписаться",
+            mode: "destructive",
+            autoclose: true,
+            action: () => { this.doUnsubscribe(id) }
+          }
         ]}
         onClose={() => this.props.setPopout(null)}
         actionsLayout="vertical"

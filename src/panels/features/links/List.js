@@ -161,16 +161,16 @@ export default class Links extends Component {
       <Alert
         actions={[
           {
-            title: "Удалить",
-            mode: "destructive",
-            autoclose: true,
-            action: () => { this.deleteLink(id) }
-          },
-          {
             title: "Отмена",
             autoclose: true,
             mode: "cancel",
           },
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: true,
+            action: () => { this.deleteLink(id) }
+          }
         ]}
         onClose={() => this.props.setPopout(null)}
         actionsLayout="vertical"
