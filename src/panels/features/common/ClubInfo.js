@@ -266,6 +266,11 @@ export default class ClubInfo extends Component {
     } else {
       this.setState({ isStatsHidden: true })
     }
+
+    if (this.props.needToOpenSettingsOnClubMount) {
+      this.setState({ activeModal: "settings" });
+      this.props.toggleNeedToOpenSettingsOnClubMount(false);
+    }
   }
 
   render() {

@@ -419,7 +419,17 @@ export default class CommentsList extends Component {
               {!this.state.isEnabled &&
                 <Placeholder
                   icon={<Icon56CommentsOutline />}
-                  action={<Button size="m" onClick={() => this.props.go("settings")}>Перейти в настройки</Button>}
+                  action={
+                    <Button
+                      size="m"
+                      onClick={() => {
+                        this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                        this.props.go("club_info");
+                      }}
+                    >
+                      Перейти в настройки
+                    </Button>
+                  }
                 >
                   Вам нужно включить Комментарии в Настройках, чтобы использовать этот раздел.
                 </Placeholder>

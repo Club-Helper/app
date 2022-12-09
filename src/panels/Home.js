@@ -129,6 +129,8 @@ function Home({
   const [activeModal, setActiveModal] = useState("");
   const [apiScheme, setScheme] = useState("https");
 
+  const [needToOpenSettingsOnClubMount, toggleNeedToOpenSettingsOnClubMount] = useState(false);
+
   const checkVersion = (a, b) => {
 
     const [majorA, minorA] = String(a).split('.').map(v => Number.parseInt(v));
@@ -654,6 +656,7 @@ function Home({
           declOfNum={declOfNum}
           commentsState={commentsState}
           setCommentsState={setCommentsState}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },
@@ -666,6 +669,7 @@ function Home({
           declOfNum={declOfNum}
           linksState={linksState}
           setLinksState={setLinksState}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },
@@ -699,6 +703,7 @@ function Home({
           declOfNum={declOfNum}
           linksState={linksState}
           setLinksState={setLinksState}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },
@@ -761,6 +766,7 @@ function Home({
           setActiveStory={setActiveStory}
           setIsNew={setIsNew}
           parseLinks={parseLinks}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },
@@ -832,6 +838,8 @@ function Home({
           showMenu={showMenu}
           toggleShowMenu={toggleShowMenu}
           toggleShowMobileMenu={toggleShowMobileMenu}
+          needToOpenSettingsOnClubMount={needToOpenSettingsOnClubMount}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },
@@ -1019,6 +1027,7 @@ function Home({
           updateOffice={updateOffice}
           createError={createError}
           req={req}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },

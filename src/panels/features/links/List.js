@@ -533,7 +533,17 @@ export default class Links extends Component {
               !this.state.isEnabled &&
               <Placeholder
                 icon={<Icon48Linked width={56} height={56} />}
-                action={<Button size='m' onClick={() => this.props.go('settings')}>Перейти в настройки</Button>}
+                action={
+                  <Button
+                    size="m"
+                    onClick={() => {
+                      this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                      this.props.go("club_info");
+                    }}
+                  >
+                    Перейти в настройки
+                  </Button>
+                }
               >
                 Вам нужно включить Ссылки в Настройках, чтобы использовать этот раздел.
               </Placeholder>

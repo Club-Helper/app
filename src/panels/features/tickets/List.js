@@ -234,7 +234,17 @@ export default class TicketsList extends Component {
           <Group>
             <Placeholder
               icon={<Icon56MessagesOutline />}
-              action={<Button size='m' onClick={() => this.props.go('settings')}>Перейти в настройки</Button>}
+              action={
+                <Button
+                  size="m"
+                  onClick={() => {
+                    this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                    this.props.go("club_info");
+                  }}
+                >
+                  Перейти в настройки
+                </Button>
+              }
             >
               Вам нужно включить Сообщения в Настройках, чтобы использовать этот раздел.
             </Placeholder>
