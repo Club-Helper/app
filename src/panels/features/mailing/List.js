@@ -192,7 +192,11 @@ export default class MailingList extends Component {
               >
                 Рассылка создана
               </Snackbar>
-            )
+            ),
+            formTitle: "",
+            formDescription: "",
+            formValidationTitle: "",
+            formValidationDescription: ""
           });
           bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         },
