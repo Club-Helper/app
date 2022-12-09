@@ -188,6 +188,11 @@ export default class Links extends Component {
     },
       (data) => {
         this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false })
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ isEnabled: false, deleteButtonLoading: false });
+        this.props.setPopout(null);
       }
     )
   }

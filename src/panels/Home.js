@@ -691,6 +691,7 @@ function Home({
           mailingState={mailingState}
           setMailingState={setMailingState}
           declOfNum={declOfNum}
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount }
         />
       )
     },
@@ -1027,7 +1028,6 @@ function Home({
           updateOffice={updateOffice}
           createError={createError}
           req={req}
-          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
         />
       )
     },

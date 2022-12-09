@@ -20,7 +20,8 @@ import {
   Icon28AddOutline,
   Icon16Done,
   Icon16Hashtag,
-  Icon24CancelOutline
+  Icon24CancelOutline,
+  Icon56AdvertisingOutline
 } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 
@@ -52,7 +53,8 @@ export default class MailingList extends Component {
       mailingEditDescription: "",
       mailingEditSaveButtonWorking: false,
       formValidationDescription: "",
-      sendMessageValidation: ""
+      sendMessageValidation: "",
+      isEnabled: true
     }
 
     this.getMailing = this.getMailing.bind(this);
@@ -73,9 +75,15 @@ export default class MailingList extends Component {
         this.setState({
           mailing: data.response,
           list: data.response.items,
-          availability: data.response.availability
+          availability: data.response.availability,
+          isEnabled: true
         });
         this.props.setLoading(false);
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ isEnabled: false, deleteButtonLoading: false });
+        this.props.setLoading(null);
       }
     )
 
@@ -547,6 +555,7 @@ export default class MailingList extends Component {
         <SplitLayout modal={modal}>
           <SplitCol>
             {this.props.isLoading ? <PanelSpinner /> :
+              this.state.isEnabled ?
               <Panel>
                 <PanelHeader left={
                   <React.Fragment>
@@ -613,6 +622,26 @@ export default class MailingList extends Component {
                 </Group>
                 {this.state.snackbar}
               </Panel>
+              : <Panel>
+                <Group>
+                  <Placeholder
+                    icon={<Icon56AdvertisingOutline />}
+                    action={
+                      <Button
+                        size="m"
+                        onClick={() => {
+                          this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                          this.props.go("club_info");
+                        }}
+                      >
+                        Перейти в настройки
+                      </Button>
+                    }
+                  >
+                    Вам нужно включить Рассылки в Настройках, чтобы использовать этот раздел.
+                  </Placeholder>
+                </Group>
+              </Panel>
             }
           </SplitCol>
         </SplitLayout>
@@ -620,3 +649,4 @@ export default class MailingList extends Component {
     )
   }
 }
+
