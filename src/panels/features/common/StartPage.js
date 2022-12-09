@@ -496,7 +496,7 @@ class StartPage extends React.Component {
                       <Icon28UserOutline fill="#2787f5" />
                     </div>
                     <div className="clubHelper--message__content">
-                      <Text weight="regular">Здравствуйте, я хотела заказать платье в вашем интернет-магазине, но нужного размера не оказалось.Мне предложили связаться с Вами, чтобы подобрать модель, похожую по цвету и материалу ткани</Text>
+                      <Text weight="regular">Здравствуйте, я хотела заказать платье в вашем интернет-магазине, но нужного размера не оказалось. Мне предложили связаться с Вами, чтобы подобрать модель, похожую по цвету и материалу ткани</Text>
                     </div>
                   </div>
                   <div className="clubHelper--message clubHelper--message__club">
