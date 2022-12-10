@@ -159,6 +159,7 @@ export default class Links extends Component {
                 </Snackbar>
               )
             })
+            bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
             this.props.setPopout(null);
             return true;
           },
