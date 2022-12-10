@@ -249,7 +249,7 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentTitle: e.target.value })
                   if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
                     this.setState({ titleValidation: "Поле обязательно для заполнения" });
-                  } else if (this.state.newCommentTitle > 50) {
+                  } else if (this.state.newCommentTitle.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
                   } else if (/^\s+$/.test(this.state.newCommentTitle)) {
                     this.setState({ titleValidation: "Неверный формат" });
