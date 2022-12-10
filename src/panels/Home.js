@@ -256,9 +256,9 @@ function Home({
               setIsNew(false);
               setToken(data.response.token)
 
-              ym(90794548, 'userParams', {
+              /*ym(90794548, 'userParams', {
                 session_id: data.response.session_id
-              });
+              });*/
 
               fetch(`${apiScheme}://ch.n1rwana.ml/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
