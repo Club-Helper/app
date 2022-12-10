@@ -357,7 +357,7 @@ export default class CommentsList extends Component {
               {this.state.openedComment?.comand}
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
+              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user?.id} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedComment?.creat?.time?.label}

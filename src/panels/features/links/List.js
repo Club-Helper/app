@@ -137,7 +137,28 @@ export default class Links extends Component {
           token: this.props.token
         },
           (data) => {
-            this.setState({ links: data.response.items, count: data.response.count, isEnabled: true, deleteButtonLoading: false, availability: data.response.availability })
+            this.setState({
+              links: data.response.items,
+              count: data.response.count,
+              isEnabled: true,
+              deleteButtonLoading: false,
+              availability: data.response.availability,
+              snackbar: (
+                <Snackbar
+                  onClose={() => this.setState({ snackbar: null })}
+                  before={
+                    <Avatar
+                      size={24}
+                      style={{ background: "var(--button_commerce_background)" }}
+                    >
+                      <Icon16Done fill="#fff" width={14} height={14} />
+                    </Avatar>
+                  }
+                >
+                  Ссылка #{id} удалена
+                </Snackbar>
+              )
+            })
             this.props.setPopout(null);
             return true;
           },
