@@ -230,6 +230,9 @@ function Home({
                     createError(data.error.error_msg);
                   }
                 })
+            } else if (data.response.page === "call_admin" || data.response.page === "need_admin") {
+              toggleShowMenu(false);
+              setActiveStory("call_admin");
             } else if (data.response.page === "landing") {
               setIsNew(true);
               setPage("landing");
