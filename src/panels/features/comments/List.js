@@ -70,13 +70,12 @@ export default class CommentsList extends Component {
 
     if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
       this.setState({ titleValidation: "Поле обязательно для заполнения" });
-    } else if (this.state.newCommentTitle > 50) {
+    } else if (this.state.newCommentTitle.length > 50) {
       this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
     } else if (/^\s+$/.test(this.state.newCommentTitle)) {
       this.setState({ titleValidation: "Неверный формат" });
     } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
       this.setState({ titleValidation: "Неверный формат" });
-      return false;
     } else {
       this.setState({ titleValidation: "" });
     }
@@ -103,7 +102,8 @@ export default class CommentsList extends Component {
       this.setState({ patternValidation: "" });
     }
 
-    if (this.state.titleValidation || this.state.commandValidation || this.state.patternValidation) {
+    if (!this.state.newCommentTitle || !this.state.newCommentCommand || !this.state.newCommentPattern || this.state.titleValidation || this.state.commandValidation || this.state.patternValidation) {
+      this.setState({ newCommentButtonWorking: false });
       return false;
     }
 
@@ -249,13 +249,12 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentTitle: e.target.value })
                   if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
                     this.setState({ titleValidation: "Поле обязательно для заполнения" });
-                  } else if (this.state.newCommentTitle > 50) {
+                  } else if (this.state.newCommentTitle.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
                   } else if (/^\s+$/.test(this.state.newCommentTitle)) {
                     this.setState({ titleValidation: "Неверный формат" });
                   } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
                     this.setState({ titleValidation: "Неверный формат" });
-                    return false;
                   } else {
                     this.setState({ titleValidation: "" });
                   }
