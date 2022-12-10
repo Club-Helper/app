@@ -378,8 +378,7 @@ export default class CommentsList extends Component {
                 <SplitCol>
                   {this.state.listLoading ? <PanelSpinner /> :
                     <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
-                      {this.state.comments.length > 0 ?
-                        <Div style={{ maxWidth: 300 }}>
+                      <Div style={{ maxWidth: 300 }}>
                           <SegmentedControl
                             size="m"
                             name="filter"
@@ -397,7 +396,7 @@ export default class CommentsList extends Component {
                             onChange={(value) => this.onFilterChange(value)}
                             value={this.state.filter}
                           />
-                        </Div> : ""}
+                        </Div>
                       <List>
                         {this.state.comments.length > 0 ?
                           <>
@@ -438,7 +437,7 @@ export default class CommentsList extends Component {
                           <Placeholder
                             action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
                           >
-                            В этом сообществе ещё нет ни одного шаблона комментария.
+                            Не найдено ни одного шаблона комментария.
                           </Placeholder>
                         }
                       </List>

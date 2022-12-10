@@ -473,8 +473,7 @@ export default class Links extends Component {
                     onRefresh={this.onRefresh}
                     isFetching={this.state.fetching}
                   >
-                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal}>Создать ссылку</Button>}>В этом сообществе ещё нет ни одного шаблона ссылки.</Placeholder> : <>
-                      <Group mode='plain'>
+                    <Group mode='plain'>
                         <Cell
                           disabled
                           before={<Title level='3' style={{
@@ -507,6 +506,7 @@ export default class Links extends Component {
                           />
                         </Div>
                       </Group>
+                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal}>Создать ссылку</Button>}>Не найдено ни одного шаблона ссылки.</Placeholder> : <>
                       <Group mode='plain'>
                         <List>
                           {this.state.linksLoading ? <PanelSpinner /> :
@@ -536,7 +536,7 @@ export default class Links extends Component {
                                 </SimpleCell>
                               ))
                               :
-                              <Footer>В этом сообществе ещё нет ни одной ссылки.</Footer>
+                              <Footer>Не найдено ни одного шаблона ссылки.</Footer>
                           }
                         </List>
                         {this.state.availability.creat &&
