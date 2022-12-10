@@ -147,6 +147,10 @@ export default class Links extends Component {
             this.props.setPopout(null);
           }
         )
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ deleteButtonLoading: false });
       }
     )
   }
@@ -199,10 +203,24 @@ export default class Links extends Component {
 
   updateNewLinkTitle(e) {
     this.setState({ title: e.target.value })
+    if (!this.state.title) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
+    } else if (this.state.title.length > 50) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
+    } else {
+      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
+    }
   }
 
   updateNewLinkPattern(e) {
     this.setState({ pattern: e.target.value })
+    if (!this.state.pattern) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
+    } else if (this.state.pattern.length < 10) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
+    } else {
+      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
   }
 
   openCreateLinkModal() {
@@ -214,27 +232,22 @@ export default class Links extends Component {
   createLink() {
     if (!this.state.title) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
-      return false;
     } else {
       this.setState({ formTitleStatus: "default", formTitleBottom: "" });
     }
+
     if (!this.state.pattern) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
-      return false;
-    } else {
-      this.setState({ formPatternStatus: "default", formPatternBottom: "" })
-    }
-    if (this.state.title.length > 50) {
-      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
-      return false;
-    } else {
-      this.setState({ formTitleStatus: "default", formTitleBottom: "" });
-    }
-    if (this.state.pattern.length < 10) {
+    } else if (this.state.title.length > 50) {
+      this.setState({ formPatternStatus: "error", formPatternStatus: "Заголовок не может быть длиннее 50 символов" });
+    } else if (this.state.pattern.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
-      return false;
     } else {
       this.setState({ formPatternStatus: "default", formPatternBottom: "" })
+    }
+
+    if (!this.state.title || !this.state.pattern || this.state.formTitleStatus == "error" || this.state.formPatternStatus == "error") {
+      return false;
     }
 
     if (this.state.title != '' && this.state.pattern != '') {
@@ -251,12 +264,33 @@ export default class Links extends Component {
           token: this.props.token
         },
           (data) => {
+            this.setState({ activeModal: "", title: "", pattern: "" });
             this.props.req("links.get", {
               filter: this.state.filter,
               token: this.props.token
             },
               (data) => {
-                this.setState({ links: data.response.items, count: data.response.count, buttonLoading: false, availability: data.response.availability })
+                this.setState({
+                  links: data.response.items,
+                  count: data.response.count,
+                  buttonLoading: false,
+                  availability: data.response.availability,
+                  snackbar: (
+                    <Snackbar
+                      onClose={() => this.setState({ snackbar: null })}
+                      before={
+                        <Avatar
+                          size={24}
+                          style={{ background: "var(--button_commerce_background)" }}
+                        >
+                          <Icon16Done fill="#fff" width={14} height={14} />
+                        </Avatar>
+                      }
+                    >
+                      Ссылка создана
+                    </Snackbar>
+                  )
+                })
                 this.closeModal();
                 bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
               }
@@ -308,6 +342,9 @@ export default class Links extends Component {
     this.interval = setInterval(() => this.getLinks(this.state.filter), 60000);
 
     this.getLinks("all");
+    localStorage.removeItem("links_list_formData_title");
+    localStorage.removeItem("links_list_formData_pattern");
+    this.setState({ snackbar: null });
   }
 
   onFilterChange(value) {
@@ -321,6 +358,7 @@ export default class Links extends Component {
     localStorage.setItem("links_list_formData_pattern", this.state.pattern);
     this.props.setLinksState(this.state);
     clearInterval(this.interval);
+    this.setState({ snackbar: null });
   }
 
   render() {
@@ -416,7 +454,7 @@ export default class Links extends Component {
                 stretched
                 onClick={this.createLink}
                 loading={this.state.buttonLoading}
-                disabled={this.state.buttonLoading}
+                disabled={this.state.buttonLoading || (this.state.formPatternStatus === "error" || this.state.formTitleStatus === "error")}
               >Создать ссылку</Button>
             </FormItem>
           </FormLayout>
@@ -530,8 +568,8 @@ export default class Links extends Component {
                       чтобы создать больше.
                     </Footer>
                   }
-                  {this.state.snackbar}
                 </SplitCol>
+                {this.state.snackbar}
               </SplitLayout>
             </>}
             {
