@@ -68,7 +68,7 @@ export default class Mailings extends Component {
         ]}
         onClose={() => this.props.setPopout(null)}
         actionsLayout="vertical"
-        header={this.props.t("confirm")}
+        header={"Подтвердите действие"}
         text="Вы уверены, что хотите отписаться от этой рассылки? Данное действие необратимо."
       />
     )
@@ -80,11 +80,11 @@ export default class Mailings extends Component {
         <SplitLayout>
           <SplitCol>
             <Panel>
-              <PanelHeader>{this.props.t("office_subscribed_mailings")}</PanelHeader>
+              <PanelHeader>Мои рассылки</PanelHeader>
               {!this.props?.mailings?.length > 0 ?
                 <Group>
                   <Placeholder>
-                    {this.props.t("office_no_mailings_found")}
+                  Вы пока не подписаны ни на одну рассылку.
                   </Placeholder>
                 </Group>
                 :
@@ -119,7 +119,7 @@ export default class Mailings extends Component {
                                 <Icon24CancelOutline />
                               </IconButton>
                             }
-                            description={(this.props?.office?.user.sex == 2 ? `${this.props.t("office_subscribed_m")}` : `${this.props.t("office_subscribed_f")}`) + mailing.subscription.label}
+                            description={(this.props?.office?.user.sex == 2 ? 'подписался' : 'подписалась') + mailing.subscription.label}
                           >
                             {mailing.title}
                           </Cell>

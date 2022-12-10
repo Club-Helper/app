@@ -155,7 +155,7 @@ function Home({
          }
       })
 
-    fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
+    /*fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
       .then(response => response.json())
       .then(data => {
         console.log("RU LOCALE", data);
@@ -170,7 +170,7 @@ function Home({
           console.log(`LOCALE (${params.get("vk_language")})`, data);
           setLocale(data);
         })
-    }
+    }*/
 
     fetch(`${apiScheme}://ch.n1rwana.ml/api/app.start${window.location.search}`)
       .then(response => response.json())
@@ -186,10 +186,6 @@ function Home({
             setRole(role);
             setToken(data.response.token);
             setLanguageCode(params.get("vk_language"));
-
-            ym(90794548, 'userParams', {
-              session_id: data.response.session_id
-            });
 
             console.log("Session ID", data.response.session_id);
 

@@ -182,7 +182,7 @@ export default class Clubs extends Component {
                   </PanelHeaderButton>
                 }
               >
-                {this.props.t("office_my_communities")}
+                Мои сообщества
               </PanelHeader>
               <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh()}>
                 <Group>
