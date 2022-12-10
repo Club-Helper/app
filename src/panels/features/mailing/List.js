@@ -20,7 +20,8 @@ import {
   Icon28AddOutline,
   Icon16Done,
   Icon16Hashtag,
-  Icon24CancelOutline
+  Icon24CancelOutline,
+  Icon56AdvertisingOutline
 } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 
@@ -52,7 +53,8 @@ export default class MailingList extends Component {
       mailingEditDescription: "",
       mailingEditSaveButtonWorking: false,
       formValidationDescription: "",
-      sendMessageValidation: ""
+      sendMessageValidation: "",
+      isEnabled: true
     }
 
     this.getMailing = this.getMailing.bind(this);
@@ -73,9 +75,15 @@ export default class MailingList extends Component {
         this.setState({
           mailing: data.response,
           list: data.response.items,
-          availability: data.response.availability
+          availability: data.response.availability,
+          isEnabled: true
         });
         this.props.setLoading(false);
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ isEnabled: false, deleteButtonLoading: false });
+        this.props.setLoading(null);
       }
     )
 
@@ -134,27 +142,26 @@ export default class MailingList extends Component {
   onFormSubmit() {
     if (this.state.formTitle.length　< 10) {
       this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." });
-      return false;
-    } else {
-      this.setState({ formValidation: "" });
-    }
-    if (this.state.formTitle.length > 50) {
+      // return false;
+    } else if (this.state.formTitle.length > 50) {
       this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." });
-      return false;
+      // return false;
     } else {
       this.setState({ formValidation: "" });
     }
+
     if (this.state.formDescription.length < 10) {
       this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
-      return false;
+      // return false;
+    } else if (this.state.formDescription.length > 255) {
+      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
+      // return false;
     } else {
       this.setState({ formValidationDescription: "" });
     }
-    if (this.state.formDescription.length > 255) {
-      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
+
+    if (this.state.formValidation || this.state.formValidationDescription) {
       return false;
-    } else {
-      this.setState({ formValidationDescription: "" });
     }
 
     if (this.state.formTitle.length >= 10 && this.state.formTitle.length <= 50) {
@@ -184,7 +191,11 @@ export default class MailingList extends Component {
               >
                 Рассылка создана
               </Snackbar>
-            )
+            ),
+            formTitle: "",
+            formDescription: "",
+            formValidationTitle: "",
+            formValidationDescription: ""
           });
           bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         },
@@ -509,7 +520,21 @@ export default class MailingList extends Component {
               <FormItem
                 top="Название рассылки"
                 value={this.state.formTitle}
-                onChange={(e) => this.setState({ formTitle: e.target.value })}
+                onChange={(e) => {
+                  this.setState({ formTitle: e.target.value })
+                  if (e.target.value.length　< 10) {
+                    this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." });
+                    return false;
+                  } else {
+                    this.setState({ formValidation: "" });
+                  }
+                  if (e.target.value.length > 50) {
+                    this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." });
+                    return false;
+                  } else {
+                    this.setState({ formValidation: "" });
+                  }
+                }}
                 status={this.state.formValidation ? "error" : "default"}
                 bottom={this.state.formValidation}
               >
@@ -518,7 +543,21 @@ export default class MailingList extends Component {
               <FormItem
                 top={"Описание рассылки"}
                 value={this.state.formDescription}
-                onChange={(e) => this.setState({ formDescription: e.target.value })}
+                onChange={(e) => {
+                  this.setState({ formDescription: e.target.value })
+                  if (this.state.formDescription.length < 10) {
+                    this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
+                    return false;
+                  } else {
+                    this.setState({ formValidationDescription: "" });
+                  }
+                  if (this.state.formDescription.length > 255) {
+                    this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
+                    return false;
+                  } else {
+                    this.setState({ formValidationDescription: "" });
+                  }
+                }}
                 required={false}
                 status={this.state.formValidationDescription ? "error" : "default"}
                 bottom={this.state.formValidationDescription}
@@ -547,6 +586,7 @@ export default class MailingList extends Component {
         <SplitLayout modal={modal}>
           <SplitCol>
             {this.props.isLoading ? <PanelSpinner /> :
+              this.state.isEnabled ?
               <Panel>
                 <PanelHeader left={
                   <React.Fragment>
@@ -613,6 +653,26 @@ export default class MailingList extends Component {
                 </Group>
                 {this.state.snackbar}
               </Panel>
+              : <Panel>
+                <Group>
+                  <Placeholder
+                    icon={<Icon56AdvertisingOutline />}
+                    action={
+                      <Button
+                        size="m"
+                        onClick={() => {
+                          this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                          this.props.go("club_info");
+                        }}
+                      >
+                        Перейти в настройки
+                      </Button>
+                    }
+                  >
+                    Вам нужно включить Рассылки в Настройках, чтобы использовать этот раздел.
+                  </Placeholder>
+                </Group>
+              </Panel>
             }
           </SplitCol>
         </SplitLayout>
@@ -620,3 +680,4 @@ export default class MailingList extends Component {
     )
   }
 }
+

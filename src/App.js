@@ -11,7 +11,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
-import {AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform} from '@vkontakte/vkui';
+import {AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform, VKCOM} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Context from './Context/Context';
 
@@ -45,11 +45,13 @@ const App = () => {
     console.log(isLight)
     setAppearance(isLight ? 'light' : 'dark');
 
-    bridge.send('VKWebAppSetViewSettings', {
-      'status_bar_style': isLight ? 'dark' : 'light',
-      'action_bar_color': isLight ? '#FFF' : '#000',
-      'navigation_bar_color': isLight ? '#FFF' : '#000'
-    });
+    if (platform.current !== VKCOM) {
+      bridge.send('VKWebAppSetViewSettings', {
+        'status_bar_style': isLight ? 'dark' : 'light',
+        'action_bar_color': isLight ? '#FFF' : '#000',
+        'navigation_bar_color': isLight ? '#FFF' : '#000'
+     });
+    }
   }
 
   useEffect(() => {

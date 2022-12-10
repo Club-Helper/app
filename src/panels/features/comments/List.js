@@ -26,7 +26,7 @@ export default class CommentsList extends Component {
       count: null,
       activeModal: "",
       newCommentTitle: "",
-      newCommentCommand: "",
+      newCommentCommand: "/",
       newCommentPattern: "",
       newCommentButtonWorking: false,
       snackbar: null,
@@ -34,7 +34,8 @@ export default class CommentsList extends Component {
       filter: "all",
       titleValidation: "",
       commandValidation: "",
-      patternValidation: ""
+      patternValidation: "",
+      deleteCommentButtonWorking: false
     }
   }
 
@@ -65,25 +66,15 @@ export default class CommentsList extends Component {
   }
 
   createComment() {
+    this.setState({ newCommentButtonWorking: true });
+
     if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
       this.setState({ titleValidation: "Поле обязательно для заполнения" });
-      return false;
-    } else {
-      this.setState({ titleValidation: "" });
-    }
-    if (this.state.newCommentTitle > 50) {
+    } else if (this.state.newCommentTitle > 50) {
       this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
-      return false;
-    } else {
-      this.setState({ titleValidation: "" });
-    }
-    if (/^\s+$/.test(this.state.newCommentTitle)) {
+    } else if (/^\s+$/.test(this.state.newCommentTitle)) {
       this.setState({ titleValidation: "Неверный формат" });
-      return false;
-    } else {
-      this.setState({ titleValidation: "" });
-    }
-    if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
+    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
       this.setState({ titleValidation: "Неверный формат" });
       return false;
     } else {
@@ -92,46 +83,28 @@ export default class CommentsList extends Component {
 
     if (!this.state.newCommentCommand || this.state.newCommentCommand == '') {
       this.setState({ commandValidation: "Поле обязательно для заполнения" });
-      return false;
-    } else {
-      this.setState({ commandValidation: "" });
-    }
-    if (!/^[!|\/].*/.test(this.state.newCommentCommand)) {
+    } else if (!/^[!|\/].*/.test(this.state.newCommentCommand)) {
       this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
-      return false;
-    } else {
-      this.setState({ commandValidation: "" });
-    }
-    if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentCommand) === false) {
+    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentCommand) === false) {
       this.setState({ commandValidation: "Неверный формат" });
-      return false;
     } else {
       this.setState({ commandValidation: "" });
     }
 
     if (!this.state.newCommentPattern || this.state.newCommentPattern == '') {
       this.setState({ patternValidation: "Поле обязательно для заполнения" });
-      return false;
-    } else {
-      this.setState({ patternValidation: "" });
-    }
-    if (this.state.newCommentPattern.length < 10) {
+    } else if (this.state.newCommentPattern.length < 10) {
       this.setState({ patternValidation: "Длина текста должна быть не менее 10 символов" });
-      return false;
-    } else {
-      this.setState({ patternValidation: "" });
-    }
-    if (/^\s+$/.test(this.state.newCommentPattern)) {
+    } else if (/^\s+$/.test(this.state.newCommentPattern)) {
       this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
-      return false;
+    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false) {
+      this.setState({ patternValidation: "Неверный формат" });
     } else {
       this.setState({ patternValidation: "" });
     }
-    if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false) {
-      this.setState({ patternValidation: "Неверный формат" });
+
+    if (this.state.titleValidation || this.state.commandValidation || this.state.patternValidation) {
       return false;
-    } else {
-      this.setState({ patternValidation: "" });
     }
 
     this.props.req("comments.creat", {
@@ -157,11 +130,19 @@ export default class CommentsList extends Component {
             >
               Шаблон создан успешно
             </Snackbar>
-          )
+          ),
+          newCommentButtonWorking: false,
+          newCommentTitle: "",
+          newCommentCommand: "/",
+          newCommentPattern: ""
         });
         this.getComments(this.state.filter);
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
-    })
+    }),
+    (error) => {
+      this.props.createError(error.error.error_msg);
+      this.setState({ newCommentButtonWorking: false });
+    }
   }
 
   deleteComment() {
@@ -190,27 +171,33 @@ export default class CommentsList extends Component {
         });
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         this.getComments(this.state.filter);
+        this.setState({ deleteCommentButtonWorking: false });
+        this.props.setPopout(null);
       }
     );
   }
 
   delete() {
+    this.setState({ deleteCommentButtonWorking: true });
     this.props.setPopout(
       <Alert
         actions={[
-          {
-            title: "Удалить",
-            mode: "destructive",
-            autoclose: true,
-            action: () => { this.deleteComment() }
-          },
           {
             title: "Отмена",
             autoclose: true,
             mode: "cancel",
           },
+          {
+            title: "Удалить",
+            mode: "destructive",
+            autoclose: false,
+            action: () => { this.deleteComment() }
+          }
         ]}
-        onClose={() => this.props.setPopout(null)}
+        onClose={() => {
+          this.props.setPopout(null)
+          this.setState({ deleteCommentButtonWorking: false });
+        }}
         actionsLayout="vertical"
         header="Подтвердите действие"
         text="Вы уверены, что хотите удалить этот шаблон? Данное действие необратимо."
@@ -258,7 +245,21 @@ export default class CommentsList extends Component {
                 name="title"
                 placeholder="Название шаблона"
                 value={this.state.newCommentTitle}
-                onChange={(e) => this.setState({ newCommentTitle: e.target.value })}
+                onChange={(e) => {
+                  this.setState({ newCommentTitle: e.target.value })
+                  if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
+                    this.setState({ titleValidation: "Поле обязательно для заполнения" });
+                  } else if (this.state.newCommentTitle > 50) {
+                    this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
+                  } else if (/^\s+$/.test(this.state.newCommentTitle)) {
+                    this.setState({ titleValidation: "Неверный формат" });
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
+                    this.setState({ titleValidation: "Неверный формат" });
+                    return false;
+                  } else {
+                    this.setState({ titleValidation: "" });
+                  }
+                }}
                 disabled={this.state.newCommentButtonWorking}
               />
             </FormItem>
@@ -272,7 +273,18 @@ export default class CommentsList extends Component {
                 name="title"
                 placeholder="Команда для отправки шаблона"
                 value={this.state.newCommentCommand}
-                onChange={(e) => this.setState({ newCommentCommand: e.target.value })}
+                onChange={(e) => {
+                  this.setState({ newCommentCommand: e.target.value })
+                  if (!this.state.newCommentCommand || this.state.newCommentCommand == '') {
+                    this.setState({ commandValidation: "Поле обязательно для заполнения" });
+                  } else if (!/^[!|\/].*/.test(this.state.newCommentCommand)) {
+                    this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentCommand) === false) {
+                    this.setState({ commandValidation: "Неверный формат" });
+                  } else {
+                    this.setState({ commandValidation: "" });
+                  }
+                }}
                 disabled={this.state.newCommentButtonWorking}
               />
             </FormItem>
@@ -284,7 +296,20 @@ export default class CommentsList extends Component {
               <Textarea
                 placeholder={"{greetings}, {user_name}!\n\nСообщение, которое получит пользователь в комментариях при использовании команды."}
                 value={this.state.newCommentPattern}
-                onChange={(e) => this.setState({ newCommentPattern: e.target.value })}
+                onChange={(e) => {
+                  this.setState({ newCommentPattern: e.target.value })
+                  if (!this.state.newCommentPattern || this.state.newCommentPattern == '') {
+                    this.setState({ patternValidation: "Поле обязательно для заполнения" });
+                  } else if (this.state.newCommentPattern.length < 10) {
+                    this.setState({ patternValidation: "Длина текста должна быть не менее 10 символов" });
+                  } else if (/^\s+$/.test(this.state.newCommentPattern)) {
+                    this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false) {
+                    this.setState({ patternValidation: "Неверный формат" });
+                  } else {
+                    this.setState({ patternValidation: "" });
+                  }
+                }}
                 disabled={this.state.newCommentButtonWorking}
               />
             </FormItem>
@@ -294,7 +319,7 @@ export default class CommentsList extends Component {
                 stretched
                 onClick={() => this.createComment()}
                 loading={this.state.newCommentButtonWorking}
-                disabled={this.state.newCommentButtonWorking}
+                disabled={this.state.newCommentButtonWorking || this.state.titleValidation || this.state.commandValidation || this.state.patternValidation}
               >
                 Создать шаблон
               </Button>
@@ -330,7 +355,14 @@ export default class CommentsList extends Component {
           </Group>
 
           <Div style={{ width: "93%", marginTop: "10px" }}>
-            <Button size="m" mode="destructive" stretched onClick={() => this.delete(this.state.openedComment?.id)} loading={this.state?.deleteButtonLoading}>
+            <Button
+              size="m"
+              mode="destructive"
+              stretched
+              onClick={() => this.delete(this.state.openedComment?.id)}
+              loading={this.state.deleteCommentButtonWorking}
+              disabled={this.state.deleteCommentButtonWorking}
+            >
               Удалить
             </Button>
           </Div>
@@ -419,7 +451,17 @@ export default class CommentsList extends Component {
               {!this.state.isEnabled &&
                 <Placeholder
                   icon={<Icon56CommentsOutline />}
-                  action={<Button size="m" onClick={() => this.props.go("settings")}>Перейти в настройки</Button>}
+                  action={
+                    <Button
+                      size="m"
+                      onClick={() => {
+                        this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                        this.props.go("club_info");
+                      }}
+                    >
+                      Перейти в настройки
+                    </Button>
+                  }
                 >
                   Вам нужно включить Комментарии в Настройках, чтобы использовать этот раздел.
                 </Placeholder>
