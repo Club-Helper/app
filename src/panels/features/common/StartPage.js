@@ -604,10 +604,10 @@ class StartPage extends React.Component {
             </Button>
             <Progress style={{ height: 7, borderRadius: 5, color: "#333" }} value={(slideIndexProgress * 100 / countPageStart)} />
           </div>}
-          <Button style={{ marginRight: "5px" }} mode="overlay_secondary" onClick={() => this.handleBackClick()}>
+          <Button style={{ marginRight: "5px", marginTop: "5px" }} mode="overlay_secondary" onClick={() => this.handleBackClick()}>
             {"<"}
           </Button>
-          <Button style={{ marginRight: "5px" }} mode="overlay_secondary" onClick={() => this.handleClick(true)}>
+          <Button style={{ marginRight: "5px", marginTop: "5px" }} mode="overlay_secondary" onClick={() => this.handleClick(true)}>
             {">"}
           </Button>
           <Button mode="overlay_outline" onClick={() => {
