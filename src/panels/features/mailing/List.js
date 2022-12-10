@@ -156,7 +156,7 @@ export default class MailingList extends Component {
       this.setState({ formValidationDescription: "" });
     }
 
-    if (this.state.formValidation || this.state.formValidationDescription) {
+    if (!this.state.formTitle || !this.state.formDescription || this.state.formValidation || this.state.formValidationDescription) {
       return false;
     }
 
