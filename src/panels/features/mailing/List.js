@@ -273,16 +273,15 @@ export default class MailingList extends Component {
     if (!this.state.mailingText) {
       this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
       this.setState({ sendBtnWorking: false });
-      return false;
+    } else if (this.state.mailingText.length < 40) {
+      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+      this.setState({ sendBtnWorking: false });
     } else {
       this.setState({ sendMessageValidation: "" });
     }
-    if (this.state.mailingText.length < 10) {
-      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 10 символов" });
-      this.setState({ sendBtnWorking: false });
+
+    if (!this.state.mailingText || this.state.mailingText.length < 40) {
       return false;
-    } else {
-      this.setState({ sendMessageValidation: "" });
     }
 
     this.props.req("mailings.send", {
@@ -308,13 +307,17 @@ export default class MailingList extends Component {
             </Snackbar>
           ),
           activeModal: "",
-          mailingText: ""
+          mailingText: "",
+          sendBtnWorking: false
         });
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ sendBtnWorking: false });
       }
     );
 
-    this.setState({ sendBtnWorking: false });
   }
 
   toggleEditMode() {
@@ -455,7 +458,18 @@ export default class MailingList extends Component {
               <FormLayout>
                 <FormItem
                   value={this.state.mailingText}
-                  onChange={(e) => this.setState({ mailingText: e.target.value })}
+                  onChange={(e) => {
+                    this.setState({ mailingText: e.target.value })
+                    if (!e.target.value) {
+                      this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
+                      this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.length < 40) {
+                      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+                      this.setState({ sendBtnWorking: false });
+                    } else {
+                      this.setState({ sendMessageValidation: "" });
+                    }
+                  }}
                   bottom={this.state.sendMessageValidation}
                   status={this.state.sendMessageValidation ? "error" : "default"}
                 >
