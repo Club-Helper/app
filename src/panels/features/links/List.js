@@ -53,7 +53,7 @@ export default class Links extends Component {
       formTitleBottom: "",
       formPatternStatus: "default",
       formPatternBottom: "",
-
+      filterDisabled: false
     }
 
     this.state = this.props.linksState !== null ? this.props.linksState : initialState
@@ -199,6 +199,13 @@ export default class Links extends Component {
         this.props.setPopout(null);
       }
     )
+
+    this.setState({ filterDisabled: true });
+
+    this.getLinksTimeout = setTimeout(() => {
+      this.setState({ filterDisabled: false });
+      clearTimeout(this.getLinksTimeout);
+    }, 500);
   }
 
   updateNewLinkTitle(e) {
@@ -359,6 +366,7 @@ export default class Links extends Component {
     this.props.setLinksState(this.state);
     clearInterval(this.interval);
     this.setState({ snackbar: null });
+    clearTimeout(this.getLinksTimeout);
   }
 
   render() {
@@ -486,21 +494,23 @@ export default class Links extends Component {
                           }}>{this.state.count}</span></Title>}
                           style={{ margin: "0 -10px" }}
                         />
-                        <Div style={{ maxWidth: 300 }}>
+                        <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
                           <SegmentedControl
                             size="m"
                             name="filter"
                             options={[
                               {
                                 label: "Все",
-                                value: "all"
+                                value: "all",
+                                disabled: this.state.filterDisabled
                               },
                               {
                                 label: "Мои",
-                                value: "my"
+                                value: "my",
+                                disabled: this.state.filterDisabled
                               }
                             ]}
-                            style={{ height: "35px", padding: "5px" }}
+                            style={ this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
                             onChange={(value) => this.onFilterChange(value)}
                             value={this.state.filter}
                           />
