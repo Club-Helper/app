@@ -247,13 +247,13 @@ export default class CommentsList extends Component {
                 value={this.state.newCommentTitle}
                 onChange={(e) => {
                   this.setState({ newCommentTitle: e.target.value })
-                  if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
+                  if (!e.target.value || e.target.value == '') {
                     this.setState({ titleValidation: "Поле обязательно для заполнения" });
-                  } else if (this.state.newCommentTitle.length > 50) {
+                  } else if (e.target.value.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
-                  } else if (/^\s+$/.test(this.state.newCommentTitle)) {
+                  } else if (/^\s+$/.test(e.target.value)) {
                     this.setState({ titleValidation: "Неверный формат" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ titleValidation: "Неверный формат" });
                   } else {
                     this.setState({ titleValidation: "" });
@@ -274,11 +274,11 @@ export default class CommentsList extends Component {
                 value={this.state.newCommentCommand}
                 onChange={(e) => {
                   this.setState({ newCommentCommand: e.target.value })
-                  if (!this.state.newCommentCommand || this.state.newCommentCommand == '') {
+                  if (!e.target.value || e.target.value == '') {
                     this.setState({ commandValidation: "Поле обязательно для заполнения" });
-                  } else if (!/^[!|\/].*/.test(this.state.newCommentCommand)) {
+                  } else if (!/^[!|\/].*/.test(e.target.value)) {
                     this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentCommand) === false) {
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ commandValidation: "Неверный формат" });
                   } else {
                     this.setState({ commandValidation: "" });
@@ -297,13 +297,13 @@ export default class CommentsList extends Component {
                 value={this.state.newCommentPattern}
                 onChange={(e) => {
                   this.setState({ newCommentPattern: e.target.value })
-                  if (!this.state.newCommentPattern || this.state.newCommentPattern == '') {
+                  if (!e.target.value || e.target.value == '') {
                     this.setState({ patternValidation: "Поле обязательно для заполнения" });
-                  } else if (this.state.newCommentPattern.length < 10) {
+                  } else if (e.target.value.length < 10) {
                     this.setState({ patternValidation: "Длина текста должна быть не менее 10 символов" });
-                  } else if (/^\s+$/.test(this.state.newCommentPattern)) {
+                  } else if (/^\s+$/.test(e.target.value)) {
                     this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false) {
+                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ patternValidation: "Неверный формат" });
                   } else {
                     this.setState({ patternValidation: "" });
@@ -378,8 +378,7 @@ export default class CommentsList extends Component {
                 <SplitCol>
                   {this.state.listLoading ? <PanelSpinner /> :
                     <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
-                      {this.state.comments.length > 0 ?
-                        <Div style={{ maxWidth: 300 }}>
+                      <Div style={{ maxWidth: 300 }}>
                           <SegmentedControl
                             size="m"
                             name="filter"
@@ -397,7 +396,7 @@ export default class CommentsList extends Component {
                             onChange={(value) => this.onFilterChange(value)}
                             value={this.state.filter}
                           />
-                        </Div> : ""}
+                        </Div>
                       <List>
                         {this.state.comments.length > 0 ?
                           <>
@@ -438,7 +437,7 @@ export default class CommentsList extends Component {
                           <Placeholder
                             action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
                           >
-                            В этом сообществе ещё нет ни одного шаблона комментария.
+                            Не найдено ни одного шаблона комментария.
                           </Placeholder>
                         }
                       </List>

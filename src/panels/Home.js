@@ -155,7 +155,7 @@ function Home({
          }
       })
 
-    fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
+    /*fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
       .then(response => response.json())
       .then(data => {
         console.log("RU LOCALE", data);
@@ -170,7 +170,7 @@ function Home({
           console.log(`LOCALE (${params.get("vk_language")})`, data);
           setLocale(data);
         })
-    }
+    }*/
 
     fetch(`${apiScheme}://ch.n1rwana.ml/api/app.start${window.location.search}`)
       .then(response => response.json())
@@ -186,10 +186,6 @@ function Home({
             setRole(role);
             setToken(data.response.token);
             setLanguageCode(params.get("vk_language"));
-
-            ym(90794548, 'userParams', {
-              session_id: data.response.session_id
-            });
 
             console.log("Session ID", data.response.session_id);
 
@@ -234,6 +230,9 @@ function Home({
                     createError(data.error.error_msg);
                   }
                 })
+            } else if (data.response.page === "call_admin" || data.response.page === "need_admin") {
+              toggleShowMenu(false);
+              setActiveStory("call_admin");
             } else if (data.response.page === "landing") {
               setIsNew(true);
               setPage("landing");
@@ -480,14 +479,14 @@ function Home({
     {
       id: "office-clubs",
       triggers: ["office-clubs"],
-      name: t("communities"),
+      name: "Сообщества",
       before: <Icon36Users3Outline width={28} height={28} />,
       show: true
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
-      name: t("mailings"),
+      name: "Рассылки",
       before: <Icon32AdvertisingOutline width={28} height={28} />,
       show: true
     },
@@ -1342,7 +1341,7 @@ function Home({
                       <Group>
                         <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
                           <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-                            {t("searching_for_employees")}
+                          Команда Club Helper ищет сотрудников
                             <br /><br />
                             <Button size="s" stretched mode="secondary">Подробнее</Button>
                           </SimpleCell>

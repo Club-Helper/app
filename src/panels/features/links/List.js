@@ -203,9 +203,9 @@ export default class Links extends Component {
 
   updateNewLinkTitle(e) {
     this.setState({ title: e.target.value })
-    if (!this.state.title) {
+    if (!e.target.value) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
-    } else if (this.state.title.length > 50) {
+    } else if (e.target.value.length > 50) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
     } else {
       this.setState({ formTitleStatus: "default", formTitleBottom: "" });
@@ -214,9 +214,9 @@ export default class Links extends Component {
 
   updateNewLinkPattern(e) {
     this.setState({ pattern: e.target.value })
-    if (!this.state.pattern) {
+    if (!e.target.value) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
-    } else if (this.state.pattern.length < 10) {
+    } else if (e.target.value.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
     } else {
       this.setState({ formPatternStatus: "default", formPatternBottom: "" })
@@ -473,8 +473,7 @@ export default class Links extends Component {
                     onRefresh={this.onRefresh}
                     isFetching={this.state.fetching}
                   >
-                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal}>Создать ссылку</Button>}>В этом сообществе ещё нет ни одного шаблона ссылки.</Placeholder> : <>
-                      <Group mode='plain'>
+                    <Group mode='plain'>
                         <Cell
                           disabled
                           before={<Title level='3' style={{
@@ -507,6 +506,7 @@ export default class Links extends Component {
                           />
                         </Div>
                       </Group>
+                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal}>Создать ссылку</Button>}>Не найдено ни одного шаблона ссылки.</Placeholder> : <>
                       <Group mode='plain'>
                         <List>
                           {this.state.linksLoading ? <PanelSpinner /> :
@@ -536,7 +536,7 @@ export default class Links extends Component {
                                 </SimpleCell>
                               ))
                               :
-                              <Footer>В этом сообществе ещё нет ни одной ссылки.</Footer>
+                              <Footer>Не найдено ни одного шаблона ссылки.</Footer>
                           }
                         </List>
                         {this.state.availability.creat &&

@@ -140,22 +140,18 @@ export default class MailingList extends Component {
   }
 
   onFormSubmit() {
-    if (this.state.formTitle.length　< 10) {
-      this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." });
-      // return false;
-    } else if (this.state.formTitle.length > 50) {
-      this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." });
-      // return false;
+    if (this.state.formTitle.length　< 5) {
+      this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
+    } else if (this.state.formTitle.length > 25) {
+      this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
     } else {
       this.setState({ formValidation: "" });
     }
 
     if (this.state.formDescription.length < 10) {
       this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
-      // return false;
-    } else if (this.state.formDescription.length > 255) {
-      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
-      // return false;
+    } else if (this.state.formDescription.length > 25) {
+      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
     } else {
       this.setState({ formValidationDescription: "" });
     }
@@ -164,7 +160,6 @@ export default class MailingList extends Component {
       return false;
     }
 
-    if (this.state.formTitle.length >= 10 && this.state.formTitle.length <= 50) {
       this.setState({ formValidation: "", formWorking: true });
 
       this.props.req("mailings.creat", {
@@ -205,9 +200,7 @@ export default class MailingList extends Component {
           this.props.createError(error.error.error_msg);
         }
       )
-    } else {
-      this.state.formTitle.length < 10 ? this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." }) : this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." })
-    }
+
   }
 
   getMailingUsers(id) {
@@ -280,16 +273,15 @@ export default class MailingList extends Component {
     if (!this.state.mailingText) {
       this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
       this.setState({ sendBtnWorking: false });
-      return false;
+    } else if (this.state.mailingText.length < 40) {
+      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+      this.setState({ sendBtnWorking: false });
     } else {
       this.setState({ sendMessageValidation: "" });
     }
-    if (this.state.mailingText.length < 10) {
-      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 10 символов" });
-      this.setState({ sendBtnWorking: false });
+
+    if (!this.state.mailingText || this.state.mailingText.length < 40) {
       return false;
-    } else {
-      this.setState({ sendMessageValidation: "" });
     }
 
     this.props.req("mailings.send", {
@@ -315,13 +307,17 @@ export default class MailingList extends Component {
             </Snackbar>
           ),
           activeModal: "",
-          mailingText: ""
+          mailingText: "",
+          sendBtnWorking: false
         });
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ sendBtnWorking: false });
       }
     );
 
-    this.setState({ sendBtnWorking: false });
   }
 
   toggleEditMode() {
@@ -462,7 +458,18 @@ export default class MailingList extends Component {
               <FormLayout>
                 <FormItem
                   value={this.state.mailingText}
-                  onChange={(e) => this.setState({ mailingText: e.target.value })}
+                  onChange={(e) => {
+                    this.setState({ mailingText: e.target.value })
+                    if (!e.target.value) {
+                      this.setState({ sendMessageValidation: "Поле обязательно для заполнения" });
+                      this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.length < 40) {
+                      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+                      this.setState({ sendBtnWorking: false });
+                    } else {
+                      this.setState({ sendMessageValidation: "" });
+                    }
+                  }}
                   bottom={this.state.sendMessageValidation}
                   status={this.state.sendMessageValidation ? "error" : "default"}
                 >
@@ -522,15 +529,11 @@ export default class MailingList extends Component {
                 value={this.state.formTitle}
                 onChange={(e) => {
                   this.setState({ formTitle: e.target.value })
-                  if (e.target.value.length　< 10) {
-                    this.setState({ formValidation: "Название рассылки должно содержать не менее 10 символов." });
-                    return false;
-                  } else {
-                    this.setState({ formValidation: "" });
-                  }
-                  if (e.target.value.length > 50) {
-                    this.setState({ formValidation: "Длина названия рассылки не должна превышать 50 символов." });
-                    return false;
+                  if (e.target.value.length　< 5) {
+                    this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
+                  } else if (e.target.value.length > 25) {
+                    console.log("25");
+                    this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
                   } else {
                     this.setState({ formValidation: "" });
                   }
@@ -545,15 +548,10 @@ export default class MailingList extends Component {
                 value={this.state.formDescription}
                 onChange={(e) => {
                   this.setState({ formDescription: e.target.value })
-                  if (this.state.formDescription.length < 10) {
+                  if (e.target.value.length < 10) {
                     this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
-                    return false;
-                  } else {
-                    this.setState({ formValidationDescription: "" });
-                  }
-                  if (this.state.formDescription.length > 255) {
-                    this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 255 символов." });
-                    return false;
+                  } else if (e.target.value.length > 25) {
+                    this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
                   } else {
                     this.setState({ formValidationDescription: "" });
                   }
@@ -569,7 +567,7 @@ export default class MailingList extends Component {
                   stretched
                   size="l"
                   onClick={this.onFormSubmit}
-                  disabled={this.state.formWorking}
+                  disabled={this.state.formWorking || this.state.formValidation || this.state.formValidationDescription}
                   loading={this.state.formWorking}
                 >
                   Создать
