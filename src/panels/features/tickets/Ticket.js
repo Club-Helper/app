@@ -119,11 +119,13 @@ export default class TicketsList extends Component {
                 Приглашение отправлено
               </Snackbar>
             ),
-            activeModal: ""
+            activeModal: "",
+            buttonLoading: ""
           });
           bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
         } else {
           this.props.createError(data.response.error);
+          this.setState({ buttonLoading: "" });
         }
       }
     );
