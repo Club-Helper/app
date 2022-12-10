@@ -791,6 +791,7 @@ function Home({
       obj: (
         <CallAdmin
           {...basicProps}
+          changeMode={changeMode}
         />
       )
     },

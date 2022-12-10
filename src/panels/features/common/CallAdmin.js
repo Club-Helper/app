@@ -9,8 +9,8 @@
  *******************************************************/
 
 import React from 'react'
-import { ConfigProvider, Group, Placeholder, Footer, Link, Separator } from '@vkontakte/vkui'
-import { Icon56FaceIdOutline } from '@vkontakte/icons';
+import { ConfigProvider, Group, Placeholder, Footer, Link, Separator, SimpleCell, Button } from '@vkontakte/vkui'
+import { Icon28UserTagOutline, Icon56FaceIdOutline } from '@vkontakte/icons';
 
 export default function CallAdmin(props) {
   props.setPopout(null);
@@ -28,6 +28,14 @@ export default function CallAdmin(props) {
           icon={<Icon56FaceIdOutline width={96} height={96} style={{ marginBottom: "10px" }} fill="var(--vkui--color_background_accent)" />}
           header="Нужен администратор"
           key="error-info"
+          action={
+            <Button
+              before={<Icon28UserTagOutline />}
+              onClick={() => props.changeMode("office")}
+            >
+              Личный кабинет
+            </Button>
+          }
         >
           Это сообщество ещё не настроено. Попросите администратора настроить его в нашем приложении.
         </Placeholder>
