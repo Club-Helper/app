@@ -154,7 +154,7 @@ body {
   font-size: 14px;
   white-space: pre-wrap;
   background-color: #DEDEE3;
-  color: var(--text_primary);
+  color: #000;
 }
 
 body[scheme="space_gray"] .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {

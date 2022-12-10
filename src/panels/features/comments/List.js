@@ -35,11 +35,16 @@ export default class CommentsList extends Component {
       titleValidation: "",
       commandValidation: "",
       patternValidation: "",
-      deleteCommentButtonWorking: false
+      deleteCommentButtonWorking: false,
+      filterDisabled: false
     }
   }
 
   getComments(filter) {
+    this.setState({ filterDisabled: true });
+
+    this.setState({ listLoading: true });
+
     this.props.req("comments.get", {
       token: this.props.token,
       filter: filter
@@ -53,6 +58,11 @@ export default class CommentsList extends Component {
         this.props.createError(error.error.error_msg);
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" });
       })
+
+    this.getCommentsTimeout = setTimeout(() => {
+      this.setState({ filterDisabled: false });
+      clearTimeout(this.getCommentsTimeout);
+    }, 500);
   }
 
   onRefresh() {
@@ -221,6 +231,7 @@ export default class CommentsList extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    clearTimeout(this.getCommentsTimeout);
   }
 
   render() {
@@ -346,7 +357,7 @@ export default class CommentsList extends Component {
               {this.state.openedComment?.comand}
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
+              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user?.id} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedComment?.creat?.time?.label}
@@ -376,74 +387,87 @@ export default class CommentsList extends Component {
             <>
               {this.state.isEnabled &&
                 <SplitCol>
-                  {this.state.listLoading ? <PanelSpinner /> :
                     <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
-                      <Div style={{ maxWidth: 300 }}>
+                      <Cell
+                          disabled
+                          before={<Title level='3' style={{
+                            marginLeft: "15px",
+                            marginTop: "15px",
+                            marginBottom: "0px"
+                          }}>Комментарии <span style={{
+                            color: "var(--text_secondary)",
+                            fontSize: "12px"
+                          }}>{this.state.count}</span></Title>}
+                          style={{ margin: "0 -10px" }}
+                        />
+                      <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
                           <SegmentedControl
                             size="m"
                             name="filter"
                             options={[
                               {
                                 label: "Все",
-                                value: "all"
+                                value: "all",
+                                disabled: this.state.filterDisabled
                               },
                               {
                                 label: "Мои",
-                                value: "my"
+                                value: "my",
+                                disabled: this.state.filterDisabled
                               }
                             ]}
-                            style={{ height: "35px", padding: "5px" }}
+                            style={ this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
                             onChange={(value) => this.onFilterChange(value)}
                             value={this.state.filter}
                           />
                         </Div>
-                      <List>
-                        {this.state.comments.length > 0 ?
-                          <>
-                            {this.state.comments.map((comment, idx) => (
-                              <Cell
-                                key={idx}
-                                description={comment.comand}
-                                before={<Icon28CommentOutline />}
-                                after={<Icon28InfoCircleOutline onClick={() => this.getCommentById(idx)} />}
-                                onClick={() => this.getCommentById(idx)}
+                        {this.state.listLoading ? <PanelSpinner /> :
+                          <List>
+                            {this.state.comments.length > 0 ?
+                              <>
+                                {this.state.comments.map((comment, idx) => (
+                                  <Cell
+                                    key={idx}
+                                    description={comment.comand}
+                                    before={<Icon28CommentOutline />}
+                                    after={<Icon28InfoCircleOutline onClick={() => this.getCommentById(idx)} />}
+                                    onClick={() => this.getCommentById(idx)}
+                                  >
+                                    {comment.title}
+                                  </Cell>
+                                ))}
+                                {this.state.availability.limit ?
+                                  <Footer>
+                                    Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["комментарий", "комментария", "комментариев"])}
+                                  </Footer>
+                                  : ""}
+                                {!this.state.availability.creat &&
+                                  <Footer>
+                                    Достигнут лимит шаблонов комментариев. Оплатите подписку VK Donut или удалите ненужные шаблоны, чтобы создать больше.
+                                  </Footer>
+                                }
+                                {this.state.availability.creat &&
+                                  <div>
+                                    <Spacing size={20} separator />
+                                    <CellButton
+                                      before={<Icon24AddCircleDottedOutline />}
+                                      onClick={() => this.setState({ activeModal: "create-comment" })}
+                                    >
+                                      Создать шаблон
+                                    </CellButton>
+                                  </div>
+                                }
+                              </>
+                              :
+                              <Placeholder
+                                action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
                               >
-                                {comment.title}
-                              </Cell>
-                            ))}
-                            {this.state.availability.limit ?
-                              <Footer>
-                                Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["комментарий", "комментария", "комментариев"])}
-                              </Footer>
-                              : ""}
-                            {!this.state.availability.creat &&
-                              <Footer>
-                                Достигнут лимит шаблонов комментариев. Оплатите подписку VK Donut или удалите ненужные шаблоны, чтобы создать больше.
-                              </Footer>
+                                Не найдено ни одного шаблона комментария.
+                              </Placeholder>
                             }
-                            {this.state.availability.creat &&
-                              <div>
-                                <Spacing size={20} separator />
-                                <CellButton
-                                  before={<Icon24AddCircleDottedOutline />}
-                                  onClick={() => this.setState({ activeModal: "create-comment" })}
-                                >
-                                  Создать шаблон
-                                </CellButton>
-                              </div>
-                            }
-                          </>
-                          :
-                          <Placeholder
-                            action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
-                          >
-                            Не найдено ни одного шаблона комментария.
-                          </Placeholder>
+                          </List>
                         }
-                      </List>
                     </PullToRefresh>
-
-                  }
                 </SplitCol>
               }
               {!this.state.isEnabled &&
