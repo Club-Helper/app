@@ -656,6 +656,7 @@ function Home({
           commentsState={commentsState}
           setCommentsState={setCommentsState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -669,6 +670,7 @@ function Home({
           linksState={linksState}
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -705,6 +707,7 @@ function Home({
           linksState={linksState}
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },

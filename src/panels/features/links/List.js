@@ -89,6 +89,7 @@ export default class Links extends Component {
    * @param {int} id
    */
   openPatternModal(id) {
+    this.props.toggleShowMobileMenu(false);
     let pattern = this.state.links.find(pattern => pattern.id == id)
 
     this.setState({
@@ -115,6 +116,7 @@ export default class Links extends Component {
   }
 
   closeModal() {
+    this.props.toggleShowMobileMenu(true);
     this.setState({
       activeModal: null
     })
@@ -159,11 +161,13 @@ export default class Links extends Component {
                 </Snackbar>
               )
             })
+            this.props.toggleShowMobileMenu(true);
             bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
             this.props.setPopout(null);
             return true;
           },
           (error) => {
+            this.props.toggleShowMobileMenu(true);
             this.props.createError(error.error.error_msg);
             this.setState({ isEnabled: false, deleteButtonLoading: false });
             this.props.setPopout(null);
@@ -253,6 +257,7 @@ export default class Links extends Component {
   }
 
   openCreateLinkModal() {
+    this.props.toggleShowMobileMenu(false);
     this.setState({
       activeModal: "create-link"
     });
@@ -293,6 +298,7 @@ export default class Links extends Component {
           token: this.props.token
         },
           (data) => {
+            this.props.toggleShowMobileMenu(true);
             this.setState({ activeModal: "", title: "", pattern: "" });
             this.props.req("links.get", {
               filter: this.state.filter,
@@ -457,7 +463,7 @@ export default class Links extends Component {
               bottom={this.state.formTitleBottom}
               onChange={this.updateNewLinkTitle}
             >
-              <Input
+              <Textarea
                 type={"text"}
                 name="title"
                 placeholder='Администратор'

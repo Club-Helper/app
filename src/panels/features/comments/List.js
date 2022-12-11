@@ -102,6 +102,7 @@ export default class CommentsList extends Component {
   }
 
   getCommentById(id) {
+    this.props.toggleShowMobileMenu(false);
     this.setState({ openedComment: this.state.comments[id], activeModal: "comment-info" })
     bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
   }
@@ -247,7 +248,10 @@ export default class CommentsList extends Component {
     );
   }
 
-  closeModal() { this.setState({ activeModal: "" }); }
+  closeModal() {
+    this.props.toggleShowMobileMenu(true);
+    this.setState({ activeModal: "" });
+  }
 
   componentDidMount() {
     this.props.setLoading(false);
@@ -283,7 +287,7 @@ export default class CommentsList extends Component {
               bottom={this.state.titleValidation}
               status={!this.state.titleValidation ? "" : "error"}
             >
-              <Input
+              <Textarea
                 type="text"
                 name="title"
                 placeholder="Название шаблона"
@@ -310,7 +314,7 @@ export default class CommentsList extends Component {
               bottom={this.state.commandValidation}
               status={!this.state.commandValidation ? "" : "error"}
             >
-              <Input
+              <Textarea
                 type="text"
                 name="title"
                 placeholder="Команда для отправки шаблона"
@@ -486,7 +490,12 @@ export default class CommentsList extends Component {
                                     <Spacing size={20} separator />
                                     <CellButton
                                       before={<Icon24AddCircleDottedOutline />}
-                                      onClick={() => this.setState({ activeModal: "create-comment" })}
+                                      onClick={() => {
+                                        this.props.toggleShowMobileMenu(false);
+                                        this.setState({
+                                         activeModal: "create-comment"
+                                        })
+                                      }}
                                     >
                                       Создать шаблон
                                     </CellButton>
@@ -495,7 +504,11 @@ export default class CommentsList extends Component {
                               </>
                               :
                               <Placeholder
-                                action={<Button onClick={() => this.setState({ activeModal: "create-comment" })}>Создать комментарий</Button>}
+                                action={<Button onClick={() => {
+                                  this.props.toggleShowMobileMenu(false);
+                                  this.setState({ activeModal: "create-comment" })
+                                }}
+                                >Создать комментарий</Button>}
                               >
                                 Не найдено ни одного шаблона комментария.
                               </Placeholder>

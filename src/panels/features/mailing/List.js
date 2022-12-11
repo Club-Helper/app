@@ -559,7 +559,7 @@ export default class MailingList extends Component {
                 status={this.state.formValidation ? "error" : "default"}
                 bottom={this.state.formValidation}
               >
-                <Input placeholder='Видят пользователи при получении приглашения' type="text" required minLength={10} maxLength={50} />
+                <Textarea placeholder='Видят пользователи при получении приглашения' type="text" required minLength={10} maxLength={50} />
               </FormItem>
               <FormItem
                 top={"Описание рассылки"}
