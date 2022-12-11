@@ -52,14 +52,14 @@ export default class AppInfo extends Component {
                         color: "var(--vkui--color_text_secondary)",
                       }}
                     >
-                      v1.0.0-beta
+                      v1.0.5-beta
                     </Text>
                   </Gradient>
                   <List>
                     <SimpleCell
                       before={<Icon24ShareOutline />}
                       onClick={() => {
-                        bridge.send("VKWebAppShare", {"link": "vk.com/app7938346"});
+                        bridge.send("VKWebAppShare", {"link": "https://vk.com/app7938346"});
                       }
                       }
                     >Поделиться</SimpleCell>

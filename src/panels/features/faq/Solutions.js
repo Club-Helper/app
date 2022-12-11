@@ -21,7 +21,7 @@ export default class FAQSolutions extends Component {
             <Panel>
               <PanelHeader
                 left={
-                  <PanelHeaderBack onClick={() => this.props.goBack()} />
+                  <PanelHeaderBack onClick={() => this.props.goBack(2)} />
                 }
               >
                 {this.props.openedTriggerTitle[this.props.openedTriggerTitle.length - 1]}

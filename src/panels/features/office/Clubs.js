@@ -95,7 +95,9 @@ export default class Clubs extends Component {
       .catch((error) => {
         this.setState({ bridgeInstallResult: error });
         this.props.toggleShowMenu(false);
-        this.setState({ activeModal: "error" });
+        if (error.error_data.error_code !== 4) {
+          this.setState({ activeModal: "error" });
+        }
       })
   }
 

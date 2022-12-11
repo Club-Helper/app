@@ -791,6 +791,7 @@ function Home({
       obj: (
         <CallAdmin
           {...basicProps}
+          changeMode={changeMode}
         />
       )
     },
@@ -1351,7 +1352,7 @@ function Home({
                       <Footer onClick={() => {
                         activeStory !== "app_info" && go("app_info")
                       }}>
-                        v1.0.0-beta
+                        v1.0.5-beta
                       </Footer>
                     </Panel>
                   </SplitCol>
@@ -1561,7 +1562,7 @@ function Home({
                         <Footer onClick={() => {
                           activeStory !== "app_info" && go("app_info")
                         }}>
-                          v1.0.0-beta
+                          v1.0.5-beta
                         </Footer>
                       </Panel>
                     </SplitCol>

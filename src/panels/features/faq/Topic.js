@@ -124,7 +124,7 @@ export default class FAQTopic extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={<PanelHeaderBack onClick={() => this.props.goBack()} />}
+                left={<PanelHeaderBack onClick={() => this.props.goBack(2)} />}
               >
                 {this.props.openedProduct?.name?.length > 0 ? this.props.openedProduct.name : "Загрузка..."}
               </PanelHeader>

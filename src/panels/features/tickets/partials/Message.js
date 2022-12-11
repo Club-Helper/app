@@ -11,8 +11,8 @@
 import React from 'react';
 
 import { GrayText } from '../../common/partials/GrayText';
-import { Gallery, Spinner, Card, Placeholder } from '@vkontakte/vkui';
-import { Icon48PictureOutline } from '@vkontakte/icons';
+import { Gallery } from '@vkontakte/vkui';
+import { AttachmentsProvider } from './AttachmentsProvider';
 
 /**
 * Системное сообщение
@@ -43,10 +43,11 @@ export const SystemMessage = ({ noLast, children }) => {
 */
 
 export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, children, attachments }) => {
-  if (!sticker && !children[0]) return false;
+  if (!sticker && !children[0] && attachments.lenght === 0) return false;
 
   return (
     <div className="clubHelper--userMessage" key={key}>
+
       <div className={noLast ? "clubHelper--contentMessage no--last" : "clubHelper--contentMessage"}>
         <a href={"https://vk.com/id" + user} target="_blank"><img className="clubHelper--photoMessage" src={photoUser} alt="" /></a>
         {sticker ?
@@ -59,16 +60,16 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
             <div className="clubHelper--textMessage">
               {children}
               {attachments.length > 0 &&
-                <Gallery slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows style={{ marginTop: "1vh" }}>
+                <Gallery align="center" slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
+                style={
+                  children != null ?
+                  { marginTop: "1vh" }
+                  : {}
+                }>
                   {attachments.map((item, idx) => (
-                    item.type === "photo" && item.photo.url ?
-                      <img key={idx} src={item.photo.url} style={{
-                        borderRadius: "10px"
-                      }} />
-                      :
-                      <Card mode={"shadow"}>
-                        <Placeholder icon={<Icon48PictureOutline />} />
-                      </Card>
+                    <center style={{ width:"100%" }}>
+                      <AttachmentsProvider key={idx} item={item} />
+                    </center>
                   ))}
                 </Gallery>
               }
@@ -107,16 +108,16 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
             <div className="clubHelper--textMessage">
               {children}
               {attachments.length > 0 &&
-                <Gallery slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows style={{ marginTop: "1vh" }}>
+                <Gallery align="center" slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
+                style={
+                  children != null ?
+                  { marginTop: "1vh" }
+                  : {}
+                }>
                   {attachments.map((item, idx) => (
-                    item.type === "photo" && item.photo.url ?
-                      <img key={idx} src={item.photo.url} style={{
-                        borderRadius: "10px"
-                      }} />
-                      :
-                      <Card mode={"shadow"}>
-                        <Placeholder icon={<Icon48PictureOutline />} />
-                      </Card>
+                    <center style={{ width:"100%" }}>
+                      <AttachmentsProvider key={idx} item={item} />
+                    </center>
                   ))}
                 </Gallery>
               }

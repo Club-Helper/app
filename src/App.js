@@ -119,13 +119,14 @@ const App = () => {
    * Возвращает пользователя на предыдущую панель или закрывает приложение,
    * если это невозможно.
    */
-  const goBack = () => {
-    console.log(history, history.length - 1)
+  const goBack = (offset) => {
+    if (!offset) offset = 1;
+    console.log(history, history[history.length - offset])
 
     if (history.length === 1) {
       bridge.send("VKWebAppClose", { "status": "success" });
-    } else if (history.length > 1) {
-      let target = history[history.length - 1];
+    } else if (history.length > offset) {
+      let target = history[history.length - offset];
       window.history.pushState({ panel: target }, target);
       history.pop();
       setActiveStory(target);

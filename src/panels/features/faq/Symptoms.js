@@ -65,7 +65,7 @@ export default class FAQSymptoms extends Component {
                 <PanelHeader left={
                   <PanelHeaderBack onClick={() => {
                     this.props.openedTriggerTitle.pop();
-                    this.props.goBack()
+                    this.props.goBack(2)
                   }} />
                 }>
                   {this.props.openedTriggerTitle[this.props.openedTriggerTitle.length - 1]}

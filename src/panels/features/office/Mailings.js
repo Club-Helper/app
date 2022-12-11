@@ -119,7 +119,7 @@ export default class Mailings extends Component {
                                 <Icon24CancelOutline />
                               </IconButton>
                             }
-                            description={(this.props?.office?.user.sex == 2 ? 'подписался' : 'подписалась') + mailing.subscription.label}
+                            description={(this.props?.office?.user.sex == 2 ? 'подписался ' : 'подписалась ') + mailing.subscription.label}
                           >
                             {mailing.title}
                           </Cell>
