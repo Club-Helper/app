@@ -60,13 +60,17 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
             <div className="clubHelper--textMessage">
               {children}
               {attachments.length > 0 &&
-                <Gallery slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
+                <Gallery align="center" slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
                 style={
                   children != null ?
-                  { marginTop: "1vh", width: "100% !important" }
-                  : {width: "100% !important"}
+                  { marginTop: "1vh" }
+                  : {}
                 }>
-                  <AttachmentsProvider attachments={attachments} />
+                  {attachments.map((item, idx) => (
+                    <center style={{ width:"100%" }}>
+                      <AttachmentsProvider key={idx} item={item} />
+                    </center>
+                  ))}
                 </Gallery>
               }
             </div>
@@ -110,7 +114,11 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
                   { marginTop: "1vh", width: "100% !important" }
                   : {width: "100% !important"}
                 }>
-                  <AttachmentsProvider attachments={attachments} />
+                  {attachments.map((item, idx) => (
+                    <center>
+                      <AttachmentsProvider key={idx} item={item} />
+                    </center>
+                  ))}
                 </Gallery>
               }
             </div>
