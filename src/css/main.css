@@ -159,6 +159,7 @@ body {
 
 body[scheme="space_gray"] .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
   background-color: #26252a;
+  color: #fff;
 }
 
 .clubHelper--clubMessage .clubHelper--contentMessage .clubHelper--textContentMessage .clubHelper--textMessage {
