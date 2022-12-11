@@ -690,7 +690,8 @@ function Home({
           mailingState={mailingState}
           setMailingState={setMailingState}
           declOfNum={declOfNum}
-          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount }
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },

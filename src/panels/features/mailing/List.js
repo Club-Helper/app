@@ -132,10 +132,12 @@ export default class MailingList extends Component {
   }
 
   openModal(id) {
+    this.props.toggleShowMobileMenu(false);
     this.setState({ activeModal: id });
   }
 
   closeModal() {
+    this.props.toggleShowMobileMenu(true);
     this.setState({ activeModal: "" });
   }
 
