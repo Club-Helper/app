@@ -121,9 +121,9 @@ const App = () => {
    */
   const goBack = (offset) => {
     if (!offset) offset = 1;
-    console.log(history, history.length - offset)
+    console.log(history, history[history.length - offset])
 
-    if (history.length === offset) {
+    if (history.length === 1) {
       bridge.send("VKWebAppClose", { "status": "success" });
     } else if (history.length > offset) {
       let target = history[history.length - offset];
