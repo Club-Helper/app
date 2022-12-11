@@ -90,6 +90,7 @@ export default class ClubInfo extends Component {
     },
       (data) => {
         this.setState({ club: data.response, isClubLoading: false });
+        window.scrollTo(0, 0);
       }
     )
   }

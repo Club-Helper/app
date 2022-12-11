@@ -2,10 +2,9 @@ import React from 'react';
 
 import { Gallery, Spinner, Card, Placeholder, Cell, RichCell, Title, Div, Spacing, Link } from '@vkontakte/vkui';
 import { Icon48PictureOutline, Icon48Video, Icon56MicrophoneOutline, Icon56MusicOutline, Icon56VideoOutline } from '@vkontakte/icons';
-import { render } from 'react-dom';
 
 export const AttachmentsProvider = ({ item }) => {
-    if (!item) return false;
+    if (!item) return null;
 
     if (item.type === "photo") {
         if (item.photo.url) {
@@ -87,5 +86,13 @@ export const AttachmentsProvider = ({ item }) => {
                 </Card>
             </div>
         )
+    } else {
+        return (
+            <Card>
+                <Placeholder>
+                    Неподдерживаемый тип вложения
+                </Placeholder>
+            </Card>
+        );
     }
 }

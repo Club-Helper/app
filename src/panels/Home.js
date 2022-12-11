@@ -656,6 +656,7 @@ function Home({
           commentsState={commentsState}
           setCommentsState={setCommentsState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -669,6 +670,7 @@ function Home({
           linksState={linksState}
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -690,7 +692,8 @@ function Home({
           mailingState={mailingState}
           setMailingState={setMailingState}
           declOfNum={declOfNum}
-          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount }
+          toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
@@ -704,6 +707,7 @@ function Home({
           linksState={linksState}
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },

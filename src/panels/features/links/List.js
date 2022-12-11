@@ -89,6 +89,7 @@ export default class Links extends Component {
    * @param {int} id
    */
   openPatternModal(id) {
+    this.props.toggleShowMobileMenu(false);
     let pattern = this.state.links.find(pattern => pattern.id == id)
 
     this.setState({
@@ -115,6 +116,7 @@ export default class Links extends Component {
   }
 
   closeModal() {
+    this.props.toggleShowMobileMenu(true);
     this.setState({
       activeModal: null
     })
@@ -159,11 +161,13 @@ export default class Links extends Component {
                 </Snackbar>
               )
             })
+            this.props.toggleShowMobileMenu(true);
             bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
             this.props.setPopout(null);
             return true;
           },
           (error) => {
+            this.props.toggleShowMobileMenu(true);
             this.props.createError(error.error.error_msg);
             this.setState({ isEnabled: false, deleteButtonLoading: false });
             this.props.setPopout(null);
@@ -213,7 +217,7 @@ export default class Links extends Component {
       filter: filter
     },
       (data) => {
-        this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false })
+        this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false, isEnabled: true })
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -253,6 +257,7 @@ export default class Links extends Component {
   }
 
   openCreateLinkModal() {
+    this.props.toggleShowMobileMenu(false);
     this.setState({
       activeModal: "create-link"
     });
@@ -268,7 +273,7 @@ export default class Links extends Component {
     if (!this.state.pattern) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
     } else if (this.state.title.length > 50) {
-      this.setState({ formPatternStatus: "error", formPatternStatus: "Заголовок не может быть длиннее 50 символов" });
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Заголовок не может быть длиннее 50 символов" });
     } else if (this.state.pattern.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
     } else {
@@ -293,6 +298,7 @@ export default class Links extends Component {
           token: this.props.token
         },
           (data) => {
+            this.props.toggleShowMobileMenu(true);
             this.setState({ activeModal: "", title: "", pattern: "" });
             this.props.req("links.get", {
               filter: this.state.filter,
@@ -430,7 +436,7 @@ export default class Links extends Component {
               <Link href={this.state.openedPattern.link} target="_blank">{this.state.openedPattern.link}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedPattern.creat.user} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
+              <Link href={"https://vk.com/id" + this.state.openedPattern.creat.user.id} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedPattern.creat.time.label}
@@ -457,7 +463,7 @@ export default class Links extends Component {
               bottom={this.state.formTitleBottom}
               onChange={this.updateNewLinkTitle}
             >
-              <Input
+              <Textarea
                 type={"text"}
                 name="title"
                 placeholder='Администратор'
@@ -546,9 +552,12 @@ export default class Links extends Component {
                               this.state.links.map(item => (
                                 <SimpleCell
                                   multiline
+                                  className="clubHelper--SimpleCell"
                                   before={<Avatar size={48} src={item.creat.user.photo} />}
                                   key={item.id}
                                   description={item.creat.user.first_name + " " + item.creat.user.last_name}
+                                  hasHover={false}
+                                  hasActive={false}
                                   after={
                                     <div style={{ display: "flex", gridGap: 10 }}>
                                       <IconButton

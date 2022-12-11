@@ -132,10 +132,12 @@ export default class MailingList extends Component {
   }
 
   openModal(id) {
+    this.props.toggleShowMobileMenu(false);
     this.setState({ activeModal: id });
   }
 
   closeModal() {
+    this.props.toggleShowMobileMenu(true);
     this.setState({ activeModal: "" });
   }
 
@@ -276,6 +278,9 @@ export default class MailingList extends Component {
     } else if (this.state.mailingText.length < 40) {
       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
       this.setState({ sendBtnWorking: false });
+    } else if (this.state.mailingText.length > 600) {
+      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
+      this.setState({ sendBtnWorking: false });
     } else {
       this.setState({ sendMessageValidation: "" });
     }
@@ -375,7 +380,12 @@ export default class MailingList extends Component {
           header={
             <ModalPageHeader
               right={this.props.isMobile &&
-                <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>
+                <PanelHeaderButton onClick={() => {
+                  this.closeModal();
+                  if (this.state.mailingEditMode) {
+                    this.toggleEditMode();
+                  }
+                }}><Icon24Dismiss /></PanelHeaderButton>
               }
             >
               {this.state.mailingEditMode ?
@@ -392,7 +402,12 @@ export default class MailingList extends Component {
               }
             </ModalPageHeader>
         }
-          onClose={this.closeModal}
+          onClose={() => {
+            this.closeModal();
+            if (this.state.mailingEditMode) {
+              this.toggleEditMode();
+            }
+          }}
           settlingHeight={100}
         >
           <Group>
@@ -465,6 +480,9 @@ export default class MailingList extends Component {
                       this.setState({ sendBtnWorking: false });
                     } else if (e.target.value.length < 40) {
                       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+                      this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.length > 600) {
+                      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
                       this.setState({ sendBtnWorking: false });
                     } else {
                       this.setState({ sendMessageValidation: "" });
@@ -541,7 +559,7 @@ export default class MailingList extends Component {
                 status={this.state.formValidation ? "error" : "default"}
                 bottom={this.state.formValidation}
               >
-                <Input placeholder='Видят пользователи при получении приглашения' type="text" required minLength={10} maxLength={50} />
+                <Textarea placeholder='Видят пользователи при получении приглашения' type="text" required minLength={10} maxLength={50} />
               </FormItem>
               <FormItem
                 top={"Описание рассылки"}
@@ -615,9 +633,12 @@ export default class MailingList extends Component {
                                 onDragFinish={({ from, to }) =>
                                   this.updateList({ from, to }, this.state.list)
                                 }
+                                className="clubHelper--Cell"
+                                hasHover={false}
+                                hasActive={false}
                                 onRemove={() => this.removeItem(item.id)}
                                 after={
-                                  <Icon24InfoCircleOutline
+                                  <IconButton
                                     onClick={() => {
                                       this.setState(
                                         {
@@ -628,7 +649,10 @@ export default class MailingList extends Component {
                                           mailingEditTitle: this.state.list[idx].title,
                                           mailingEditDescription: this.state.list[idx]?.description
                                         }); this.openModal("mailingListItem")
-                                    }} />}
+                                    }}
+                                  >
+                                    <Icon24InfoCircleOutline/>
+                                  </IconButton>}
                               >
                                 {item.title}
                               </Cell>

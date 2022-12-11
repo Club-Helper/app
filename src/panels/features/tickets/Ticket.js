@@ -317,14 +317,14 @@ export default class TicketsList extends Component {
                   {this.state.ticketOptions != [] &&
                     <>
                       <Separator style={{ margin: "10px 0 10px 0" }} />
-                    <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
-                      {this.state.ticketOptions.includes("received_information") &&
-                        <Button
-                          onClick={() => this.handleOptionClick("received_information")}
-                          loading={this.state.buttonLoading === "received_information"}
-                          mode="commerce"
-                        >
-                          Информация получена
+                      <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
+                        {this.state.ticketOptions.includes("received_information") &&
+                          <Button
+                            onClick={() => this.handleOptionClick("received_information")}
+                            loading={this.state.buttonLoading === "received_information"}
+                            mode="commerce"
+                          >
+                            Информация получена
                           </Button>
                         }
                         {this.state.ticketOptions.includes("request_information") &&
@@ -349,7 +349,7 @@ export default class TicketsList extends Component {
                             loading={this.state.buttonLoading === "close"}
                           >
                             Закрыть обращение
-                        </Button>}
+                          </Button>}
                         {this.state.ticketOptions.includes("invitation_mailing") &&
                           <Button
                             mode="outline"
@@ -390,14 +390,17 @@ export default class TicketsList extends Component {
                                 user={item.message.user.id}
                                 photoUser={item.message.user.photo}
                                 time={item.time}
-                                sticker={!item.message.text && item.message.attachments.length === 0}
+                                sticker={item.message?.sticker}
                                 attachments={item.message.attachments ?? []}
+                                geo={item.message?.geo}
                               >
-                                {item.message.text ?
-                                  item.message.text :
-                                   (!item.message.text && item.message.attachments.length === 0) ?
-                                    item.message.sticker
-                                    : false
+                                {item.message.geo ?
+                                  item.message.geo :
+                                  item.message.text ?
+                                    item.message.text :
+                                    item.message.sticker ?
+                                      item.message.sticker
+                                      : false
                                 }
                               </UserMessage>
                             );
@@ -408,10 +411,18 @@ export default class TicketsList extends Component {
                                 user={item.message.user.id}
                                 photoUser={item.message.user.photo}
                                 time={item.time}
-                                sticker={!item.message.text}
+                                sticker={item.message?.sticker}
                                 attachments={item.message.attachments ?? []}
+                                geo={item.message?.geo}
                               >
-                                {item.message.text ? item.message.text : item.message.sticker}
+                                {item.message.geo ?
+                                  item.message.geo :
+                                  item.message.text ?
+                                    item.message.text :
+                                    item.message.sticker ?
+                                      item.message.sticker
+                                      : false
+                                }
                               </ClubMessage>
                             )
                           }

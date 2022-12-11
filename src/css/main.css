@@ -328,3 +328,19 @@ body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText 
 .clubHelper--show-modal {
   overflow: hidden;
 }
+
+.clubHelper--SimpleCell {
+  cursor: default;
+}
+
+.clubHelper--SimpleCell .vkuiIconButton {
+  cursor: pointer;
+}
+
+.clubHelper--Cell .vkuiCell__content {
+  cursor: default;
+}
+
+.clubHelper--Cell .vkuiIconButton {
+  cursor: pointer;
+}
