@@ -384,10 +384,15 @@ export default class TicketsList extends Component {
                                 user={item.message.user.id}
                                 photoUser={item.message.user.photo}
                                 time={item.time}
-                                sticker={!item.message.text}
+                                sticker={!item.message.text && item.message.attachments.length === 0}
                                 attachments={item.message.attachments ?? []}
                               >
-                                {item.message.text ? item.message.text : item.message.sticker}
+                                {item.message.text ?
+                                  item.message.text :
+                                   (!item.message.text && item.message.attachments.length === 0) ?
+                                    item.message.sticker
+                                    : false
+                                }
                               </UserMessage>
                             );
                           } else {
