@@ -83,7 +83,7 @@ export default class FAQTriggers extends Component {
                       <PanelHeaderBack
                         onClick={() => {
                           this.props.openedTriggerTitle.pop();
-                          this.props.goBack()
+                          this.props.goBack(2)
                         }}
                       />
                   }
