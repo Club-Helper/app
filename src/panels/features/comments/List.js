@@ -9,7 +9,38 @@
  *******************************************************/
 
 import React, { Component } from 'react'
-import { Avatar, Button, Cell, ConfigProvider, FormItem, FormLayout, Input, List, ModalPage, ModalPageHeader, ModalRoot, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, Snackbar, SplitCol, SplitLayout, Textarea, Group, Title, Div, MiniInfoCell, Link, Alert, Footer, CellButton, Spacing, SegmentedControl } from '@vkontakte/vkui';
+import {
+  Avatar,
+  Button,
+  Cell,
+  ConfigProvider,
+  FormItem,
+  FormLayout,
+  Input,
+  List,
+  ModalPage,
+  ModalPageHeader,
+  ModalRoot,
+  PanelHeaderButton,
+  PanelSpinner,
+  Placeholder,
+  PullToRefresh,
+  Snackbar,
+  SplitCol,
+  SplitLayout,
+  Textarea,
+  Group,
+  Title,
+  Div,
+  MiniInfoCell,
+  Link,
+  Alert,
+  Footer,
+  CellButton,
+  Spacing,
+  SegmentedControl,
+  IconButton
+} from '@vkontakte/vkui';
 import { Icon16Done, Icon24Dismiss, Icon28CommentOutline, Icon28InfoCircleOutline, Icon56CommentsOutline, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon24AddCircleDottedOutline, Icon20MentionOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 
@@ -148,11 +179,12 @@ export default class CommentsList extends Component {
         });
         this.getComments(this.state.filter);
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
-    }),
-    (error) => {
-      this.props.createError(error.error.error_msg);
-      this.setState({ newCommentButtonWorking: false });
-    }
+      },
+      (error) => {
+        this.props.createError(error.error.error_msg);
+        this.setState({ newCommentButtonWorking: false });
+      }
+    )
   }
 
   deleteComment() {
@@ -427,10 +459,13 @@ export default class CommentsList extends Component {
                               <>
                                 {this.state.comments.map((comment, idx) => (
                                   <Cell
+                                    className="clubHelper--Cell"
+                                    hasHover={false}
+                                    hasActive={false}
                                     key={idx}
                                     description={comment.comand}
                                     before={<Icon28CommentOutline />}
-                                    after={<Icon28InfoCircleOutline onClick={() => this.getCommentById(idx)} />}
+                                    after={<IconButton onClick={() => this.getCommentById(idx)}><Icon28InfoCircleOutline/></IconButton>}
                                     onClick={() => this.getCommentById(idx)}
                                   >
                                     {comment.title}

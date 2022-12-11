@@ -631,9 +631,12 @@ export default class MailingList extends Component {
                                 onDragFinish={({ from, to }) =>
                                   this.updateList({ from, to }, this.state.list)
                                 }
+                                className="clubHelper--Cell"
+                                hasHover={false}
+                                hasActive={false}
                                 onRemove={() => this.removeItem(item.id)}
                                 after={
-                                  <Icon24InfoCircleOutline
+                                  <IconButton
                                     onClick={() => {
                                       this.setState(
                                         {
@@ -644,7 +647,10 @@ export default class MailingList extends Component {
                                           mailingEditTitle: this.state.list[idx].title,
                                           mailingEditDescription: this.state.list[idx]?.description
                                         }); this.openModal("mailingListItem")
-                                    }} />}
+                                    }}
+                                  >
+                                    <Icon24InfoCircleOutline/>
+                                  </IconButton>}
                               >
                                 {item.title}
                               </Cell>

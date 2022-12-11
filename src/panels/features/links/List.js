@@ -268,7 +268,7 @@ export default class Links extends Component {
     if (!this.state.pattern) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
     } else if (this.state.title.length > 50) {
-      this.setState({ formPatternStatus: "error", formPatternStatus: "Заголовок не может быть длиннее 50 символов" });
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Заголовок не может быть длиннее 50 символов" });
     } else if (this.state.pattern.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
     } else {
@@ -546,9 +546,12 @@ export default class Links extends Component {
                               this.state.links.map(item => (
                                 <SimpleCell
                                   multiline
+                                  className="clubHelper--SimpleCell"
                                   before={<Avatar size={48} src={item.creat.user.photo} />}
                                   key={item.id}
                                   description={item.creat.user.first_name + " " + item.creat.user.last_name}
+                                  hasHover={false}
+                                  hasActive={false}
                                   after={
                                     <div style={{ display: "flex", gridGap: 10 }}>
                                       <IconButton
