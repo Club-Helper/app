@@ -375,7 +375,12 @@ export default class MailingList extends Component {
           header={
             <ModalPageHeader
               right={this.props.isMobile &&
-                <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>
+                <PanelHeaderButton onClick={() => {
+                  this.closeModal();
+                  if (this.state.mailingEditMode) {
+                    this.toggleEditMode();
+                  }
+                }}><Icon24Dismiss /></PanelHeaderButton>
               }
             >
               {this.state.mailingEditMode ?
@@ -392,7 +397,12 @@ export default class MailingList extends Component {
               }
             </ModalPageHeader>
         }
-          onClose={this.closeModal}
+          onClose={() => {
+            this.closeModal();
+            if (this.state.mailingEditMode) {
+              this.toggleEditMode();
+            }
+          }}
           settlingHeight={100}
         >
           <Group>
