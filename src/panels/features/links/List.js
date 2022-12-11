@@ -213,7 +213,7 @@ export default class Links extends Component {
       filter: filter
     },
       (data) => {
-        this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false })
+        this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false, isEnabled: true })
       },
       (error) => {
         this.props.createError(error.error.error_msg);
