@@ -430,7 +430,7 @@ export default class Links extends Component {
               <Link href={this.state.openedPattern.link} target="_blank">{this.state.openedPattern.link}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedPattern.creat.user} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
+              <Link href={"https://vk.com/id" + this.state.openedPattern.creat.user.id} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedPattern.creat.time.label}
