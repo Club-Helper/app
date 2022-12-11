@@ -276,6 +276,9 @@ export default class MailingList extends Component {
     } else if (this.state.mailingText.length < 40) {
       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
       this.setState({ sendBtnWorking: false });
+    } else if (this.state.mailingText.length > 600) {
+      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
+      this.setState({ sendBtnWorking: false });
     } else {
       this.setState({ sendMessageValidation: "" });
     }
@@ -475,6 +478,9 @@ export default class MailingList extends Component {
                       this.setState({ sendBtnWorking: false });
                     } else if (e.target.value.length < 40) {
                       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не менее 40 символов" });
+                      this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.length > 600) {
+                      this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
                       this.setState({ sendBtnWorking: false });
                     } else {
                       this.setState({ sendMessageValidation: "" });
