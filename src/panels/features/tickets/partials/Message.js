@@ -58,9 +58,12 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
           :
           <div className="clubHelper--textContentMessage" style={{ maxWidth: "90%" }}>
             <div className="clubHelper--textMessage">
-              {children}
-              {attachments.length > 0 &&
-                <Gallery align="center" slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
+              {children.length <= 0
+                ? "Пустое сообщение"
+                : children
+              }
+              {attachments && attachments?.length > 0 &&
+                <Gallery align="center" slideWidth="100%" bullets={attachments?.length > 1 ? "dark" : "none"} showArrows
                 style={
                   children != null ?
                   { marginTop: "1vh" }
@@ -106,9 +109,12 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
           :
           <div className="clubHelper--textContentMessage" style={{ maxWidth: "90%" }}>
             <div className="clubHelper--textMessage">
-              {children}
-              {attachments.length > 0 &&
-                <Gallery align="center" slideWidth="100%" bullets={attachments.length > 1 ? "dark" : "none"} showArrows
+            {children.length <= 0
+                ? "Пустое сообщение"
+                : children
+              }
+              {attachments && attachments?.length > 0 &&
+                <Gallery align="center" slideWidth="100%" bullets={attachments?.length > 1 ? "dark" : "none"} showArrows
                 style={
                   children != null ?
                   { marginTop: "1vh" }
