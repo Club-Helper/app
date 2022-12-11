@@ -59,7 +59,7 @@ export default class AppInfo extends Component {
                     <SimpleCell
                       before={<Icon24ShareOutline />}
                       onClick={() => {
-                        bridge.send("VKWebAppShare", {"link": "vk.com/app7938346"});
+                        bridge.send("VKWebAppShare", {"link": "https://vk.com/app7938346"});
                       }
                       }
                     >Поделиться</SimpleCell>
