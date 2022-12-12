@@ -281,8 +281,14 @@ export default class ClubInfo extends Component {
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
           id="donut"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>VK Donut</ModalPageHeader>}
-          onClose={this.closeModal}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.closeModal();
+          }}><Icon24Dismiss /></PanelHeaderButton>}>VK Donut</ModalPageHeader>}
+          onClose={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.closeModal();
+          }}
           settlingHeight={100}
         >
           <Donut {...this.props} />
@@ -463,7 +469,10 @@ export default class ClubInfo extends Component {
                       <List style={{ paddingTop: "10px" }}>
                         <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
                         <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
-                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
+                          this.props.toggleShowMobileMenu(false);
+                          this.openModal("donut")
+                        }} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
                       </List>
                     </Group>
                     {!this.props.isMobile && !this.props.showMenu &&

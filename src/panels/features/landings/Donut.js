@@ -66,6 +66,7 @@ export default function Donut(props) {
           }
         })}
         <a href="https://vk.com/donut/ch_app" target="_blank" className="clubHelper--donut_button"><Button sizeY="regular" stretched={true} appearance="overlay">Подключить</Button></a>
+        <br /><br />
       </div>}
     </Panel>
   )
