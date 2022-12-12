@@ -10,7 +10,7 @@
 
 
 import React, { Component } from 'react'
-import { Cell, ConfigProvider, Group, Panel, PanelHeader, PanelSpinner, List, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, SimpleCell, MiniInfoCell, SplitLayout, SplitCol, Placeholder, Title, FormLayout, FormItem, Input, Button, Snackbar, Avatar, PullToRefresh, Footer, Textarea, IconButton, Alert, Div, ButtonGroup } from '@vkontakte/vkui'
+import { Cell, ConfigProvider, Group, Panel, PanelHeader, PanelSpinner, List, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, SimpleCell, MiniInfoCell, SplitLayout, SplitCol, Placeholder, Title, FormLayout, FormItem, Input, Button, Snackbar, Avatar, PullToRefresh, Footer, Textarea, IconButton, Alert, Div, ButtonGroup, Separator, Caption } from '@vkontakte/vkui'
 import {
   Icon28EditOutline,
   Icon20UserOutline,
@@ -54,7 +54,9 @@ export default class MailingList extends Component {
       mailingEditSaveButtonWorking: false,
       formValidationDescription: "",
       sendMessageValidation: "",
-      isEnabled: true
+      isEnabled: true,
+      mailingEditTitleValidation: "",
+      mailingEditDescriptionValidation: "",
     }
 
     this.getMailing = this.getMailing.bind(this);
@@ -146,9 +148,9 @@ export default class MailingList extends Component {
       this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
     } else if (this.state.formTitle.length > 25) {
       this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
-    } else if (e.target.value.match(/^[ ]+$/)) {
+    } else if (this.state.formTitle.match(/^[ ]+$/)) {
       this.setState({ formValidation: "Название не может состоять только из пробелов" });
-    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+    } else if (this.state.formTitle.match(/^\s+|\s+$|\s+(?=\s)/g)) {
       this.setState({ formValidation: "Название не может содержать пробелы в начале/конце" });
     } else {
       this.setState({ formValidation: "" });
@@ -158,9 +160,9 @@ export default class MailingList extends Component {
       this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
     } else if (this.state.formDescription.length > 25) {
       this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
-    } else if (e.target.value.match(/^[ ]+$/)) {
+    } else if (this.state.formDescription.match(/^[ ]+$/)) {
       this.setState({ formValidationDescription: "Описание не может состоять только из пробелов" });
-    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+    } else if (this.state.formDescription.match(/^\s+|\s+$|\s+(?=\s)/g)) {
       this.setState({ formValidationDescription: "Описание не может содержать пробелы в начале/конце" });
     } else {
       this.setState({ formValidationDescription: "" });
@@ -403,14 +405,30 @@ export default class MailingList extends Component {
               }
             >
               {this.state.mailingEditMode ?
-                <FormItem
-                  onChange={(e) => this.setState({mailingEditTitle: e.target.value})}
-                >
-                  <Input
-                    type={"text"}
-                    value={this.state.mailingEditTitle}
-                  />
-                </FormItem>
+                <Div style={{ padding: "10%" }}>
+                  <FormItem
+                    onChange={(e) => {
+                      this.setState({mailingEditTitle: e.target.value})
+                      if (e.target.value.length　< 5) {
+                        this.setState({ mailingEditTitleValidation: "Название рассылки должно содержать не менее 5 символов." });
+                      } else if (e.target.value.length > 25) {
+                        this.setState({ mailingEditTitleValidation: "Длина названия рассылки не должна превышать 25 символов." });
+                      } else if (e.target.value.match(/^[ ]+$/)) {
+                        this.setState({ mailingEditTitleValidation: "Название не может состоять только из пробелов" });
+                      } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                        this.setState({ mailingEditTitleValidation: "Название не может содержать пробелы в начале/конце" });
+                      } else {
+                        this.setState({ mailingEditTitleValidation: "" });
+                      }
+                    }}
+                    status={this.state.mailingEditTitleValidation ? "error" : "default"}
+                  >
+                    <Input
+                      type={"text"}
+                      value={this.state.mailingEditTitle}
+                    />
+                  </FormItem>
+                </Div>
                 :
                 this.state.openedItem.title
               }
@@ -425,6 +443,14 @@ export default class MailingList extends Component {
           settlingHeight={100}
         >
           <Group>
+            {this.state.mailingEditTitleValidation &&
+            <center>
+              <Div>
+                {this.state.mailingEditTitleValidation}
+              </Div>
+              <Separator />
+            </center>
+            }
             <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>{this.state.openedItem.id}</MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>{this.state.openedItemTime.label}</MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>Автор: {this.state.openedItemCreator.first_name} {this.state.openedItemCreator.last_name}</MiniInfoCell>
@@ -432,7 +458,22 @@ export default class MailingList extends Component {
                 this.state.mailingEditMode ?
                   <FormItem
                     top={"Описание"}
-                    onChange={(e) => this.setState({ mailingEditDescription: e.target.value })}
+                    onChange={(e) => {
+                      this.setState({ mailingEditDescription: e.target.value })
+                      if (e.target.value.length < 10) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
+                      } else if (e.target.value.length > 25) {
+                        this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                      } else if (e.target.value.match(/^[ ]+$/)) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
+                      } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание не может содержать пробелы в начале/конце" });
+                      } else {
+                        this.setState({ mailingEditDescriptionValidation: "" });
+                      }
+                    }}
+                    status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
+                    bottom={this.state.mailingEditDescriptionValidation}
                   >
                     <Textarea value={this.state.mailingEditDescription} />
                   </FormItem>
@@ -444,27 +485,51 @@ export default class MailingList extends Component {
                 this.state.mailingEditMode &&
                   <FormItem
                     top={"Описание"}
-                    onChange={(e) => this.setState({ mailingEditDescription: e.target.value })}
+                    onChange={(e) => {
+                      this.setState({ mailingEditDescription: e.target.value })
+                      if (e.target.value.length < 10) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
+                      } else if (e.target.value.length > 25) {
+                        this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                      } else if (e.target.value.match(/^[ ]+$/)) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
+                      } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                        this.setState({ mailingEditDescriptionValidation: "Описание не может содержать пробелы в начале/конце" });
+                      } else {
+                        this.setState({ mailingEditDescriptionValidation: "" });
+                      }
+                    }}
+                    status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
+                    bottom={this.state.mailingEditDescriptionValidation}
                   >
                     <Textarea value={this.state.mailingEditDescription} />
                   </FormItem>
             }
             <Div>
               {!this.state.mailingEditMode ?
-                <Button
-                  onClick={() => this.toggleEditMode()}
-                  mode={"secondary"}
-                  stretched
-                >
-                  Редактировать
-                </Button>
+                <ButtonGroup stretched>
+                  <Button
+                    onClick={() => this.toggleEditMode()}
+                    mode={"secondary"}
+                    stretched
+                  >
+                    Редактировать
+                  </Button>
+                  <Button
+                    onClick={() => this.removeItem(this.state.openedItem.id)}
+                    mode={"destructive"}
+                    stretched
+                  >
+                    Удалить
+                  </Button>
+                </ButtonGroup>
               :
                 <ButtonGroup
                   stretched
                 >
                   <Button
                     onClick={() => this.toggleEditMode()}
-                    mode={"destructive"}
+                    mode={"secondary"}
                     stretched
                   >
                     Отменить
@@ -473,10 +538,22 @@ export default class MailingList extends Component {
                     onClick={() => this.save()}
                     mode={"commerce"}
                     stretched
-                    disabled={this.state.mailingEditSaveButtonWorking}
+                    disabled={
+                      this.state.mailingEditSaveButtonWorking
+                      || (this.state.mailingEditTitleValidation || this.state.mailingEditDescriptionValidation)
+                      || !this.state.mailingEditDescription
+                      || !this.state.mailingEditTitle
+                    }
                     loading={this.state.mailingEditSaveButtonWorking}
                   >
                     Сохранить
+                  </Button>
+                  <Button
+                    onClick={() => this.removeItem(this.state.openedItem.id)}
+                    mode={"destructive"}
+                    stretched
+                  >
+                    Удалить
                   </Button>
                 </ButtonGroup>
               }
@@ -633,7 +710,9 @@ export default class MailingList extends Component {
               <Panel>
                 <PanelHeader left={
                   <React.Fragment>
-                    {this.state.list.length > 0 && <PanelHeaderButton onClick={() => this.setState({ editMode: !this.state.editMode })}>
+                    {this.state.list.length > 0 && <PanelHeaderButton onClick={() => {
+                      this.setState({ editMode: !this.state.editMode })}
+                    }>
                       <Icon28EditOutline fill={this.state.editMode ? "var(--accent)" : ""} />
                     </PanelHeaderButton>}
                     {this.state.availability.creat && <PanelHeaderButton onClick={() => this.openModal("createMailing")}>
