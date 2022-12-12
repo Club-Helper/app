@@ -231,7 +231,10 @@ function Home({
                   }
                 })
             } else if (data.response.page === "call_admin" || data.response.page === "need_admin") {
+              setPage("app");
+              setIsNew(false);
               toggleShowMenu(false);
+
               setActiveStory("call_admin");
             } else if (data.response.page === "landing") {
               setIsNew(true);
@@ -1707,7 +1710,7 @@ function Home({
                 </SplitLayout>
               </ConfigProvider>
             )
-          }else {
+          } else {
             return <br />
           }
         }
