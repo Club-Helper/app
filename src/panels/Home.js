@@ -475,7 +475,7 @@ function Home({
     {
       id: "office",
       triggers: ["office"],
-      name: office?.user?.first_name + " " + office?.user?.last_name,
+      name: office?.user?.first_name,
       before: <Avatar size={28} src={office?.user?.photo} />,
       show: !isDesktop
     },
@@ -1522,7 +1522,7 @@ function Home({
                                   borderRadius: 8
                                 } : {}}
                               >
-                                <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name} {office.user.last_name}</div>
+                                <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name}</div>
                               </Cell>
                             </> : <Spinner />}
                         </Group>
