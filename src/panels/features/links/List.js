@@ -240,6 +240,10 @@ export default class Links extends Component {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
     } else if (e.target.value.length > 50) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может состоять только из пробелов" });
+    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может содержать пробелы в начале/конце" });
     } else {
       this.setState({ formTitleStatus: "default", formTitleBottom: "" });
     }
@@ -251,7 +255,11 @@ export default class Links extends Component {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
     } else if (e.target.value.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
-    } else {
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может состоять только из пробелов" });
+    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать пробелы в начале/конце" });
+    }  else {
       this.setState({ formPatternStatus: "default", formPatternBottom: "" })
     }
   }

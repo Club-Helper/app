@@ -146,6 +146,10 @@ export default class MailingList extends Component {
       this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
     } else if (this.state.formTitle.length > 25) {
       this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formValidation: "Название не может состоять только из пробелов" });
+    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+      this.setState({ formValidation: "Название не может содержать пробелы в начале/конце" });
     } else {
       this.setState({ formValidation: "" });
     }
@@ -154,6 +158,10 @@ export default class MailingList extends Component {
       this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
     } else if (this.state.formDescription.length > 25) {
       this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formValidationDescription: "Описание не может состоять только из пробелов" });
+    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+      this.setState({ formValidationDescription: "Описание не может содержать пробелы в начале/конце" });
     } else {
       this.setState({ formValidationDescription: "" });
     }
@@ -280,6 +288,12 @@ export default class MailingList extends Component {
       this.setState({ sendBtnWorking: false });
     } else if (this.state.mailingText.length > 600) {
       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
+      this.setState({ sendBtnWorking: false });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ sendMessageValidation: "Текст рассылки не может состоять только из пробелов" });
+      this.setState({ sendBtnWorking: false });
+    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+      this.setState({ sendMessageValidation: "Текст рассылки не может содержать пробелы в начале/конце" });
       this.setState({ sendBtnWorking: false });
     } else {
       this.setState({ sendMessageValidation: "" });
@@ -484,6 +498,12 @@ export default class MailingList extends Component {
                     } else if (e.target.value.length > 600) {
                       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
                       this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.match(/^[ ]+$/)) {
+                      this.setState({ sendMessageValidation: "Текст рассылки не может состоять только из пробелов" });
+                      this.setState({ sendBtnWorking: false });
+                    } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                      this.setState({ sendMessageValidation: "Текст рассылки не может содержать пробелы в начале/конце" });
+                      this.setState({ sendBtnWorking: false });
                     } else {
                       this.setState({ sendMessageValidation: "" });
                     }
@@ -550,8 +570,11 @@ export default class MailingList extends Component {
                   if (e.target.value.length　< 5) {
                     this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
                   } else if (e.target.value.length > 25) {
-                    console.log("25");
                     this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ formValidation: "Название не может состоять только из пробелов" });
+                  } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                    this.setState({ formValidation: "Название не может содержать пробелы в начале/конце" });
                   } else {
                     this.setState({ formValidation: "" });
                   }
@@ -570,6 +593,10 @@ export default class MailingList extends Component {
                     this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
                   } else if (e.target.value.length > 25) {
                     this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ formValidationDescription: "Описание не может состоять только из пробелов" });
+                  } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
+                    this.setState({ formValidationDescription: "Описание не может содержать пробелы в начале/конце" });
                   } else {
                     this.setState({ formValidationDescription: "" });
                   }
@@ -601,7 +628,7 @@ export default class MailingList extends Component {
       <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
         <SplitLayout modal={modal}>
           <SplitCol>
-            {this.props.isLoading ? <PanelSpinner /> :
+            {this.props.isLoading ? <Group><PanelSpinner /></Group> :
               this.state.isEnabled ?
               <Panel>
                 <PanelHeader left={
@@ -621,7 +648,7 @@ export default class MailingList extends Component {
                       onRefresh={() => this.getMailing(true)}
                     >
                       {
-                        this.state.listLoading ? <PanelSpinner /> :
+                        this.state.listLoading ? <Group><PanelSpinner /></Group> :
                           this.state.list.length != 0 ?
                             this.state.list.map((item, idx) => (
                               <Cell
