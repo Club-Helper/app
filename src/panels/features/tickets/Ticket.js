@@ -314,7 +314,7 @@ export default class TicketsList extends Component {
                   <MiniInfoCell before={<Icon20ClockOutline />}>
                     {this.state.ticket.time}
                   </MiniInfoCell>
-                  {this.state.ticketOptions != [] &&
+                  {this.state.ticketOptions?.length > 0 &&
                     <>
                       <Separator style={{ margin: "10px 0 10px 0" }} />
                       <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
