@@ -208,6 +208,7 @@ export default class TicketsList extends Component {
           })
         this.props.setLoading(false);
         if (data.response.history.items.length <= 2) {
+          this.props.toggleShowMobileMenu(false);
           this.setState({ activeModal: "send-hello-msg" });
         }
       }
@@ -259,11 +260,20 @@ export default class TicketsList extends Component {
         </ModalPage>
         <ModalCard
           id={"send-hello-msg"}
-          onClose={this.closeModal}
+          onClose={() => {
+            this.closeModal();
+            this.props.toggleShowMobileMenu(true);
+          }}
           actions={
             <ButtonGroup stretched>
-              <Button mode={"secondary"} onClick={this.closeModal}>Нет</Button>
-              <Button onClick={() => this.sendHelloMsg()} disabled={this.state.sendHelloMsgBtnWorking} loading={this.state.sendHelloMsgBtnWorking}>Да</Button>
+              <Button mode={"secondary"} onClick={() => {
+                this.closeModal();
+                this.props.toggleShowMobileMenu(true);
+              }}>Нет</Button>
+              <Button onClick={() => {
+                this.sendHelloMsg();
+                this.props.toggleShowMobileMenu(true);
+              }} disabled={this.state.sendHelloMsgBtnWorking} loading={this.state.sendHelloMsgBtnWorking}>Да</Button>
             </ButtonGroup>
           }
         >

@@ -788,7 +788,7 @@ function Home({
           ticket={ticket}
           setActiveStory={setActiveStory}
           club={club}
-
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
