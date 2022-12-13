@@ -422,15 +422,18 @@ export default class ClubInfo extends Component {
                         mode={this.props.appearance === "dark" ? 'black' : 'white'}
                       >
                         <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
-                        <Link target="_blank" href={"https://vk.com/club" + club.id}>
-                          <Title
-                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
-                            level="2"
-                            weight="2"
-                          >
-                            {club.name}
-                          </Title>
-                        </Link>
+                        <center>
+                          <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                            <Title
+                              style={{ marginBottom: 8, marginTop: 20, color: "var(--text_primary)", maxWidth: "78%" }}
+                              level="2"
+                              weight="2"
+                            >
+                              {club.name.slice(0, 42)}
+                              {club.name.length > 42 ? "..." : ""}
+                            </Title>
+                          </Link>
+                        </center>
                       </Gradient>
                       {!club.error && <Separator wide />}
                       {club.error &&
