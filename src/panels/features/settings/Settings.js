@@ -389,12 +389,12 @@ export default class Settings extends Component {
               >
                 VK Donut
               </Cell>
-              <CellButton onClick={() => {
+              {false && <CellButton onClick={() => {
                 this.props.setPage("landing");
                 this.props.setActiveStory("start_app");
               }}>
                 Показать онбординг
-              </CellButton>
+              </CellButton>}
               <br />
               <Div>
                 <Button
