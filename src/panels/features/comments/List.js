@@ -304,8 +304,6 @@ export default class CommentsList extends Component {
                     this.setState({ titleValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ titleValidation: "Заголовок не может состоять только из пробелов" });
-                  } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
-                    this.setState({ titleValidation: "Заголовок не может содержать пробелы в начале/конце" });
                   } else {
                     this.setState({ titleValidation: "" });
                   }
@@ -333,8 +331,6 @@ export default class CommentsList extends Component {
                     this.setState({ commandValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ commandValidation: "Команда не может состоять только из пробелов" });
-                  } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
-                    this.setState({ commandValidation: "Команда не может содержать пробелы в начале/конце" });
                   } else {
                     this.setState({ commandValidation: "" });
                   }
@@ -362,8 +358,6 @@ export default class CommentsList extends Component {
                     this.setState({ patternValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
-                  } else if (e.target.value.match(/^\s+|\s+$|\s+(?=\s)/g)) {
-                    this.setState({ patternValidation: "Текст не может содержать пробелы в начале/конце" });
                   } else {
                     this.setState({ patternValidation: "" });
                   }
