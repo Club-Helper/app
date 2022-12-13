@@ -1398,6 +1398,7 @@ function Home({
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
                     toggleShowMenu={toggleShowMenu}
+                    apiScheme={apiScheme}
                   />
                 </Panel>
               </View>
@@ -1428,6 +1429,7 @@ function Home({
                     club_role={club_role}
                     toggleNeedToShowClubStartOnboarding={toggleNeedToShowClubStartOnboarding}
                     toggleShowMenu={toggleShowMenu}
+                    apiScheme={apiScheme}
                   />
                 </Panel>
               </View>;

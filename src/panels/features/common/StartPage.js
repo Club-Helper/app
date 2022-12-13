@@ -182,7 +182,95 @@ class StartPage extends React.Component {
           }
         });
 
-        bridge
+        bridge.send("VKWebAppGetCommunityToken", {
+          app_id: 7938346,
+          group_id: Number(URL.split('vk_group_id=')[1].split('&')[0]),
+          scope: "messages,manage,wall"
+        })
+          .then((data) => {
+            console.log("Получено разрешение на права доступа.");
+
+            fetch(`${this.props.apiScheme}://ch.n1rwana.ml/api/clubs.creat?access_token=${data.access_token}&token=${this.props.token}`)
+              .then((response) => response.json())
+              .then((data) => {
+                if (!data?.error && !data?.response?.error) {
+                  console.log("Сообщество создано в базе:", data.response);
+
+                  this.props.toggleNeedToShowClubStartOnboarding(true);
+                  this.props.toggleShowMenu(false);
+                  this.props.setIsNew(false);
+                  this.setState({ load: { isLoad: false } });
+
+                  localStorage.setItem('checkEduceation', groupID);
+                  localStorage.setItem('checkToken', 'true');
+
+                  if (data['response']) {
+                    this.setState({
+                      slideIndex: newSlideIndex,
+                      noButton: true
+                    });
+
+                    this.settingClub(Number(URL.split('vk_group_id=')[1].split('&')[0]), this.props.token);
+                  } else {
+                    console.log('Сообщество не удалось создать в базе');
+                    console.log(data['error'])
+
+                    this.setState({
+                      load: {
+                        isLoad: false,
+                        isError: true
+                      }
+                    });
+
+                    this.props.setPopout(
+                      <Alert
+                        actions={[
+                          {
+                            title: "Закрыть",
+                            autoclose: true,
+                            mode: "cancel",
+                          }
+                        ]}
+                        actionsLayout="vertical"
+                        onClose={() => this.props.setPopout(null)}
+                        header="Ошибка"
+                        text={data.error.error_msg}
+                      />
+                    )
+                  }
+
+                  this.props.setActiveStory("club_start_onboarding")
+                } else {
+                  console.log('Сообщество не удалось создать в базе:', data.error);
+
+                  this.setState({
+                    load: {
+                      isLoad: false,
+                      isError: true
+                    }
+                  });
+
+                  this.props.setPopout(
+                    <Alert
+                      actions={[
+                        {
+                          title: "Закрыть",
+                          autoclose: true,
+                          mode: "cancel",
+                        }
+                      ]}
+                      actionsLayout="vertical"
+                      onClose={() => this.props.setPopout(null)}
+                      header="Ошибка"
+                      text={data.error.error_msg}
+                    />
+                  )
+                }
+              })
+          })
+          .catch((error) => {
+            console.error("Ошибка VK Bridge:", error);
+          })
           .send("VKWebAppGetCommunityToken", { "app_id": 7938346, "group_id": Number(URL.indexOf('vk_group_id=') !== -1 ? URL.split('vk_group_id=')[1].split('&')[0] : 0), "scope": "messages,manage,wall" })
           .then(data => {
             console.log('Получено разрешение на права доступа');
@@ -354,7 +442,7 @@ class StartPage extends React.Component {
                 isLoad: false,
               }
             });
-          });
+          });*/
       } else {
         if (this.state.load.isLoad) return;
 
