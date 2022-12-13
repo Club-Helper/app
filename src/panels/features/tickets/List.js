@@ -146,23 +146,30 @@ export default class TicketsList extends Component {
 
   componentDidMount() {
     this.setState({ ticketsLoading: true });
-    this.props.req("tickets.get", {
-      token: this.props.token,
-      filter: this.state.activeTab
-    },
-      (data) => {
-        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
-      },
-      (error) => {
-        this.setState({ isEnabled: false });
-      }
-    );
 
-    this.props.setLoading(false);
-    this.setState({ ticketsLoading: false });
     this.props.setPopout(null);
 
     this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
+
+    if (localStorage.getItem("tickets_list_activeTab")) {
+      this.setState({ activeTab: localStorage.getItem("tickets_list_activeTab"), ticketsLoading: false });
+      this.getTickets(localStorage.getItem("tickets_list_activeTab"));
+      this.props.setLoading(false);
+    } else {
+      this.props.req("tickets.get", {
+        token: this.props.token,
+        filter: this.state.activeTab
+      },
+        (data) => {
+          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+          this.props.setLoading(false);
+        },
+        (error) => {
+          this.setState({ isEnabled: false });
+          this.props.setLoading(false);
+        }
+      );
+    }
   }
 
   openTicketButtonsModal(id, options) {
