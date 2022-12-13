@@ -107,6 +107,8 @@ export default class MailingList extends Component {
       (data) => {
         this.getMailing(false);
         bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        this.setState({ activeModal: "" });
+        this.props.toggleShowMobileMenu(true);
       }
     );
   }
