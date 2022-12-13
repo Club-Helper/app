@@ -222,6 +222,7 @@ export default class TicketsList extends Component {
 
   componentWillUnmount() {
     clearInterval(this.interval);
+    document.querySelectorAll('audio').forEach(el => el.pause());
   }
 
   render() {
