@@ -238,6 +238,8 @@ export default class Links extends Component {
     this.setState({ title: e.target.value })
     if (!e.target.value) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
+    } else if (e.target.value.length < 5) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок должен содержать не менее 5 символов" });
     } else if (e.target.value.length > 50) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
     } else if (e.target.value.match(/^[ ]+$/)) {

@@ -296,6 +296,8 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentTitle: e.target.value })
                   if (!e.target.value || e.target.value == '') {
                     this.setState({ titleValidation: "Поле обязательно для заполнения" });
+                  } else if (e.target.value.length < 5) {
+                    this.setState({ titleValidation: "Заголовок должен содержать не менее 5 символов" });
                   } else if (e.target.value.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
                   } else if (/^\s+$/.test(e.target.value)) {
@@ -325,6 +327,8 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentCommand: e.target.value })
                   if (!e.target.value || e.target.value == '') {
                     this.setState({ commandValidation: "Поле обязательно для заполнения" });
+                  } else if (e.target.value.length < 2) {
+                    this.setState({ commandValidation: "Команда должна содержать не менее 2 символов" });
                   } else if (!/^[!|\/].*/.test(e.target.value)) {
                     this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
                   } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {

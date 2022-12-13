@@ -404,7 +404,7 @@ export default class MailingList extends Component {
                   <FormItem
                     onChange={(e) => {
                       this.setState({mailingEditTitle: e.target.value})
-                      if (e.target.value.length　< 5) {
+                      if (e.target.value.length < 5) {
                         this.setState({ mailingEditTitleValidation: "Название рассылки должно содержать не менее 5 символов." });
                       } else if (e.target.value.length > 25) {
                         this.setState({ mailingEditTitleValidation: "Длина названия рассылки не должна превышать 25 символов." });
@@ -630,7 +630,7 @@ export default class MailingList extends Component {
                 value={this.state.formTitle}
                 onChange={(e) => {
                   this.setState({ formTitle: e.target.value })
-                  if (e.target.value.length　< 5) {
+                  if (e.target.value.length < 5) {
                     this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
                   } else if (e.target.value.length > 25) {
                     this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
