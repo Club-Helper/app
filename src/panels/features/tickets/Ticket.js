@@ -10,8 +10,8 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard } from '@vkontakte/vkui'
-import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon16Done, Icon28AdvertisingOutline } from '@vkontakte/icons';
+import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard, IconButton, ActionSheet, ActionSheetItem, List, CellButton, FixedLayout, Card } from '@vkontakte/vkui'
+import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon16Done, Icon28AdvertisingOutline, Icon28MessagesOutline, Icon28MoreHorizontal, Icon28InfoCircleOutline, Icon28RecentOutline, Icon28CancelOutline, Icon28DoneOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 import { SystemMessage, UserMessage, ClubMessage } from './partials/Message';
 import TicketActions from './TicketActions';
@@ -37,7 +37,8 @@ export default class TicketsList extends Component {
       buttonLoading: null,
       fetchingHeader: false,
       snackbar: null,
-      sendHelloMsgBtnWorking: false
+      sendHelloMsgBtnWorking: false,
+      showOptions: false
     }
 
     this.openModal = this.openModal.bind(this);
@@ -49,6 +50,7 @@ export default class TicketsList extends Component {
 
 
   openModal(id) {
+    this.props.toggleShowMobileMenu(false);
     this.setState({
       activeModal: id
     });
@@ -242,19 +244,26 @@ export default class TicketsList extends Component {
         </ModalPage>
         <ModalPage
           id="actions"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>Приглашение в рассылку</ModalPageHeader>}
-          onClose={() => {
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.props.toggleShowMobileMenu(true);
             this.setState({
               activeModal: "",
-              buttonLoading: null
+              buttonLoading: ""
+            })
+          }}><Icon24Dismiss /></PanelHeaderButton>}>Приглашение в рассылку</ModalPageHeader>}
+          onClose={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.setState({
+              activeModal: "",
+              buttonLoading: ""
             })
           }}
-          settlingHeight={100}
         >
           <TicketActions {...this.props} close={() => {
+            this.props.toggleShowMobileMenu(true);
             this.setState({
               activeModal: "",
-              buttonLoading: null
+              buttonLoading: ""
             })
           }} send={this.mailingInviteSend} />
         </ModalPage>
@@ -281,6 +290,80 @@ export default class TicketsList extends Component {
             Похоже, Вы впервые подключились к обращению. Хотите поприветствовать пользователя?
           </span>
         </ModalCard>
+        <ModalPage
+          id={"options"}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.setState({
+              activeModal: "",
+              buttonLoading: null
+            })
+          }}><Icon24Dismiss /></PanelHeaderButton>}>Действия</ModalPageHeader>}
+          onClose={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.setState({
+              activeModal: "",
+              buttonLoading: null
+            })
+          }}
+        >
+          <List>
+            {this.state.ticketOptions.includes("received_information") &&
+              <CellButton
+                onClick={() => this.handleOptionClick("received_information")}
+                loading={this.state.buttonLoading === "received_information"}
+                mode="commerce"
+              >
+                Информация получена
+              </CellButton>
+            }
+            {this.state.ticketOptions.includes("request_information") &&
+              <CellButton
+                onClick={() => this.handleOptionClick("request_information")}
+                loading={this.state.buttonLoading === "request_information"}>
+                Ожидается информация
+              </CellButton>
+            }
+            {this.state.ticketOptions.includes("cancel_request_information") &&
+              <CellButton
+                mode="destructive"
+                onClick={() => this.handleOptionClick("cancel_request_information")}
+                loading={this.state.buttonLoading === "cancel_request_information"}
+              >
+                Отменить ожидание информации
+              </CellButton>}
+            {this.state.ticketOptions.includes("close") &&
+              <CellButton
+                mode="destructive"
+                onClick={() => this.handleOptionClick("close")}
+                loading={this.state.buttonLoading === "close"}
+              >
+                Закрыть обращение
+              </CellButton>}
+            {this.state.ticketOptions.includes("invitation_mailing") &&
+              <CellButton
+                mode="outline"
+                onClick={() => this.setState({
+                  activeModal: "actions",
+                  buttonLoading: "invitation_mailing"
+                })}
+                loading={this.state.buttonLoading === "invitation_mailing"}
+                disabled={this.state.buttonLoading === "invitation_mailing"}
+              >
+                Пригласить в рассылку
+              </CellButton>
+            }
+            {this.state.ticketOptions.includes("get_support") &&
+              <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                <CellButton
+                  mode="secondary"
+                  size="m"
+                >
+                  Написать в Поддержку
+                </CellButton>
+              </Link>}
+          </List>
+        </ModalPage>
       </ModalRoot>
     );
 
@@ -291,10 +374,12 @@ export default class TicketsList extends Component {
             <React.Fragment>
               <PanelHeaderBack onClick={() => this.props.go("tickets_list")} />
               <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28AdvertisingOutline /></PanelHeaderButton>
+              {this.state.ticketOptions?.length > 0 &&
+                  <PanelHeaderButton onClick={() => this.setState({ showOptions: !this.state.showOptions })}><Icon28MoreHorizontal /></PanelHeaderButton>
+              }
               {this.state.fetchingHeader && <PanelHeaderButton><Spinner /></PanelHeaderButton>}
             </React.Fragment>
           }
-
         >
         </PanelHeader>
 
@@ -311,7 +396,11 @@ export default class TicketsList extends Component {
                     disabled
                     description={this.state.ticketStatus.label}
                     before={<Icon12Circle fill={this.state.ticketStatusColor} />}
-                    after={<Link href={"https://vk.com/gim" + this.props.group_id + "?sel=" + this.state.ticketUser.id} target="_blank"><Button mode="secondary">Перейти в диалог</Button></Link>}
+                    after={
+                      <Link href={"https://vk.com/gim" + this.props.group_id + "?sel=" + this.state.ticketUser.id} target="_blank">
+                        {this.props.isMobile ? <Button mode="secondary"><Icon28MessagesOutline /></Button> : <Button mode="secondary">Перейти в диалог</Button>}
+                      </Link>
+                    }
                   >
                     <Title level="1">Обращение #{this.props.ticket.id}</Title>
                   </Cell>
@@ -324,67 +413,6 @@ export default class TicketsList extends Component {
                   <MiniInfoCell before={<Icon20ClockOutline />}>
                     {this.state.ticket.time}
                   </MiniInfoCell>
-                  {this.state.ticketOptions?.length > 0 &&
-                    <>
-                      <Separator style={{ margin: "10px 0 10px 0" }} />
-                      <ButtonGroup style={{ marginLeft: "15px", marginBottom: "10px" }}>
-                        {this.state.ticketOptions.includes("received_information") &&
-                          <Button
-                            onClick={() => this.handleOptionClick("received_information")}
-                            loading={this.state.buttonLoading === "received_information"}
-                            mode="commerce"
-                          >
-                            Информация получена
-                          </Button>
-                        }
-                        {this.state.ticketOptions.includes("request_information") &&
-                          <Button
-                            onClick={() => this.handleOptionClick("request_information")}
-                            loading={this.state.buttonLoading === "request_information"}>
-                            Ожидается информация
-                          </Button>
-                        }
-                        {this.state.ticketOptions.includes("cancel_request_information") &&
-                          <Button
-                            mode="destructive"
-                            onClick={() => this.handleOptionClick("cancel_request_information")}
-                            loading={this.state.buttonLoading === "cancel_request_information"}
-                          >
-                            Отменить ожидание информации
-                          </Button>}
-                        {this.state.ticketOptions.includes("close") &&
-                          <Button
-                            mode="destructive"
-                            onClick={() => this.handleOptionClick("close")}
-                            loading={this.state.buttonLoading === "close"}
-                          >
-                            Закрыть обращение
-                          </Button>}
-                        {this.state.ticketOptions.includes("invitation_mailing") &&
-                          <Button
-                            mode="outline"
-                            onClick={() => this.setState({
-                              activeModal: "actions",
-                              buttonLoading: "invitation_mailing"
-                            })}
-                            loading={this.state.buttonLoading === "invitation_mailing"}
-                            disabled={this.state.buttonLoading === "invitation_mailing"}
-                          >
-                            Пригласить в рассылку
-                          </Button>
-                        }
-                        {this.state.ticketOptions.includes("get_support") &&
-                          <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
-                            <Button
-                              mode="secondary"
-                              size="m"
-                            >
-                              Написать в Поддержку
-                            </Button>
-                          </Link>}
-                      </ButtonGroup>
-                    </>
-                  }
                 </Group>
 
                 <Group mode="plain">
@@ -460,7 +488,71 @@ export default class TicketsList extends Component {
                 {this.state.snackbar}
               </PullToRefresh>
             </SplitCol>
+            <FixedLayout vertical={"bottom"}>
+              {this.state.showOptions &&
+                <Card mode={"shadow"}>
+                  <List>
+                  {this.state.ticketOptions.includes("received_information") &&
+                    <CellButton
+                      onClick={() => this.handleOptionClick("received_information")}
+                      before={this.state.buttonLoading === "received_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28InfoCircleOutline />}
+                      mode="commerce"
+                    >
+                      Информация получена
+                    </CellButton>
+                  }
+                  {this.state.ticketOptions.includes("request_information") &&
+                    <CellButton
+                      onClick={() => this.handleOptionClick("request_information")}
+                      before={this.state.buttonLoading === "request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28RecentOutline />}>
+                      Ожидается информация
+                    </CellButton>
+                  }
+                  {this.state.ticketOptions.includes("cancel_request_information") &&
+                    <CellButton
+                      mode="destructive"
+                      onClick={() => this.handleOptionClick("cancel_request_information")}
+                      before={this.state.buttonLoading === "cancel_request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28CancelOutline />}
+                    >
+                      Отменить ожидание информации
+                    </CellButton>}
+                  {this.state.ticketOptions.includes("close") &&
+                    <CellButton
+                      mode="destructive"
+                      onClick={() => this.handleOptionClick("close")}
+                      before={this.state.buttonLoading === "close" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28DoneOutline />}
+                    >
+                      Закрыть обращение
+                    </CellButton>}
+                  {this.state.ticketOptions.includes("invitation_mailing") &&
+                    <CellButton
+                      mode="outline"
+                      onClick={() => this.setState({
+                        activeModal: "actions",
+                        buttonLoading: "invitation_mailing"
+                      })}
+                      before={this.state.buttonLoading === "invitation_mailing" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28AdvertisingOutline />}
+                      disabled={this.state.buttonLoading === "invitation_mailing"}
+                    >
+                      Пригласить в рассылку
+                    </CellButton>
+                  }
+                  {this.state.ticketOptions.includes("get_support") &&
+                    <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                      <CellButton
+                        mode="secondary"
+                        size="m"
+                      >
+                        Написать в Поддержку
+                      </CellButton>
+                    </Link>}
+                  </List>
+                </Card>
+              }
+            </FixedLayout>
+
           </SplitLayout>
+
         }
       </ConfigProvider>
     )
