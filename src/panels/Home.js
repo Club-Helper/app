@@ -674,6 +674,7 @@ function Home({
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
           toggleShowMobileMenu={toggleShowMobileMenu}
+          donutStatus={donutStatus}
         />
       )
     },
@@ -711,6 +712,7 @@ function Home({
           setLinksState={setLinksState}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
           toggleShowMobileMenu={toggleShowMobileMenu}
+          donutStatus={donutStatus}
         />
       )
     },

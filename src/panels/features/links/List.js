@@ -599,10 +599,16 @@ export default class Links extends Component {
                     </>}
                   </PullToRefresh>
 
-                  {this.state.availability.limit && this.state.count > 0 ?
+                  {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
                     <Footer>
                       Вы можете создать
-                      ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["ссылку", "ссылки", "ссылок"])}.
+                      ещё {
+                        this.state.availability.limit
+                        + " "
+                        + this.props.declOfNum(
+                          this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
+                        )
+                        }.
                     </Footer>
                     : ""
                   }
