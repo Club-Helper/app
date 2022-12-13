@@ -425,12 +425,12 @@ export default class ClubInfo extends Component {
                         <center>
                           <Link target="_blank" href={"https://vk.com/club" + club.id}>
                             <Title
-                              style={{ marginBottom: 8, marginTop: 20, color: "var(--text_primary)", maxWidth: "78%" }}
+                              style={{ marginBottom: 8, marginTop: 20, color: "var(--text_primary)" }}
                               level="2"
                               weight="2"
                             >
-                              {club.name.slice(0, 42)}
-                              {club.name.length > 42 ? "..." : ""}
+                              {club.name.slice(0, 35)}
+                              {club.name.length > 35 ? "..." : ""}
                             </Title>
                           </Link>
                         </center>
