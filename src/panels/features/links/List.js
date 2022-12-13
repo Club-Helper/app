@@ -386,6 +386,7 @@ export default class Links extends Component {
     localStorage.removeItem("links_list_formData_title");
     localStorage.removeItem("links_list_formData_pattern");
     this.setState({ snackbar: null });
+    this.props.toggleShowMobileMenu(true);
   }
 
   onFilterChange(value) {

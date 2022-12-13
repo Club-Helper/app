@@ -381,6 +381,7 @@ export default class MailingList extends Component {
 
   componentDidMount() {
     this.getMailing(true);
+    this.props.toggleShowMobileMenu(true);
   }
 
   render() {

@@ -258,6 +258,7 @@ export default class CommentsList extends Component {
     this.interval = setInterval(() => this.getComments(this.state.filter), 60000);
 
     this.getComments(this.state.filter);
+    this.props.toggleShowMobileMenu(true);
   }
 
   onFilterChange(value) {
