@@ -523,10 +523,10 @@ export default class Links extends Component {
                             marginLeft: "15px",
                             marginTop: "15px",
                             marginBottom: "0px"
-                          }}>Ссылки <span style={{
+                          }}>Ссылки {this.state.count > 0 && <span style={{
                             color: "var(--text_secondary)",
                             fontSize: "12px"
-                          }}>{this.state.count}</span></Title>}
+                          }}>{this.state.count}</span>}</Title>}
                           style={{ margin: "0 -10px" }}
                         />
                         <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
@@ -601,26 +601,29 @@ export default class Links extends Component {
                       </Group>
                     </>}
                   </PullToRefresh>
-
-                  {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
-                    <Footer>
-                      Вы можете создать
-                      ещё {
-                        this.state.availability.limit
-                        + " "
-                        + this.props.declOfNum(
-                          this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
-                        )
-                        }.
-                    </Footer>
-                    : ""
-                  }
-                  {
-                    !this.state.availability.creat &&
-                    <Footer>
-                      Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
-                      чтобы создать больше.
-                    </Footer>
+                  {!this.state.linksLoading &&
+                  <>
+                    {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
+                      <Footer>
+                        Вы можете создать
+                        ещё {
+                          this.state.availability.limit
+                          + " "
+                          + this.props.declOfNum(
+                            this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
+                          )
+                          }.
+                      </Footer>
+                      : ""
+                    }
+                    {
+                      !this.state.availability.creat &&
+                      <Footer>
+                        Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
+                        чтобы создать больше.
+                      </Footer>
+                    }
+                  </>
                   }
                 </SplitCol>
                 {this.state.snackbar}
