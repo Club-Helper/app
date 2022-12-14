@@ -475,7 +475,10 @@ export default class ClubInfo extends Component {
                         <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
                           this.props.toggleShowMobileMenu(false);
                           this.openModal("donut")
-                        }} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                        }} after={<div onClick={() => {
+                          this.props.toggleShowMobileMenu(false);
+                          this.openModal("donut");
+                        }} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
                       </List>
                     </Group>
                     {!this.props.isMobile && !this.props.showMenu &&
