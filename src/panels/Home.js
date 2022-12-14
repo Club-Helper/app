@@ -137,8 +137,8 @@ function Home({
     const [majorB, minorB] = String(b).split('.').map(v => Number.parseInt(v));
 
     if (majorA !== majorB) {
-       return majorA > majorB;
-    }
+      return majorA > majorB;
+    }
 
     return minorA > minorB;
 
@@ -151,8 +151,8 @@ function Home({
     bridge.send("VKWebAppGetClientVersion")
       .then((data) => {
         if (params.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
-           setScheme('vkcors');
-         }
+          setScheme('vkcors');
+        }
       })
 
     /*fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
@@ -1181,7 +1181,7 @@ function Home({
     <ModalRoot activeModal={activeModal}>
       <ModalPage
         id="noInternet"
-        onClose={() => { setActiveModal(""); setActiveModal("noInternet"); } }
+        onClose={() => { setActiveModal(""); setActiveModal("noInternet"); }}
       >
         <Div>
           <Placeholder
@@ -1234,13 +1234,13 @@ function Home({
                 modal={modal}
                 header={false && <PanelHeader separator={false} />}
                 style={needToShowClubStartOnboarding ? {
-                    justifyContent: "center",
-                    background: "rgb(63, 138, 224)",
-                    height: "100%"
+                  justifyContent: "center",
+                  background: "rgb(63, 138, 224)",
+                  height: "auto"
                 } : (isDesktop ? {
-                    justifyContent: "center",
-                    paddingTop: "10px",
-                    boxSizing: "border-box"
+                  justifyContent: "center",
+                  paddingTop: "10px",
+                  boxSizing: "border-box"
                 } : {
                   justifyContent: "center"
                 })}
@@ -1276,14 +1276,14 @@ function Home({
                       onSwipeBack={() => goBack()}
                     >
                       {panels.map((panel, idx) => (
-                          <Panel
-                            key={idx}
-                            id={panel.id}
-                          >
-                            {panel.panelHeader}
-                            {panel.obj}
-                          </Panel>
-                        ))}
+                        <Panel
+                          key={idx}
+                          id={panel.id}
+                        >
+                          {panel.panelHeader}
+                          {panel.obj}
+                        </Panel>
+                      ))}
                     </View>
                   </Epic>
                 </SplitCol>
@@ -1313,7 +1313,7 @@ function Home({
                                   badge={donutStatus ? <img src={DonutIcon} style={{
                                     width: '14px',
                                     height: '14px'
-                                  }}  alt=""/> : ""}
+                                  }} alt="" /> : ""}
                                 />
                               }
                               style={activeStory == "club_info" ? {
@@ -1352,7 +1352,7 @@ function Home({
                       <Group>
                         <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
                           <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-                          Команда Club Helper ищет сотрудников
+                            Команда Club Helper ищет сотрудников
                             <br /><br />
                             <Button size="s" stretched mode="secondary">Подробнее</Button>
                           </SimpleCell>
@@ -1518,7 +1518,7 @@ function Home({
                                     badge={donutStatus ? <img src={DonutIcon} style={{
                                       width: '14px',
                                       height: '14px'
-                                    }}  alt=""/> : ""}
+                                    }} alt="" /> : ""}
                                     style={{ cursor: "pointer" }}
                                   />
                                 }
@@ -1664,7 +1664,7 @@ function Home({
                   {false && (
                     <SplitCol fixed width="280px" maxWidth="280px">
                       <Panel>
-                        {hasHeader && <PanelHeader/>}
+                        {hasHeader && <PanelHeader />}
 
                         <Group>
                           {clubCard ?
@@ -1676,7 +1676,7 @@ function Home({
                                     size={28}
                                     src={clubCard.photo}
                                     onClick={() => go("club-card")}
-                                    style={{cursor: "pointer"}}
+                                    style={{ cursor: "pointer" }}
                                   />
                                 }
                                 style={activeStory === "club-card" ? {
@@ -1684,9 +1684,9 @@ function Home({
                                   borderRadius: 8
                                 } : {}}
                               >
-                                <div onClick={() => go("club-card")} style={{cursor: "pointer"}}>{clubCard.name}</div>
+                                <div onClick={() => go("club-card")} style={{ cursor: "pointer" }}>{clubCard.name}</div>
                               </Cell>
-                            </> : <Spinner/>}
+                            </> : <Spinner />}
                         </Group>
 
                         <Group>

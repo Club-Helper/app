@@ -344,6 +344,12 @@ body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText 
   cursor: pointer;
 }
 
-.galleryHeightController .vkuiGallery, .vkuiGallery__slide, .vkuiGallery__layer {
+.galleryHeightController.vkuiGallery {
   height: 80px
+}
+.galleryHeightController.vkuiGallery__slide {
+  height: 80px;
+}
+.galleryHeightController.vkuiGallery__layer {
+  height: 80px;
 }
