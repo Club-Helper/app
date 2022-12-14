@@ -82,12 +82,12 @@ export default class CommentsList extends Component {
     },
       (data) => {
         this.setState({ comments: data.response.items, count: data.response.count, availability: data.response.availability, isEnabled: true, listLoading: false })
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.setState({ isEnabled: false, listLoading: false });
         this.props.createError(error.error.error_msg);
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" }); }
       })
 
     this.getCommentsTimeout = setTimeout(() => {
@@ -104,7 +104,7 @@ export default class CommentsList extends Component {
   getCommentById(id) {
     this.props.toggleShowMobileMenu(false);
     this.setState({ openedComment: this.state.comments[id], activeModal: "comment-info" })
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   createComment() {
@@ -179,7 +179,7 @@ export default class CommentsList extends Component {
           newCommentPattern: ""
         });
         this.getComments(this.state.filter);
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -212,7 +212,7 @@ export default class CommentsList extends Component {
             </Snackbar>
           )
         });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getComments(this.state.filter);
         this.setState({ deleteCommentButtonWorking: false });
         this.props.setPopout(null);

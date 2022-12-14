@@ -226,7 +226,7 @@ export default class ClubInfo extends Component {
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
     this.setState({ autofixBtnWorking: false });
   }
 
@@ -239,7 +239,7 @@ export default class ClubInfo extends Component {
         this.props.toggleShowMobileMenu(false);
         this.setState({ supportCode: data.response });
         this.openModal("support_code_result");
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       }
     );
     this.setState({ codeBtnWorking: false });
@@ -253,7 +253,7 @@ export default class ClubInfo extends Component {
     },
       (data) => {
         this.setState({ notifiesFetching: false, notifies: data.response });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       })
   }
 

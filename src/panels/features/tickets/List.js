@@ -123,7 +123,7 @@ export default class TicketsList extends Component {
     this.props.setPopout(null);
     clearTimeout(timeout);
     needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   performAction(id, action) {
@@ -134,7 +134,7 @@ export default class TicketsList extends Component {
     },
       (data) => {
         this.closeTicketButtonsModal();
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getTickets(this.state.activeTab);
       }
     );

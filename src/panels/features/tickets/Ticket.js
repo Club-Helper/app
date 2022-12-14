@@ -87,10 +87,10 @@ export default class TicketsList extends Component {
       .then(data => {
         if (!data.response.status) {
           this.props.createError(data.response.error);
-          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" });
+          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" }); }
         } else {
           this.updateTicket();
-          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         }
         this.setState({ buttonLoading: null });
       })
@@ -124,7 +124,7 @@ export default class TicketsList extends Component {
             activeModal: "",
             buttonLoading: ""
           });
-          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         } else {
           this.props.createError(data.response.error);
           this.setState({ buttonLoading: "" });
@@ -161,7 +161,7 @@ export default class TicketsList extends Component {
           sendHelloMsgBtnWorking: false
         });
         this.updateTicket();
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.setState({

@@ -106,7 +106,7 @@ export default class MailingList extends Component {
     },
       (data) => {
         this.getMailing(false);
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.setState({ activeModal: "" });
         this.props.toggleShowMobileMenu(true);
       }
@@ -202,7 +202,7 @@ export default class MailingList extends Component {
             formValidationTitle: "",
             formValidationDescription: ""
           });
-          bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         },
         (error) => {
           this.closeModal();
@@ -247,7 +247,7 @@ export default class MailingList extends Component {
             </Snackbar>
           )
         });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailingUsers(this.state.openedItem?.id);
       }
     )
@@ -326,7 +326,7 @@ export default class MailingList extends Component {
           mailingText: "",
           sendBtnWorking: false
         });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -370,7 +370,7 @@ export default class MailingList extends Component {
           ),
           activeModal: ""
         });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailing();
         this.toggleEditMode();
       }

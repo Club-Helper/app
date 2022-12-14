@@ -162,7 +162,7 @@ export default class Links extends Component {
               )
             })
             this.props.toggleShowMobileMenu(true);
-            bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+            if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
             this.props.setPopout(null);
             return true;
           },
@@ -333,7 +333,7 @@ export default class Links extends Component {
                   )
                 })
                 this.closeModal();
-                bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+                if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
               }
             )
           },
@@ -369,7 +369,7 @@ export default class Links extends Component {
       )
     });
 
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   onRefresh() {
@@ -392,7 +392,7 @@ export default class Links extends Component {
   onFilterChange(value) {
     this.setState({ filter: value });
     this.getLinks(value);
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   componentWillUnmount() {
