@@ -520,7 +520,7 @@ class StartPage extends React.Component {
             </Button>
             <Progress style={{ height: 7, borderRadius: 5, color: "#333" }} value={(slideIndexProgress * 100 / countPageStart)} />
           </div>}
-          <Button style={{ marginRight: "5px", marginTop: "5px" }} mode="overlay_secondary" onClick={() => this.handleBackClick()}>
+          {false && <><Button style={{ marginRight: "5px", marginTop: "5px" }} mode="overlay_secondary" onClick={() => this.handleBackClick()}>
             {"<"}
           </Button>
           <Button style={{ marginRight: "5px", marginTop: "5px" }} mode="overlay_secondary" onClick={() => this.handleClick(true)}>
@@ -534,6 +534,7 @@ class StartPage extends React.Component {
           }}>
             is {typeStartPage ? "group" : "user"}
           </Button>
+          </>}
           {this.state.textNoButton && <div className="clubHelper--instalApp">
             <Text weight="medium">Club Helper установлен!</Text>
             <Text>Завершите настройку в <Link href={"https://vk.com/app7938346_-" + newGroupID} target="_blank">сообществе</Link></Text>
