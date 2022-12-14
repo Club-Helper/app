@@ -8,9 +8,9 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing, Cell, SimpleCell, Card } from '@vkontakte/vkui'
+import { ConfigProvider, Gradient, Group, Panel, PanelHeader, PanelSpinner, SplitCol, SplitLayout, Avatar, Title, Link, MiniInfoCell, List, PullToRefresh, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, Separator, Snackbar, ContentCard, Caption, CardScroll, Banner, Button, Div, Placeholder, CellButton, Spacing, Cell, SimpleCell, Card, Gallery } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
+import { Icon16Hashtag, Icon20CalendarOutline, Icon24Dismiss, Icon20BlockOutline, Icon20CommunityName, Icon20Search, Icon20WorkOutline, Icon24Linked, Icon28DonateOutline, Icon28SettingsOutline, Icon16Done, Icon28LifebuoyOutline, Icon56CheckShieldOutline, Icon24NotificationOutline, Icon20ChevronRightOutline, Icon56NotificationOutline, Icon28UserTagOutline, Icon24Error } from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -568,86 +568,85 @@ export default class ClubInfo extends Component {
                     <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)" }}>Статистика</Title>
                     {this.props.club_role == "admin" &&
                       <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Руководители</Title>}>
-                        <CardScroll size={false}>
-                          {this.state.isManagersLoading ? <PanelSpinner /> :
-                            this.state.managers?.map((item, idx) => (
-                                <Card>
-                                  <Link href={`https://vk.com/id${item.id}`} target="_blank">
-                                    <SimpleCell
-                                          before={<Avatar size={28} src={item.photo} />}
-                                          description={this.props.formatRole(item.role)}
-                                        >
-                                          {item.first_name} {item.last_name}
-                                    </SimpleCell>
-                                  </Link>
-                                </Card>
-                            )
-                            )}
-                        </CardScroll>
+                        <div className='galleryHeightController'>
+                          <Gallery showArrows={"always"} slideWidth={this.props.isMobile ? '70%' : '50%'}>
+                            {this.state.isManagersLoading ? <PanelSpinner /> :
+                              this.state.managers?.map((item, idx) => (
+                                <Link href={`https://vk.com/id${item.id}`} target="_blank">
+                                  <SimpleCell
+                                    before={<Avatar size={28} src={item.photo} />}
+                                    description={this.props.formatRole(item.role)}
+                                  >
+                                    {item.first_name} {item.last_name}
+                                  </SimpleCell>
+                                </Link>
+                              )
+                              )}
+                          </Gallery>
+                        </div>
                       </Group>
                     }
                     <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Обращения</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
-                        <CardScroll size={false}>
-                          <Card onClick={() => {
-                            localStorage.setItem("tickets_list_activeTab", "all");
-                            this.props.go("tickets_list");
-                          }}>
+                        <div className='galleryHeightController'>
+                          <Gallery showArrows={"always"} slideWidth={'50%'}>
                             <SimpleCell
+                              onClick={() => {
+                                localStorage.setItem("tickets_list_activeTab", "all");
+                                this.props.go("tickets_list");
+                              }}
                               before={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
                               description={this.state.stats?.tickets?.all}
                             >
                               Всего
                             </SimpleCell>
-                          </Card>
-                          <Card onClick={() => {
-                            localStorage.setItem("tickets_list_activeTab", "waiting_specialist");
-                            this.props.go("tickets_list");
-                          }}>
                             <SimpleCell
+                              onClick={() => {
+                                localStorage.setItem("tickets_list_activeTab", "waiting_specialist");
+                                this.props.go("tickets_list");
+                              }}
                               before={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
                               description={this.state.stats?.tickets?.waiting_specialist}
                             >
                               Ожидающих специалиста
                             </SimpleCell>
-                          </Card>
-                          <Card onClick={() => {
-                            localStorage.setItem("tickets_list_activeTab", "work");
-                            this.props.go("tickets_list");
-                          }}>
                             <SimpleCell
+                              onClick={() => {
+                                localStorage.setItem("tickets_list_activeTab", "work");
+                                this.props.go("tickets_list");
+                              }}
                               before={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
                               description={this.state.stats?.tickets?.work}
                             >
                               В работе
                             </SimpleCell>
-                          </Card>
-                          <Card onClick={() => {
-                            localStorage.setItem("tickets_list_activeTab", "closed");
-                            this.props.go("tickets_list");
-                          }}>
                             <SimpleCell
+                              onClick={() => {
+                                localStorage.setItem("tickets_list_activeTab", "closed");
+                                this.props.go("tickets_list");
+                              }}
                               before={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
                               description={this.state.stats?.tickets?.closed}
                             >
                               Закрыты
                             </SimpleCell>
-                          </Card>
-                        </CardScroll>
+                          </Gallery>
+                        </div>
                       }
                     </Group>
                     <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Ссылки</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
-                        <CardScroll size={false}>
-                          <Card onClick={() => this.props.go("templates")}>
+                        <div className='galleryHeightController'>
+                          <Gallery showArrows={"always"} slideWidth={'50%'}>
                             <SimpleCell
+                              onClick={() => this.props.go("templates")}
                               before={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
                               description={this.state.stats?.links?.all}
                             >
                               Всего
                             </SimpleCell>
-                          </Card>
-                        </CardScroll>
+                          </Gallery>
+                        </div>
                       }
                     </Group>
                   </>
@@ -656,6 +655,6 @@ export default class ClubInfo extends Component {
 
               {this.state.snackbar}
             </Panel>
-          </SplitCol></SplitLayout></ConfigProvider>)
+          </SplitCol></SplitLayout></ConfigProvider >)
   }
 }
