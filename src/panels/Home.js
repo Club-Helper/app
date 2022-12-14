@@ -878,6 +878,7 @@ function Home({
           openedTSolution={openedTSolution}
           setOpenedTSolution={setOpenedTSolution}
           showMenu={showMenu}
+          setActiveStory={setActiveStory}
         />
       )
     },

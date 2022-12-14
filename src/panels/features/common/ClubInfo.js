@@ -254,6 +254,9 @@ export default class ClubInfo extends Component {
       (data) => {
         this.setState({ notifiesFetching: false, notifies: data.response });
         if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+      }, (error) => {
+        this.setState({ activeModal: "" });
+        this.props.createError(error.error.error_msg);
       })
   }
 
@@ -377,7 +380,7 @@ export default class ClubInfo extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={!this.props.isMobile && !isClubLoading ?
+                left={!this.props.isMobile && !isClubLoading && !(this.props.startupError || club.error) ?
                   <React.Fragment>
                     {this.props.club_role === "admin" &&
                       <PanelHeaderButton onClick={() => this.openModal("settings")}>
@@ -473,12 +476,16 @@ export default class ClubInfo extends Component {
                         <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
                         <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
                         <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
-                          this.props.toggleShowMobileMenu(false);
-                          this.openModal("donut")
-                        }} after={<div onClick={() => {
-                          this.props.toggleShowMobileMenu(false);
-                          this.openModal("donut");
-                        }} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                          if (!this.props.startupError && !club.error) {
+                            this.props.toggleShowMobileMenu(false);
+                            this.openModal("donut");
+                          }
+                        }} after={(!this.props.startupError && !club.error) ? <div onClick={() => {
+                          if (!this.props.startupError) {
+                            this.props.toggleShowMobileMenu(false);
+                            this.openModal("donut");
+                          }
+                        }} style={{ color: "var(--accent)" }}>Что это?</div> : ""} disabled={this.props.startupError || club.error}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
                       </List>
                     </Group>
                     {!this.props.isMobile && !this.props.showMenu &&
@@ -503,7 +510,7 @@ export default class ClubInfo extends Component {
                         </CellButton>
                       </Group>
                     }
-                    {this.props.isMobile &&
+                    {this.props.isMobile && !isClubLoading && !(this.props.startupError || club.error) &&
                       <Group>
                         {this.props.club_role === "admin" &&
                           <CellButton
