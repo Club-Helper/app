@@ -9,7 +9,7 @@
  *******************************************************/
 
 
-import { Avatar, Cell, Group, List, Panel, PanelHeader, Placeholder, Spacing, IconButton, Snackbar, Alert, Link, ConfigProvider, SplitLayout, SplitCol } from '@vkontakte/vkui'
+import { Separator, Avatar, Cell, Group, List, Panel, PanelHeader, Placeholder, Spacing, IconButton, Snackbar, Alert, Link, ConfigProvider, SplitLayout, SplitCol } from '@vkontakte/vkui'
 import {Icon12Lock, Icon16Done, Icon24CancelOutline} from '@vkontakte/icons'
 import React, { Component } from 'react'
 
@@ -84,7 +84,7 @@ export default class Mailings extends Component {
               {!this.props?.mailings?.length > 0 ?
                 <Group>
                   <Placeholder>
-                  Вы пока не подписаны ни на одну рассылку.
+                    Вы пока не подписаны ни на одну рассылку.
                   </Placeholder>
                 </Group>
                 :
@@ -92,16 +92,18 @@ export default class Mailings extends Component {
                   {this.props?.mailings.map((item, idx) => (
                     <Group
                       header={
-                      <Link target={"_blank"} href={`https://vk.com/club${item.club.id}`}>
-                        <Cell
-                          before={<Avatar size={36} src={item.club.photo} />}
-                        >
-                          {item.club.title}
-                        </Cell>
-                      </Link>
+                        <Link target={"_blank"} href={`https://vk.com/club${item.club.id}`}>
+                          <Cell
+                            before={<Avatar size={36} src={item.club.photo}/>}
+                          >
+                            {item.club.title}
+                          </Cell>
+                        </Link>
                       }
                     >
-                      <Spacing size={20} separator />
+                      <Spacing size={20}>
+                        <Separator/>
+                      </Spacing>
                       <List>
                         {item.items.map((mailing, idx) => (
                           <Cell
@@ -109,14 +111,14 @@ export default class Mailings extends Component {
                               <React.Fragment>
                                 {mailing.lock && (
                                   <Avatar size={28}>
-                                      <Icon12Lock />
+                                    <Icon12Lock/>
                                   </Avatar>
                                 )}
                               </React.Fragment>
                             }
                             after={
                               <IconButton onClick={() => this.unsubscribe(mailing.id)}>
-                                <Icon24CancelOutline />
+                                <Icon24CancelOutline/>
                               </IconButton>
                             }
                             description={(this.props?.office?.user.sex == 2 ? 'подписался ' : 'подписалась ') + mailing.subscription.label}
@@ -136,3 +138,4 @@ export default class Mailings extends Component {
     )
   }
 }
+

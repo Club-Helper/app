@@ -8,7 +8,7 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing, Cell } from '@vkontakte/vkui'
+import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing } from '@vkontakte/vkui'
 import React, { Component } from 'react';
 import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
 
@@ -371,7 +371,7 @@ export default class ClubInfo extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={!this.props.isMobile && !isClubLoading ?
+                before={!this.props.isMobile && !isClubLoading ?
                   <React.Fragment>
                     {this.props.club_role === "admin" &&
                       <PanelHeaderButton onClick={() => this.openModal("settings")}>
@@ -416,9 +416,9 @@ export default class ClubInfo extends Component {
                         mode={this.props.appearance === "dark" ? 'black' : 'white'}
                       >
                         <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
-                        <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                        <Link target="_blank" href={"https://vk.com/club" + club.id} style={{textDecoration: "none"}}>
                           <Title
-                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
+                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", lineHeight: 1.5, color: "var(--vkui--color_text_primary)" }}
                             level="2"
                             weight="2"
                           >
@@ -522,7 +522,9 @@ export default class ClubInfo extends Component {
                         >
                           Уведомления
                         </CellButton>
-                        <Spacing separator />
+                        <Spacing>
+                          <Separator/>
+                        </Spacing>
                         <CellButton
                           onClick={() => this.props.changeMode("office")}
                           before={<Icon28UserTagOutline />}
@@ -543,7 +545,7 @@ export default class ClubInfo extends Component {
                 }
                 {!this.state.isStatsHidden &&
                   <>
-                    <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)" }}>Статистика</Title>
+                    <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--vkui--color_text_primary)" }}>Статистика</Title>
                     {this.props.club_role == "admin" &&
                       <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Руководители</Title>}>
                         <CardScroll>

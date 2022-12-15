@@ -47,7 +47,6 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
 
   return (
     <div className="clubHelper--userMessage" key={key}>
-
       <div className={noLast ? "clubHelper--contentMessage no--last" : "clubHelper--contentMessage"}>
         <a href={"https://vk.com/id" + user} target="_blank"><img className="clubHelper--photoMessage" src={photoUser} alt="" /></a>
         {sticker ?

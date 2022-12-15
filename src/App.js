@@ -10,8 +10,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
-import {AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform, VKCOM} from '@vkontakte/vkui';
+import {ScreenSpinner, AdaptivityProvider, AppRoot, ConfigProvider, Platform, SplitLayout, usePlatform} from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import Context from './Context/Context';
 
@@ -42,10 +41,10 @@ const App = () => {
     if (needChange) {
       isLight = !isLight;
     }
-    console.log(isLight)
+    console.log(scheme, isLight)
     setAppearance(isLight ? 'light' : 'dark');
 
-    if (platform.current !== VKCOM) {
+    if (platform.current !== Platform.VKCOM) {
       bridge.send('VKWebAppSetViewSettings', {
         'status_bar_style': isLight ? 'dark' : 'light',
         'action_bar_color': isLight ? '#FFF' : '#000',

@@ -17,11 +17,11 @@
   "dependencies": {
     "@sentry/react": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
-    "@vkontakte/icons": "1.141.1",
+    "@vkontakte/icons": "^1.210.0",
     "@vkontakte/vk-bridge": "latest",
     "@vkontakte/vk-miniapps-deploy": "0.0.25",
     "@vkontakte/vkjs": "0.20.0",
-    "@vkontakte/vkui": "4.28.1",
+    "@vkontakte/vkui": "^5.0.0-beta.4",
     "babel-eslint": "^10.1.0",
     "eruda": "^2.4.1",
     "eruda-code": "^2.0.0",

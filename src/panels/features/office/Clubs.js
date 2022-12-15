@@ -178,8 +178,8 @@ export default class Clubs extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={
-                  <PanelHeaderButton onClick={() => this.install()}>
+                before={
+                  <PanelHeaderButton onClick={() => this.install()} aria-label="Закрыть">
                     <Icon28AddCircleOutline />
                   </PanelHeaderButton>
                 }
@@ -201,14 +201,13 @@ export default class Clubs extends Component {
                                   <Avatar
                                     size={48}
                                     src={club.photo}
-                                    badge={
-                                      <React.Fragment>
-                                          {club.donut && !club.removed && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20DonateCircleFillYellow /></Avatar>}
-                                          {club.blocked && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon16Block fill='var(--accent)' width={20} height={20} /></Avatar>}
-                                          {club.removed && <Avatar size={20} shadow={false} style={{ backgroundColor: "var(--background_content)" }}><Icon20LockOutline /></Avatar>}
-                                      </React.Fragment>
-                                    }
-                                  />
+                                  >
+                                    <Avatar.Badge>
+                                      {club.donut && !club.removed && <Icon20DonateCircleFillYellow />}
+                                      {club.blocked && <Icon16Block fill='var(--accent)' width={20} height={20} />}
+                                      {club.removed && <Icon20LockOutline />}
+                                    </Avatar.Badge>
+                                  </Avatar>
                                 }
                                 description={this.props.formatRole(club.role) + (club.blocked ? " · Заблокировано" : "") + (club.removed ? " · Удалено" : "")}
                                 after={club.removed ? <Icon12ArrowUpRight /> : <Icon12Chevron width={16} height={16} />}
@@ -216,8 +215,9 @@ export default class Clubs extends Component {
                                 {club.title}
                               </Cell>
                             </a>
-                              )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
-
+                          )) :
+                          <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>
+                      }
                     </List>
                   }
                 </Group>

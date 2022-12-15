@@ -10,8 +10,7 @@
 
 import React, { useState, useEffect } from 'react';
 
-import Group from '@vkontakte/vkui/dist/components/Group/Group';
-import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner, ModalRoot, ModalPage, Div } from '@vkontakte/vkui';
+import { Separator, Group, Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivityConditionalRender, View, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner, ModalRoot, ModalPage, Div, Platform } from '@vkontakte/vkui';
 import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
@@ -71,10 +70,10 @@ function Home({
   goBack,
   history
 }) {
-  const viewWidth = useAdaptivity().viewWidth;
-  const isDesktop = viewWidth >= ViewWidth.SMALL_TABLET;
+  const { viewWidth } = useAdaptivityConditionalRender();
+  const isDesktop = !!viewWidth.tabletPlus;
   const isMobile = !isDesktop;
-  const hasHeader = platform.current !== VKCOM;
+  const hasHeader = platform.current !== Platform.VKCOM;
   const [modals, setModals] = useState(false);
   const [signCheckStatus, setSignCheckStatus] = useState(true)
   const [banned, setBan] = useState(null);
@@ -136,13 +135,9 @@ function Home({
     const [majorA, minorA] = String(a).split('.').map(v => Number.parseInt(v));
     const [majorB, minorB] = String(b).split('.').map(v => Number.parseInt(v));
 
-    if (majorA !== majorB) {
-       return majorA > majorB;
-    }
-
+    if (majorA !== majorB) return majorA > majorB;
     return minorA > minorB;
-
-  };
+  }
 
   let queryString = window.location.search;
   const params = new URLSearchParams(queryString);
@@ -151,8 +146,8 @@ function Home({
     bridge.send("VKWebAppGetClientVersion")
       .then((data) => {
         if (params.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
-           setScheme('vkcors');
-         }
+          setScheme('vkcors');
+        }
       })
 
     /*fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
@@ -200,18 +195,18 @@ function Home({
                 .then(response => response.json())
                 .then(data => {
                   if (!data.error) {
-                    setClub(data.response)
-                    setDonut(data.response.donut)
-                    setDonutStatus(data.response.donut.status)
-                    setMessagesStatus(data.response.setting.messages.status)
-                    setLinksStatus(data.response.setting.links.status)
-                    setCommentsStatus(data.response.setting.comments.status)
-                    setPopout(null)
+                    setClub(data.response);
+                    setDonut(data.response.donut);
+                    setDonutStatus(data.response.donut.status);
+                    setMessagesStatus(data.response.setting.messages.status);
+                    setLinksStatus(data.response.setting.links.status);
+                    setCommentsStatus(data.response.setting.comments.status);
+                    setPopout(null);
 
                     if (data.response.error) {
                       if (role == "admin") {
                         toggleShowMenu(false);
-                        setStartupError(data.response.error)
+                        setStartupError(data.response.error);
                         setActiveStory('club_info');
                       } else {
                         toggleShowMenu(false);
@@ -737,7 +732,7 @@ function Home({
     },
     {
       id: "settings",
-      panelHeader: isMobile && <PanelHeader left={<PanelHeaderBack onClick={() => goBack()} />}>Настройки</PanelHeader>,
+      panelHeader: isMobile && <PanelHeader before={<PanelHeaderBack onClick={() => goBack()} />}>Настройки</PanelHeader>,
       obj: (
         <Settings
           {...basicProps}
@@ -1226,7 +1221,6 @@ function Home({
             <ConfigProvider platform={platform.current} appearance={appearance}>
               <SplitLayout
                 modal={modal}
-                header={false && <PanelHeader separator={false} />}
                 style={needToShowClubStartOnboarding ? {
                     justifyContent: "center",
                     background: "rgb(63, 138, 224)",
@@ -1294,7 +1288,7 @@ function Home({
                         >
                           Личный кабинет
                         </Cell>
-                        <Spacing separator />
+                        <Spacing><Separator/></Spacing>
                         {club ?
                           <>
                             <Cell
@@ -1304,11 +1298,14 @@ function Home({
                                   size={28}
                                   src={club.photo}
                                   onClick={() => go("club_info")}
-                                  badge={donutStatus ? <img src={DonutIcon} style={{
-                                    width: '14px',
-                                    height: '14px'
-                                  }}  alt=""/> : ""}
-                                />
+                                >
+                                  {donutStatus && <Avatar.Badge>
+                                    <img src={DonutIcon} style={{
+                                      width: '14px',
+                                      height: '14px'
+                                    }}  alt=""/>
+                                  </Avatar.Badge>}
+                                </Avatar>
                               }
                               style={activeStory == "club_info" ? {
                                 cursor: "pointer",
@@ -1345,7 +1342,7 @@ function Home({
 
                       <Group>
                         <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
-                          <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
+                          <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" withBorder={false} />}>
                           Команда Club Helper ищет сотрудников
                             <br /><br />
                             <Button size="s" stretched mode="secondary">Подробнее</Button>
@@ -1440,7 +1437,6 @@ function Home({
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
                   modal={modal}
-                  header={false && <PanelHeader separator={false} />}
                   style={isDesktop ? {
                     justifyContent: "center",
                     paddingTop: "10px",
@@ -1507,12 +1503,12 @@ function Home({
                                     size={28}
                                     src={office.user.photo}
                                     onClick={() => go("office")}
-                                    badge={donutStatus ? <img src={DonutIcon} style={{
-                                      width: '14px',
-                                      height: '14px'
-                                    }}  alt=""/> : ""}
                                     style={{ cursor: "pointer" }}
-                                  />
+                                  >
+                                    {donutStatus && <Avatar.Badge>
+                                      <img src={DonutIcon} style={{ width: '14px', height: '14px' }}  alt=""/>
+                                    </Avatar.Badge>}
+                                  </Avatar>
                                 }
                                 style={activeStory === "office" ? {
                                   backgroundColor: "var(--button_secondary_background)",
@@ -1541,7 +1537,7 @@ function Home({
                               >
                                 {menuItem.name}
                               </Cell>
-                              {menuItem.id === "office-mailings" && <Spacing separator />}
+                              {menuItem.id === "office-mailings" && <Spacing><Separator/></Spacing>}
                             </>
                           )}
                         </Group>
@@ -1555,7 +1551,7 @@ function Home({
 
                         <Group>
                           <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
-                            <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
+                            <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" withBorder={false} />}>
                               Команда Club Helper ищет сотрудников
                               <br /><br />
                               <Button size="s" stretched mode="secondary">Подробнее</Button>
@@ -1582,7 +1578,6 @@ function Home({
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
                   modal={modal}
-                  header={false && <PanelHeader separator={false} />}
                   style={isDesktop ? {
                     justifyContent: "center",
                     paddingTop: "10px",

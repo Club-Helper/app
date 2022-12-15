@@ -604,7 +604,7 @@ export default class MailingList extends Component {
             {this.props.isLoading ? <PanelSpinner /> :
               this.state.isEnabled ?
               <Panel>
-                <PanelHeader left={
+                <PanelHeader before={
                   <React.Fragment>
                     {this.state.list.length > 0 && <PanelHeaderButton onClick={() => this.setState({ editMode: !this.state.editMode })}>
                       <Icon28EditOutline fill={this.state.editMode ? "var(--accent)" : ""} />

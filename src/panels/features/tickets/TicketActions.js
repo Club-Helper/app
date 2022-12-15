@@ -86,7 +86,9 @@ export default class TicketActions extends Component {
             </Placeholder>}
           {this.state.mailingList.find(item => item.status !== "open")?.length > 0 ? (
             <div>
-              <Spacing size={35} separator />
+              <Spacing size={35}>
+                <Separator/>
+              </Spacing>
               <Title level='3' style={{ marginLeft: "15px" }}>Недоступные для подписки</Title>
               {this.state.mailingList.map((item) => {
                 if (item.status !== "open") {

@@ -367,7 +367,9 @@ export default class Settings extends Component {
                 />
 
               </FormItem>
-              <Spacing size={20} separator />
+              <Spacing size={20}>
+                <Separator/>
+              </Spacing>
               <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Для тестирования</b></Header>
               <Cell
                 multiline

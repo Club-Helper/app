@@ -20,7 +20,7 @@ export default class FAQSolutions extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={
+                before={
                   <PanelHeaderBack onClick={() => this.props.goBack(2)} />
                 }
               >
@@ -47,7 +47,7 @@ export default class FAQSolutions extends Component {
                           size={36}
                           mode="image"
                           style={{ background: "none" }}
-                          shadow={false}
+                          withBorder={false}
                         />
                       : undefined}
                     />
@@ -73,7 +73,7 @@ export default class FAQSolutions extends Component {
                                 size={36}
                                 mode="image"
                                 style={{ background: "none" }}
-                                shadow={false}
+                                withBorder={false}
                               />
                             }
                           >
@@ -84,7 +84,7 @@ export default class FAQSolutions extends Component {
                                   size={36}
                                   mode="image"
                                   style={{ background: "none" }}
-                                  shadow={false}
+                                  withBorder={false}
                                 />
                               }
                               header={<Title style={{ maxWidth: "80%", marginLeft: "9.5%" }} level="3">{solution.title}</Title>}
@@ -139,7 +139,7 @@ export default class FAQSolutions extends Component {
                                     size={36}
                                     mode="image"
                                     style={{ background: "none" }}
-                                    shadow={false}
+                                    withBorder={false}
                                   />
                                 :
                                 <Icon28DocumentOutline />

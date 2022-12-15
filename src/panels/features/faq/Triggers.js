@@ -149,7 +149,7 @@ export default class FAQTriggers extends Component {
                                 size={36}
                                 mode="image"
                                 style={{ background: "none" }}
-                                shadow={false}
+                                withBorder={false}
                               />
                               : null
                           }
@@ -215,7 +215,7 @@ export default class FAQTriggers extends Component {
                                     size={36}
                                     mode="image"
                                     style={{ background: "none" }}
-                                    shadow={false}
+                                    withBorder={false}
                                   />
                                 }
                                 action={solution.button && solution.url &&
@@ -303,7 +303,7 @@ export default class FAQTriggers extends Component {
                               size={36}
                               mode="image"
                               style={{ background: "none" }}
-                              shadow={false}
+                              withBorder={false}
                               />
                               : null
                           }
@@ -369,7 +369,7 @@ export default class FAQTriggers extends Component {
                                     size={36}
                                     mode="image"
                                     style={{ background: "none" }}
-                                    shadow={false}
+                                    withBorder={false}
                                   />
                                 }
                                 action={solution.button && solution.url &&

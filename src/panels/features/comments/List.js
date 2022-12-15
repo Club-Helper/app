@@ -16,7 +16,6 @@ import {
   ConfigProvider,
   FormItem,
   FormLayout,
-  Input,
   List,
   ModalPage,
   ModalPageHeader,
@@ -39,7 +38,8 @@ import {
   CellButton,
   Spacing,
   SegmentedControl,
-  IconButton
+  IconButton,
+  Separator
 } from '@vkontakte/vkui';
 import { Icon16Done, Icon24Dismiss, Icon28CommentOutline, Icon28InfoCircleOutline, Icon56CommentsOutline, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon24AddCircleDottedOutline, Icon20MentionOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
@@ -487,7 +487,9 @@ export default class CommentsList extends Component {
                                 }
                                 {this.state.availability.creat &&
                                   <div>
-                                    <Spacing size={20} separator />
+                                    <Spacing size={20}>
+                                      <Separator/>
+                                    </Spacing>
                                     <CellButton
                                       before={<Icon24AddCircleDottedOutline />}
                                       onClick={() => {

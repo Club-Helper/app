@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Cell, ConfigProvider, Div, Group, Header, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderBack, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
+import { Avatar, Cell, ConfigProvider, Div, Group, Separator, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderBack, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
 
 import { Icon12Chevron, Icon24Dismiss, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTopic from './Topic';
@@ -96,7 +96,7 @@ export default class FAQIndex extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={
+                before={
                   !this.props.showMenu && <PanelHeaderBack onClick={() => this.props.goBack()} />
                 }
               >
@@ -108,15 +108,17 @@ export default class FAQIndex extends Component {
               >
                   <Group
                     header={
-                    <Title
-                      level="2"
-                      style={{ marginLeft: "15px", marginTop: "10px" }}
-                    >
-                        Выберите раздел, с которым Вам требуется помощь
+                      <Title
+                        level="2"
+                        style={{ marginLeft: "15px", marginTop: "10px" }}
+                      >
+                          Выберите раздел, с которым Вам требуется помощь
                       </Title>
                     }
                   >
-                    <Spacing size={30} separator />
+                    <Spacing size={30}>
+                      <Separator/>
+                    </Spacing>
                     {this.props.isLoading ? <PanelSpinner /> :
                       <List>
                         {this.state.product.count > 0 ?
@@ -125,12 +127,12 @@ export default class FAQIndex extends Component {
                               multiline
                               key={idx}
                               before={
-                                <Avatar
+                                <img
                                   src={item.icon}
-                                  size={36}
-                                  mode="image"
-                                  style={{ background: "none" }}
-                                  shadow={false}
+                                  width={36}
+                                  height={36}
+                                  alt=""
+                                  style={{ marginRight: 20, display: "inline-block" }}
                                 />
                               }
                               after={<Icon12Chevron width={16} height={16} />}

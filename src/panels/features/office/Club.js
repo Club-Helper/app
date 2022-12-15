@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react'
 
-import { Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Placeholder, ConfigProvider } from '@vkontakte/vkui'
+import { Separator, Avatar, CellButton, Gradient, Group, ModalCard, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderButton, Spacing, SplitCol, SplitLayout, Title, Card, Cell, Div, PanelSpinner, Text, SimpleCell, PanelHeaderClose, Footer, FormLayout, FormItem, Textarea, Radio, FixedLayout, Button, Placeholder, ConfigProvider } from '@vkontakte/vkui'
 import { Icon16Chevron, Icon24ReportOutline, Icon28ReportOutline, Icon56CheckCircleOutline, Icon56ErrorTriangleOutline } from '@vkontakte/icons'
 import bridge from '@vkontakte/vk-bridge';
 import ClubCardMailings from './ClubCardMailings';
@@ -122,7 +122,9 @@ export default class ClubCard extends Component {
           onClose={() => this.setState({ activeModal: "" })}
         >
           <CellButton before={<Icon28ReportOutline />}>Пожаловаться</CellButton>
-          <Spacing size={20} separator />
+          <Spacing size={20}>
+            <Separator/>
+          </Spacing>
           <CellButton mode="danger" onClick={() => this.setState({ activeModal: "" })}>Закрыть</CellButton>
         </ModalCard>
 
@@ -149,7 +151,9 @@ export default class ClubCard extends Component {
                 <br />
                 <Title level='3' weight='2'>{this.state.reportForm?.header}</Title>
               </Div>
-              <Spacing size={15} separator />
+              <Spacing size={15}>
+                <Separator/>
+              </Spacing>
               {this.state.reportForm?.reason_categories.map((reason, idx) => (
                 <SimpleCell
                   key={idx}
@@ -315,7 +319,7 @@ export default class ClubCard extends Component {
         <SplitLayout modal={modal}>
         <SplitCol>
           <Panel id="club-card">
-            <PanelHeader left={<PanelHeaderButton onClick={() => this.openReportForm()}><Icon24ReportOutline /></PanelHeaderButton>} />
+            <PanelHeader before={<PanelHeaderButton onClick={() => this.openReportForm()}><Icon24ReportOutline /></PanelHeaderButton>} />
             <Group>
               {this.props.club ?
                 <>
@@ -347,7 +351,9 @@ export default class ClubCard extends Component {
                     <b>{this.props.club?.rating}</b>&nbsp;
                   </Cell>
                 </Gradient>
-                  <Spacing size={20} separator />
+                  <Spacing size={20}>
+                    <Separator/>
+                  </Spacing>
                   <ClubCardMailings
                     setPopout={this.props.setPopout}
                     mailings={this.state.clubCardMailings?.items}

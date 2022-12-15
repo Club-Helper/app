@@ -10,7 +10,7 @@
 
 import React from "react";
 import {
-  Button, Gallery, Link, Progress, Text, Title, getClassName, Spinner, Alert, SplitLayout, ModalRoot, ModalCard, Div, ButtonGroup
+  Button, Gallery, Link, Progress, Text, Title, getPlatformClassName, Spinner, Alert, SplitLayout, ModalRoot, ModalCard, Div, ButtonGroup
 } from '@vkontakte/vkui';
 import {
   Icon24MessagesOutline,
@@ -44,7 +44,7 @@ let countPageStart = typeStartPage ? maxPage : (maxPage - 1);
 const textButton = ['Далее', 'Есть что-то ещё?', 'Хорошо, буду ждать', (typeStartPage ? 'Предоставить права доступа' : 'Установить'), 'Приступим к работе'];
 
 const SlideStart = ({ children, platform }) => {
-  const baseClassNames = getClassName('clubHelper--slideStart', platform);
+  const baseClassNames = getPlatformClassName('clubHelper--slideStart', platform);
 
   return (
     <div className={baseClassNames}>

@@ -11,6 +11,7 @@
 import React, { Component } from 'react'
 
 import {
+  Separator,
   ConfigProvider,
   ModalPage,
   ModalPageHeader,
@@ -421,7 +422,7 @@ export default class TicketsList extends Component {
                                         </SimpleCell>
                                       </>
                                     }
-                                    {this.state.messages.length != id + 1 && <Spacing separator size={10} style={{ marginTop: "10px" }} />}
+                                    {this.state.messages.length != id + 1 && <Spacing size={10} style={{ marginTop: "10px" }}><Separator/></Spacing>}
 
                                   </div>
                                 )) : this.state.currentMessages.map((item, id) => (

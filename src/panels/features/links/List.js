@@ -9,7 +9,7 @@
  *******************************************************/
 
 import React, { Component } from 'react'
-import { ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Input, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell, Snackbar } from '@vkontakte/vkui'
+import { Separator, ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Input, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell, Snackbar } from '@vkontakte/vkui'
 import { Icon24Linked, Icon24InfoCircleOutline, Icon24Dismiss, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon48Linked, Icon24AddCircleDottedOutline, Icon16Done } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -582,7 +582,9 @@ export default class Links extends Component {
                         </List>
                         {this.state.availability.creat &&
                           <div>
-                            <Spacing size={20} separator />
+                            <Spacing size={20}>
+                              <Separator/>
+                            </Spacing>
                             <CellButton
                               before={<Icon24AddCircleDottedOutline />}
                               onClick={this.openCreateLinkModal}

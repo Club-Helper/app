@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing, Placeholder } from '@vkontakte/vkui';
+import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Separator, Title, Spacing, Placeholder } from '@vkontakte/vkui';
 import { Icon12Chevron, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTriggers from './Triggers';
 import FAQSymptoms from './Symptoms';
@@ -124,7 +124,7 @@ export default class FAQTopic extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={<PanelHeaderBack onClick={() => this.props.goBack(2)} />}
+                before={<PanelHeaderBack onClick={() => this.props.goBack(2)} />}
               >
                 {this.props.openedProduct?.name?.length > 0 ? this.props.openedProduct.name : "Загрузка..."}
               </PanelHeader>
@@ -139,7 +139,9 @@ export default class FAQTopic extends Component {
                     </Title>
                   }
                 >
-                  <Spacing size={30} separator />
+                  <Spacing size={30}>
+                    <Separator/>
+                  </Spacing>
                   {this.state.isLoading ? <PanelSpinner /> :
                     <List>
                       {this.props.topic ?
@@ -149,12 +151,12 @@ export default class FAQTopic extends Component {
                               multiline
                               key={idx}
                               before={item.icon ?
-                                <Avatar
-                                  src={item.icon && item.icon}
-                                  size={36}
-                                  mode="image"
-                                  style={{ background: "none" }}
-                                  shadow={false}
+                                <img
+                                  src={item.icon}
+                                  width={36}
+                                  height={36}
+                                  alt=""
+                                  style={{ marginRight: 20, display: "inline-block" }}
                                 />
                               : undefined}
                               after={<Icon12Chevron width={16} height={16} />}

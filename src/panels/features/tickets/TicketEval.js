@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react'
 
-import { ConfigProvider, CustomSelectOption, FormItem, FormLayout, Group, Headline, Select, SplitCol, SplitLayout, Title, Textarea, Banner, Link, Button, Alert, AdaptivityProvider, AppRoot, Placeholder, ModalRoot, ModalPage, Div, Spacing, Footer } from '@vkontakte/vkui'
+import { Separator, ConfigProvider, CustomSelectOption, FormItem, FormLayout, Group, Headline, Select, SplitCol, SplitLayout, Title, Textarea, Banner, Link, Button, Alert, AdaptivityProvider, AppRoot, Placeholder, ModalRoot, ModalPage, Div, Spacing, Footer } from '@vkontakte/vkui'
 import { Icon28WarningTriangleOutline, Icon56CheckCircleOutline } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -464,7 +464,9 @@ export default class TicketEval extends Component {
                         </div>
                       </Placeholder>
                       <center>
-                        <Spacing size={20} separator style={{ width: "70vw" }} />
+                        <Spacing size={20} style={{ width: "70vw" }}>
+                          <Separator/>
+                        </Spacing>
 
                         <Div>
                           <Title level='3'>{this.getMarkTextByMarkName(this.state.initialMark).title}</Title>

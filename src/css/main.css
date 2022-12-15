@@ -75,6 +75,7 @@ body {
 .clubHelper--systemMessage {
   text-align: center;
   margin: 20px 0 30px;
+  color: var(--vkui--color_accent_gray);
 }
 
 .clubHelper--systemMessage .vkuiLink {

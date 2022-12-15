@@ -62,7 +62,7 @@ export default class FAQSymptoms extends Component {
                   {this.props.openedTriggerTitle[this.props.openedTriggerTitle.length - 1]}
                 </ModalPageHeader>
                 :
-                <PanelHeader left={
+                <PanelHeader before={
                   <PanelHeaderBack onClick={() => {
                     this.props.openedTriggerTitle.pop();
                     this.props.goBack(2)
@@ -84,7 +84,7 @@ export default class FAQSymptoms extends Component {
                               size={36}
                               mode="image"
                               style={{ background: "none" }}
-                              shadow={false}
+                              withBorder={false}
                             /> : undefined}
                           after={<Icon12Chevron width={16} height={16} />}
                           onClick={() => this.getTrigger(item)}
@@ -113,7 +113,7 @@ export default class FAQSymptoms extends Component {
                               size={36}
                               mode="image"
                               style={{ background: "none" }}
-                              shadow={false}
+                              withBorder={false}
                             /> : undefined}
                           after={<Icon12Chevron width={16} height={16} />}
                           onClick={() => this.getTrigger(item)}
