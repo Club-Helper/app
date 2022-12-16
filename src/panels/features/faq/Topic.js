@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing, Placeholder } from '@vkontakte/vkui';
+import { ConfigProvider, Panel, PanelHeader, SplitCol, SplitLayout, List, Cell, Avatar, Group, PanelSpinner, PanelHeaderBack, PullToRefresh, ModalRoot, ModalPage, ScreenSpinner, Div, Title, Spacing, Placeholder, Footer } from '@vkontakte/vkui';
 import { Icon12Chevron, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTriggers from './Triggers';
 import FAQSymptoms from './Symptoms';
@@ -170,6 +170,11 @@ export default class FAQTopic extends Component {
                           </Placeholder>
                         : <PanelSpinner />}
                     </List>
+                  }
+                  {this.props.topic.items.length === 1 &&
+                    <Footer>
+                      Показаны все решения.
+                    </Footer>
                   }
                 </Group>
               </PullToRefresh>
