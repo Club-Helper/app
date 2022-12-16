@@ -1019,6 +1019,7 @@ function Home({
           setStartupError={setStartupError}
           setHistory={setHistory}
           t={t}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },

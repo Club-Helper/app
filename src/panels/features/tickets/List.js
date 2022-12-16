@@ -114,9 +114,11 @@ export default class TicketsList extends Component {
     },
       (data) => {
         this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
       },
       (error) => {
         this.setState({ isEnabled: false });
+        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
       }
     );
 

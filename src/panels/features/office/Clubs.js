@@ -27,6 +27,7 @@ export default class Clubs extends Component {
 
   componentDidMount() {
     this.props.setPopout(null);
+    this.props.toggleShowMobileMenu(true);
   }
 
   handleClick(group) {
