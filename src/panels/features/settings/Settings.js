@@ -364,8 +364,8 @@ export default class Settings extends Component {
                 <Textarea
                   value={this.state.helloText}
                   onChange={(e) => this.handleHelloTextChanged(e)}
+                  placeholder={"{hello}!\n\nСпасибо, что написали нам, мы ответим Вам в ближайшее время."}
                 />
-
               </FormItem>
               <Spacing size={20} separator />
               <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Для тестирования</b></Header>
