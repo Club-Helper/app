@@ -353,3 +353,28 @@ body[scheme="space_gray"] .clubHelper--ticketSee--content .clubHelper--grayText 
 .galleryHeightController.vkuiGallery__layer {
   height: 80px;
 }
+
+.clubHelper--ListStats {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.clubHelper--ListStats > .vkuiLink.vkuiLink--vkcom {
+  width: 50%;
+}
+
+.clubHelper--ListStats > .vkuiLink:not(.vkuiLink--vkcom) {
+  width: 100%;
+}
+
+.clubHelper--ListStats > .vkuiSimpleCell {
+  box-sizing: border-box;
+}
+
+.clubHelper--ListStats > .vkuiSimpleCell.vkuiSimpleCell--vkcom {
+  width: 50%;
+}
+
+.clubHelper--ListStats > .vkuiSimpleCell:not(.vkuiSimpleCell--vkcom) {
+  width: 100%;
+}
