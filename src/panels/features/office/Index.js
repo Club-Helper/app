@@ -99,14 +99,14 @@ export default class Office extends Component {
                     :
                       <Placeholder>Здесь будет история активности</Placeholder>*/}
                 </List>
-                <CellButton
+                {false && <CellButton
                   onClick={() => {
                     this.props.setPage("landing");
                     this.props.setActiveStory("start_app");
                   }}
                 >
                   Показать онбординг
-                </CellButton>
+                </CellButton>}
               </Group>
             </Panel>
           </SplitCol>

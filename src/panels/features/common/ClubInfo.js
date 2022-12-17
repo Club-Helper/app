@@ -8,9 +8,29 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import {  ConfigProvider,  Gradient,  Group,  Panel,  PanelHeader,  PanelSpinner,  SplitCol,  SplitLayout,  Avatar,  Title,  Link,  MiniInfoCell,  List,  PullToRefresh,  PanelHeaderButton, ModalRoot, ModalPage,  ModalPageHeader,  Separator,  Snackbar,  ContentCard,  Caption,  CardScroll,  Banner,  Button,  Div,  Placeholder,  CellButton, Spacing, Cell } from '@vkontakte/vkui'
+import { ConfigProvider, Gradient, Group, Panel, PanelHeader, PanelSpinner, SplitCol, SplitLayout, Avatar, Title, Link, MiniInfoCell, List, PullToRefresh, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, Separator, Snackbar, ContentCard, Caption, CardScroll, Banner, Button, Div, Placeholder, CellButton, Spacing, Cell, SimpleCell, Card, Gallery } from '@vkontakte/vkui'
 import React, { Component } from 'react';
-import {  Icon16Hashtag, Icon20CalendarOutline,  Icon24Dismiss,  Icon20BlockOutline,  Icon20CommunityName,  Icon20Search,  Icon20WorkOutline,  Icon24Linked,  Icon28DonateOutline, Icon28SettingsOutline,  Icon16Done,  Icon28LifebuoyOutline,  Icon56CheckShieldOutline,  Icon24NotificationOutline,  Icon20ChevronRightOutline,  Icon56NotificationOutline, Icon28UserTagOutline,  Icon24Error} from '@vkontakte/icons';
+import {
+  Icon16Hashtag,
+  Icon20CalendarOutline,
+  Icon24Dismiss,
+  Icon20BlockOutline,
+  Icon20CommunityName,
+  Icon20Search,
+  Icon20WorkOutline,
+  Icon24Linked,
+  Icon28DonateOutline,
+  Icon28SettingsOutline,
+  Icon16Done,
+  Icon28LifebuoyOutline,
+  Icon56CheckShieldOutline,
+  Icon24NotificationOutline,
+  Icon20ChevronRightOutline,
+  Icon56NotificationOutline,
+  Icon28UserTagOutline,
+  Icon24Error,
+  Icon24Comment, Icon24CommentOutline
+} from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';
 import Settings from '../settings/Settings';
@@ -108,16 +128,18 @@ export default class ClubInfo extends Component {
   }
 
   openModal(id) {
-    this.setState({ modalLoading: true, activeModal: id });
+    if (id == "donut") setTimeout(() => {
+      document.querySelector("#root > .AppRoot > .vkuiSplitLayout > .vkuiSplitLayout__inner > .vkuiSplitLayout").classList.add('clubHelper--show-modal')
+    }, 100);
 
-    if (id == "donut") document.querySelector("#root > div > section > div > div > div > div").classList.add('clubHelper--show-modal');
+    this.setState({ modalLoading: true, activeModal: id });
   }
 
   closeModal() {
     let id = this.state.activeModal;
     this.setState({ activeModal: "" });
 
-    if (id == "donut") document.querySelector("#root > div > section > div > div > div > div").classList.remove('clubHelper--show-modal');
+    if (id == "donut") document.querySelector("#root > .AppRoot > .vkuiSplitLayout > .vkuiSplitLayout__inner > .vkuiSplitLayout").classList.remove('clubHelper--show-modal');
   }
 
   settingsWasChanged() {
@@ -226,7 +248,7 @@ export default class ClubInfo extends Component {
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
     this.setState({ autofixBtnWorking: false });
   }
 
@@ -239,7 +261,7 @@ export default class ClubInfo extends Component {
         this.props.toggleShowMobileMenu(false);
         this.setState({ supportCode: data.response });
         this.openModal("support_code_result");
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       }
     );
     this.setState({ codeBtnWorking: false });
@@ -253,7 +275,10 @@ export default class ClubInfo extends Component {
     },
       (data) => {
         this.setState({ notifiesFetching: false, notifies: data.response });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+      }, (error) => {
+        this.setState({ activeModal: "" });
+        this.props.createError(error.error.error_msg);
       })
   }
 
@@ -281,8 +306,14 @@ export default class ClubInfo extends Component {
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
           id="donut"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={this.closeModal}><Icon24Dismiss /></PanelHeaderButton>}>VK Donut</ModalPageHeader>}
-          onClose={this.closeModal}
+          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.closeModal();
+          }}><Icon24Dismiss /></PanelHeaderButton>}>VK Donut</ModalPageHeader>}
+          onClose={() => {
+            this.props.toggleShowMobileMenu(true);
+            this.closeModal();
+          }}
           settlingHeight={100}
         >
           <Donut {...this.props} />
@@ -371,7 +402,7 @@ export default class ClubInfo extends Component {
           <SplitCol>
             <Panel>
               <PanelHeader
-                left={!this.props.isMobile && !isClubLoading ?
+                left={!this.props.isMobile && !isClubLoading && !(this.props.startupError || club.error) ?
                   <React.Fragment>
                     {this.props.club_role === "admin" &&
                       <PanelHeaderButton onClick={() => this.openModal("settings")}>
@@ -416,15 +447,18 @@ export default class ClubInfo extends Component {
                         mode={this.props.appearance === "dark" ? 'black' : 'white'}
                       >
                         <Link target="_blank" href={"https://vk.com/club" + club.id}><Avatar size={96} src={club.photo} /></Link>
-                        <Link target="_blank" href={"https://vk.com/club" + club.id}>
-                          <Title
-                            style={{ marginBottom: 8, marginTop: 20, maxWidth: "100%", overflow: "hidden", color: "var(--text_primary)" }}
-                            level="2"
-                            weight="2"
-                          >
-                            {club.name}
-                          </Title>
-                        </Link>
+                        <center>
+                          <Link target="_blank" href={"https://vk.com/club" + club.id}>
+                            <Title
+                              style={{ marginBottom: 8, marginTop: 20, color: "var(--text_primary)" }}
+                              level="2"
+                              weight="2"
+                            >
+                              {club.name.slice(0, 35)}
+                              {club.name.length > 35 ? "..." : ""}
+                            </Title>
+                          </Link>
+                        </center>
                       </Gradient>
                       {!club.error && <Separator wide />}
                       {club.error &&
@@ -463,7 +497,17 @@ export default class ClubInfo extends Component {
                       <List style={{ paddingTop: "10px" }}>
                         <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
                         <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
-                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => this.openModal("donut")} after={<div onClick={() => this.openModal("donut")} style={{ color: "var(--accent)" }}>Что это?</div>}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
+                          if (!this.props.startupError && !club.error) {
+                            this.props.toggleShowMobileMenu(false);
+                            this.openModal("donut");
+                          }
+                        }} after={(!this.props.startupError && !club.error) ? <div onClick={() => {
+                          if (!this.props.startupError) {
+                            this.props.toggleShowMobileMenu(false);
+                            this.openModal("donut");
+                          }
+                        }} style={{ color: "var(--accent)" }}>Что это?</div> : ""} disabled={this.props.startupError || club.error}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
                       </List>
                     </Group>
                     {!this.props.isMobile && !this.props.showMenu &&
@@ -488,7 +532,7 @@ export default class ClubInfo extends Component {
                         </CellButton>
                       </Group>
                     }
-                    {this.props.isMobile &&
+                    {this.props.isMobile && !isClubLoading && !(this.props.startupError || club.error) &&
                       <Group>
                         {this.props.club_role === "admin" &&
                           <CellButton
@@ -546,61 +590,85 @@ export default class ClubInfo extends Component {
                     <Title level='2' style={{ padding: "10px", marginLeft: "5px", color: "var(--text_primary)" }}>Статистика</Title>
                     {this.props.club_role == "admin" &&
                       <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Руководители</Title>}>
-                        <CardScroll>
+                        <div className='clubHelper--ListStats'>
                           {this.state.isManagersLoading ? <PanelSpinner /> :
                             this.state.managers?.map((item, idx) => (
-                              <ContentCard
-                                mode="tint"
-                                key={idx}
-                                subtitle={<Avatar size={28} src={item.photo} />}
-                                header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">{item.first_name} {item.last_name}</Title>}
-                                caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.props.formatRole(item.role)}</Caption>}
-                              />
+                              <Link href={`https://vk.com/id${item.id}`} target="_blank">
+                                <SimpleCell
+                                  before={<Avatar size={28} src={item.photo} />}
+                                  description={this.props.formatRole(item.role)}
+                                >
+                                  {item.first_name} {item.last_name}
+                                </SimpleCell>
+                              </Link>
                             )
                             )}
-                        </CardScroll>
+                        </div>
                       </Group>
                     }
                     <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Обращения</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
-                        <CardScroll>
-                          <ContentCard
-                            mode="tint"
-                            subtitle={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Всего</Title>}
-                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.all}</Caption>}
-                          />
-                          <ContentCard
-                            mode="tint"
-                            subtitle={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Ожидающих специалиста</Title>}
-                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state?.stats.tickets?.waiting_specialist}</Caption>}
-                          />
-                          <ContentCard
-                            mode="tint"
-                            subtitle={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">В работе</Title>}
-                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.work}</Caption>}
-                          />
-                          <ContentCard
-                            mode="tint"
-                            subtitle={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Закрыты</Title>}
-                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats?.tickets?.closed}</Caption>}
-                          />
-                        </CardScroll>
+                        <div className='clubHelper--ListStats'>
+                          <SimpleCell
+                            onClick={() => {
+                              localStorage.setItem("tickets_list_activeTab", "all");
+                              this.props.go("tickets_list");
+                            }}
+                            before={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
+                            description={this.state.stats?.tickets?.all}
+                          >
+                            Всего
+                          </SimpleCell>
+                          <SimpleCell
+                            onClick={() => {
+                              localStorage.setItem("tickets_list_activeTab", "waiting_specialist");
+                              this.props.go("tickets_list");
+                            }}
+                            before={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
+                            description={this.state.stats?.tickets?.waiting_specialist}
+                          >
+                            Ожидающих специалиста
+                          </SimpleCell>
+                          <SimpleCell
+                            onClick={() => {
+                              localStorage.setItem("tickets_list_activeTab", "work");
+                              this.props.go("tickets_list");
+                            }}
+                            before={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
+                            description={this.state.stats?.tickets?.work}
+                          >
+                            В работе
+                          </SimpleCell>
+                          <SimpleCell
+                            onClick={() => {
+                              localStorage.setItem("tickets_list_activeTab", "closed");
+                              this.props.go("tickets_list");
+                            }}
+                            before={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
+                            description={this.state.stats?.tickets?.closed}
+                          >
+                            Закрыты
+                          </SimpleCell>
+                        </div>
                       }
                     </Group>
-                    <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Ссылки</Title>}>
+                    <Group header={<Title level='3' style={{ padding: "10px", marginLeft: "5px" }}>Шаблоны</Title>}>
                       {this.state.isStatsLoading ? <PanelSpinner /> :
-                        <CardScroll>
-                          <ContentCard
-                            mode="tint"
-                            subtitle={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
-                            header={<Title style={{ fontSize: "16px", color: "var(--text_secondary)" }} weight="3">Всего</Title>}
-                            caption={<Caption style={{ fontSize: "18px" }} weight={1}>{this.state.stats.links?.all}</Caption>}
-                          />
-                        </CardScroll>
+                        <div className='clubHelper--ListStats'>
+                          <SimpleCell
+                            onClick={() => this.props.go("templates")}
+                            before={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
+                            description={this.state.stats?.links?.all}
+                          >
+                            Ссылки
+                          </SimpleCell><SimpleCell
+                            onClick={() => this.props.go("templates")}
+                            before={<Icon24CommentOutline width={28} height={28}/>}
+                            description={this.state.stats?.comments?.all}
+                          >
+                            Комментарии
+                          </SimpleCell>
+                        </div>
                       }
                     </Group>
                   </>
@@ -609,6 +677,6 @@ export default class ClubInfo extends Component {
 
               {this.state.snackbar}
             </Panel>
-          </SplitCol></SplitLayout></ConfigProvider>)
+          </SplitCol></SplitLayout></ConfigProvider >)
   }
 }

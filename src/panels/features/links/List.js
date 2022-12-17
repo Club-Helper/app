@@ -162,7 +162,7 @@ export default class Links extends Component {
               )
             })
             this.props.toggleShowMobileMenu(true);
-            bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+            if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
             this.props.setPopout(null);
             return true;
           },
@@ -238,8 +238,12 @@ export default class Links extends Component {
     this.setState({ title: e.target.value })
     if (!e.target.value) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Поле обязательно для заполнения" });
+    } else if (e.target.value.length < 5) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок должен содержать не менее 5 символов" });
     } else if (e.target.value.length > 50) {
       this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может быть длиннее 50 символов" });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formTitleStatus: "error", formTitleBottom: "Заголовок не может состоять только из пробелов" });
     } else {
       this.setState({ formTitleStatus: "default", formTitleBottom: "" });
     }
@@ -251,6 +255,8 @@ export default class Links extends Component {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Поле обязательно для заполнения" });
     } else if (e.target.value.length < 10) {
       this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может содержать меньше 10 символов" });
+    } else if (e.target.value.match(/^[ ]+$/)) {
+      this.setState({ formPatternStatus: "error", formPatternBottom: "Шаблон сообщения не может состоять только из пробелов" });
     } else {
       this.setState({ formPatternStatus: "default", formPatternBottom: "" })
     }
@@ -293,8 +299,8 @@ export default class Links extends Component {
         this.setState({ buttonLoading: true })
 
         this.props.req("links.creat", {
-          title: decodeURI(this.state.title),
-          pattern: decodeURI(this.state.pattern),
+          title: encodeURI(this.state.title),
+          pattern: encodeURI(this.state.pattern),
           token: this.props.token
         },
           (data) => {
@@ -327,7 +333,7 @@ export default class Links extends Component {
                   )
                 })
                 this.closeModal();
-                bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+                if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
               }
             )
           },
@@ -363,7 +369,7 @@ export default class Links extends Component {
       )
     });
 
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   onRefresh() {
@@ -380,12 +386,13 @@ export default class Links extends Component {
     localStorage.removeItem("links_list_formData_title");
     localStorage.removeItem("links_list_formData_pattern");
     this.setState({ snackbar: null });
+    this.props.toggleShowMobileMenu(true);
   }
 
   onFilterChange(value) {
     this.setState({ filter: value });
     this.getLinks(value);
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   componentWillUnmount() {
@@ -516,10 +523,10 @@ export default class Links extends Component {
                             marginLeft: "15px",
                             marginTop: "15px",
                             marginBottom: "0px"
-                          }}>Ссылки <span style={{
+                          }}>Ссылки {this.state.count > 0 && <span style={{
                             color: "var(--text_secondary)",
                             fontSize: "12px"
-                          }}>{this.state.count}</span></Title>}
+                          }}>{this.state.count}</span>}</Title>}
                           style={{ margin: "0 -10px" }}
                         />
                         <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
@@ -594,20 +601,29 @@ export default class Links extends Component {
                       </Group>
                     </>}
                   </PullToRefresh>
-
-                  {this.state.availability.limit && this.state.count > 0 ?
-                    <Footer>
-                      Вы можете создать
-                      ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["ссылку", "ссылки", "ссылок"])}.
-                    </Footer>
-                    : ""
-                  }
-                  {
-                    !this.state.availability.creat &&
-                    <Footer>
-                      Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
-                      чтобы создать больше.
-                    </Footer>
+                  {!this.state.linksLoading &&
+                  <>
+                    {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
+                      <Footer>
+                        Вы можете создать
+                        ещё {
+                          this.state.availability.limit
+                          + " "
+                          + this.props.declOfNum(
+                            this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
+                          )
+                          }.
+                      </Footer>
+                      : ""
+                    }
+                    {
+                      !this.state.availability.creat &&
+                      <Footer>
+                        Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
+                        чтобы создать больше.
+                      </Footer>
+                    }
+                  </>
                   }
                 </SplitCol>
                 {this.state.snackbar}

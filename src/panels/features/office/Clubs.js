@@ -27,6 +27,7 @@ export default class Clubs extends Component {
 
   componentDidMount() {
     this.props.setPopout(null);
+    this.props.toggleShowMobileMenu(true);
   }
 
   handleClick(group) {
@@ -94,8 +95,8 @@ export default class Clubs extends Component {
       })
       .catch((error) => {
         this.setState({ bridgeInstallResult: error });
-        this.props.toggleShowMenu(false);
         if (error.error_data.error_code !== 4) {
+          this.props.toggleShowMenu(false);
           this.setState({ activeModal: "error" });
         }
       })

@@ -102,7 +102,7 @@ export default class Settings extends Component {
 
     this.props.req("clubs.setSetting", this.qParams({token: this.props.token}, this.props.serialize(this.state.changes)), (data) => {
       this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
-      bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+      if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       this.props.isEmbedded && this.props.close();
       this.props.isEmbedded && this.props.settingsWasChanged();
     },
@@ -364,8 +364,8 @@ export default class Settings extends Component {
                 <Textarea
                   value={this.state.helloText}
                   onChange={(e) => this.handleHelloTextChanged(e)}
+                  placeholder={"{hello}!\n\nСпасибо, что написали нам, мы ответим Вам в ближайшее время."}
                 />
-
               </FormItem>
               <Spacing size={20} separator />
               <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Для тестирования</b></Header>
@@ -389,12 +389,12 @@ export default class Settings extends Component {
               >
                 VK Donut
               </Cell>
-              <CellButton onClick={() => {
+              {false && <CellButton onClick={() => {
                 this.props.setPage("landing");
                 this.props.setActiveStory("start_app");
               }}>
                 Показать онбординг
-              </CellButton>
+              </CellButton>}
               <br />
               <Div>
                 <Button

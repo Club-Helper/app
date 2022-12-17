@@ -66,6 +66,7 @@ export default class TicketsList extends Component {
       ticketsLoading: false,
       ticketButtonsID: 0,
       currentMessages: [],
+      searchQuery: ""
     }
 
     this.state = this.props.ticketsState !== null ? this.props.ticketsState : initialState
@@ -108,32 +109,35 @@ export default class TicketsList extends Component {
     let timeout = setTimeout(() => this.props.setPopout(<ScreenSpinner />), 10000);
 
     this.props.req("tickets.get", {
-        token: this.props.token,
-        filter: filter
-      },
+      token: this.props.token,
+      filter: filter
+    },
       (data) => {
         this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
       },
       (error) => {
         this.setState({ isEnabled: false });
+        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
       }
     );
 
     this.props.setPopout(null);
     clearTimeout(timeout);
     needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   performAction(id, action) {
     this.props.req("ticket.action", {
-        id: id,
-        action: action,
-        token: this.props.token
-      },
+      id: id,
+      action: action,
+      token: this.props.token
+    },
       (data) => {
         this.closeTicketButtonsModal();
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        this.getTickets(this.state.activeTab);
       }
     );
   }
@@ -144,23 +148,30 @@ export default class TicketsList extends Component {
 
   componentDidMount() {
     this.setState({ ticketsLoading: true });
-    this.props.req("tickets.get", {
-        token: this.props.token,
-        filter: this.state.activeTab
-      },
-      (data) => {
-        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
-      },
-      (error) => {
-        this.setState({ isEnabled: false });
-      }
-    );
 
-    this.props.setLoading(false);
-    this.setState({ ticketsLoading: false });
     this.props.setPopout(null);
 
     this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
+
+    if (localStorage.getItem("tickets_list_activeTab")) {
+      this.setState({ activeTab: localStorage.getItem("tickets_list_activeTab"), ticketsLoading: false });
+      this.getTickets(localStorage.getItem("tickets_list_activeTab"));
+      this.props.setLoading(false);
+    } else {
+      this.props.req("tickets.get", {
+        token: this.props.token,
+        filter: this.state.activeTab
+      },
+        (data) => {
+          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+          this.props.setLoading(false);
+        },
+        (error) => {
+          this.setState({ isEnabled: false });
+          this.props.setLoading(false);
+        }
+      );
+    }
   }
 
   openTicketButtonsModal(id, options) {
@@ -178,10 +189,12 @@ export default class TicketsList extends Component {
   }
 
   search(e) {
+    this.setState({ searchQuery: e.target.value });
     if (!e.target.value) {
       this.setState({ currentMessages: [] });
     } else {
-      this.setState({ currentMessages: this.state.messages.filter(({ preview }) => preview.toLowerCase().indexOf(e.target.value) > -1)
+      this.setState({
+        currentMessages: this.state.messages.filter(({ preview }) => preview.toLowerCase().indexOf(e.target.value) > -1)
       })
     }
   }
@@ -343,88 +356,95 @@ export default class TicketsList extends Component {
                           {this.state.ticketsLoading ? <PanelSpinner /> :
                             <List>
                               {this.state.activeTab && this.state.count != 0 &&
-                              this.state.currentMessages.length <= 0 ?
-                                this.state.messages.map((item, id) => (
-                                  <div key={item.id}>
-                                    {this.props.isMobile &&
-                                      <div>
-                                        <Cell
-                                          disabled
-                                          multiline
-                                          before={<Avatar size={36} src={item.user.photo} />}
-                                          after={<Icon28RecentOutline />}
-                                          description={item.time.label}
-                                        >
-                                          {item.user.first_name} {item.user.last_name}
-                                        </Cell>
-                                      </div>
-                                    }
-                                    {!this.props.isMobile &&
-                                      <SimpleCell
-                                        onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}
-                                        multiline
-                                        disabled
-                                        description={item.status.label}
-                                        after={
-                                          !this.props.isMobile &&
+                                this.state.searchQuery ?
+                                this.state.currentMessages.length > 0 ?
+                                  this.state.currentMessages.map((item, id) => (
+                                    <div key={item.id}>
+                                      {this.props.isMobile &&
+                                        <div>
                                           <Cell
                                             disabled
                                             multiline
                                             before={<Avatar size={36} src={item.user.photo} />}
+                                            after={<Icon28RecentOutline />}
                                             description={item.time.label}
                                           >
                                             {item.user.first_name} {item.user.last_name}
                                           </Cell>
-                                        }
-                                        before={<Icon28RecentOutline />}
-                                        key={item.id}
-                                      >
-                                        Обращение #{item.id}
-                                      </SimpleCell>
-                                    }
-                                    <SimpleCell
-                                      multiline
-                                      disabled
-                                      style={{
-                                        backgroundColor: "var(--button_muted_background)",
-                                        borderRadius: "8px",
-                                        color: !this.props.isMobile ? "var(--button_muted_foreground)" : "var(--text_subhead)",
-                                        whiteSpace: "pre-wrap",
-                                        margin: "0 15px 0 15px"
-                                      }}
-                                    >
-                                      {item.preview}
-                                    </SimpleCell>
-                                    {item.options.length != 0 &&
-                                      <>
+                                        </div>
+                                      }
+                                      {!this.props.isMobile &&
                                         <SimpleCell
+                                          onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}
                                           multiline
                                           disabled
-                                          style={{
-                                            marginBottom: "10px"
-                                          }}
+                                          description={item.status.label}
+                                          after={
+                                            !this.props.isMobile &&
+                                            <Cell
+                                              disabled
+                                              multiline
+                                              before={<Avatar size={36} src={item.user.photo} />}
+                                              description={item.time.label}
+                                            >
+                                              {item.user.first_name} {item.user.last_name}
+                                            </Cell>
+                                          }
+                                          before={<Icon28RecentOutline />}
+                                          key={item.id}
                                         >
-                                          <HorizontalScroll
-                                            showArrows
-                                            getScrollToLeft={(i) => i - 120}
-                                            getScrollToRight={(i) => i + 120}
-                                          >
-                                            <ButtonGroup>
-                                              {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
-                                              {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
-                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
-                                              {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
-                                                <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
-                                                : ""}
-                                            </ButtonGroup>
-                                          </HorizontalScroll>
+                                          Обращение #{item.id}
                                         </SimpleCell>
-                                      </>
-                                    }
-                                    {this.state.messages.length != id + 1 && <Spacing separator size={10} style={{ marginTop: "10px" }} />}
+                                      }
+                                      <SimpleCell
+                                        multiline
+                                        disabled
+                                        style={{
+                                          backgroundColor: "var(--button_muted_background)",
+                                          borderRadius: "8px",
+                                          color: !this.props.isMobile ? "var(--button_muted_foreground)" : "var(--text_subhead)",
+                                          whiteSpace: "pre-wrap",
+                                          margin: "0 15px 0 15px"
+                                        }}
+                                      >
+                                        {item.preview}
+                                      </SimpleCell>
+                                      {item.options.length != 0 &&
+                                        <>
+                                          <SimpleCell
+                                            multiline
+                                            disabled
+                                            style={{
+                                              marginBottom: "10px"
+                                            }}
+                                          >
+                                            <HorizontalScroll
+                                              showArrows
+                                              getScrollToLeft={(i) => i - 120}
+                                              getScrollToRight={(i) => i + 120}
+                                            >
+                                              <ButtonGroup>
+                                                {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
+                                                {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
+                                                {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
+                                                {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
+                                                  <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
+                                                  : ""}
+                                              </ButtonGroup>
+                                            </HorizontalScroll>
+                                          </SimpleCell>
+                                        </>
+                                      }
+                                      {this.state.messages.length != id + 1 && <Spacing separator size={10} style={{ marginTop: "10px" }} />}
 
-                                  </div>
-                                )) : this.state.currentMessages.map((item, id) => (
+                                    </div>
+                                  ))
+                                  : <Placeholder
+                                    icon={<Icon56InboxOutline />}
+                                  >
+                                    Не найдено ни одного обращения.
+                                  </Placeholder> :
+                                this.state.messages.map((item, id) => (
                                   <div key={item.id}>
                                     {this.props.isMobile &&
                                       <div>

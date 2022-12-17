@@ -82,12 +82,12 @@ export default class CommentsList extends Component {
     },
       (data) => {
         this.setState({ comments: data.response.items, count: data.response.count, availability: data.response.availability, isEnabled: true, listLoading: false })
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.setState({ isEnabled: false, listLoading: false });
         this.props.createError(error.error.error_msg);
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" }); }
       })
 
     this.getCommentsTimeout = setTimeout(() => {
@@ -104,7 +104,7 @@ export default class CommentsList extends Component {
   getCommentById(id) {
     this.props.toggleShowMobileMenu(false);
     this.setState({ openedComment: this.state.comments[id], activeModal: "comment-info" })
-    bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   createComment() {
@@ -162,13 +162,13 @@ export default class CommentsList extends Component {
             <Snackbar
               onClose={() => this.setState({ snackbar: null })}
               before={
-              <Avatar
-                size={24}
-                style={{ background: "var(--button_commerce_background)" }}
-              >
-                <Icon16Done fill="#FFF" width={14} height={14} />
-              </Avatar>
-            }
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
             >
               Шаблон создан успешно
             </Snackbar>
@@ -179,7 +179,7 @@ export default class CommentsList extends Component {
           newCommentPattern: ""
         });
         this.getComments(this.state.filter);
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -212,7 +212,7 @@ export default class CommentsList extends Component {
             </Snackbar>
           )
         });
-        bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getComments(this.state.filter);
         this.setState({ deleteCommentButtonWorking: false });
         this.props.setPopout(null);
@@ -258,6 +258,7 @@ export default class CommentsList extends Component {
     this.interval = setInterval(() => this.getComments(this.state.filter), 60000);
 
     this.getComments(this.state.filter);
+    this.props.toggleShowMobileMenu(true);
   }
 
   onFilterChange(value) {
@@ -296,12 +297,16 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentTitle: e.target.value })
                   if (!e.target.value || e.target.value == '') {
                     this.setState({ titleValidation: "Поле обязательно для заполнения" });
+                  } else if (e.target.value.length < 5) {
+                    this.setState({ titleValidation: "Заголовок должен содержать не менее 5 символов" });
                   } else if (e.target.value.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
                   } else if (/^\s+$/.test(e.target.value)) {
                     this.setState({ titleValidation: "Неверный формат" });
                   } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ titleValidation: "Неверный формат" });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ titleValidation: "Заголовок не может состоять только из пробелов" });
                   } else {
                     this.setState({ titleValidation: "" });
                   }
@@ -323,10 +328,14 @@ export default class CommentsList extends Component {
                   this.setState({ newCommentCommand: e.target.value })
                   if (!e.target.value || e.target.value == '') {
                     this.setState({ commandValidation: "Поле обязательно для заполнения" });
+                  } else if (e.target.value.length < 2) {
+                    this.setState({ commandValidation: "Команда должна содержать не менее 2 символов" });
                   } else if (!/^[!|\/].*/.test(e.target.value)) {
                     this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
                   } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ commandValidation: "Неверный формат" });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ commandValidation: "Команда не может состоять только из пробелов" });
                   } else {
                     this.setState({ commandValidation: "" });
                   }
@@ -352,6 +361,8 @@ export default class CommentsList extends Component {
                     this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
                   } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
                     this.setState({ patternValidation: "Неверный формат" });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
                   } else {
                     this.setState({ patternValidation: "" });
                   }
@@ -423,59 +434,61 @@ export default class CommentsList extends Component {
             <>
               {this.state.isEnabled &&
                 <SplitCol>
-                    <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
-                      <Cell
-                          disabled
-                          before={<Title level='3' style={{
-                            marginLeft: "15px",
-                            marginTop: "15px",
-                            marginBottom: "0px"
-                          }}>Комментарии <span style={{
-                            color: "var(--text_secondary)",
-                            fontSize: "12px"
-                          }}>{this.state.count}</span></Title>}
-                          style={{ margin: "0 -10px" }}
-                        />
-                      <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
-                          <SegmentedControl
-                            size="m"
-                            name="filter"
-                            options={[
-                              {
-                                label: "Все",
-                                value: "all",
-                                disabled: this.state.filterDisabled
-                              },
-                              {
-                                label: "Мои",
-                                value: "my",
-                                disabled: this.state.filterDisabled
-                              }
-                            ]}
-                            style={ this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
-                            onChange={(value) => this.onFilterChange(value)}
-                            value={this.state.filter}
-                          />
-                        </Div>
-                        {this.state.listLoading ? <PanelSpinner /> :
-                          <List>
-                            {this.state.comments.length > 0 ?
+                  <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh}>
+                    <Cell
+                      disabled
+                      before={<Title level='3' style={{
+                        marginLeft: "15px",
+                        marginTop: "15px",
+                        marginBottom: "0px"
+                      }}>Комментарии {this.state.count > 0 && <span style={{
+                        color: "var(--text_secondary)",
+                        fontSize: "12px"
+                      }}>{this.state.count}</span>}</Title>}
+                      style={{ margin: "0 -10px" }}
+                    />
+                    <Div style={!this.props.isMobile ? { maxWidth: 300 } : {}}>
+                      <SegmentedControl
+                        size="m"
+                        name="filter"
+                        options={[
+                          {
+                            label: "Все",
+                            value: "all",
+                            disabled: this.state.filterDisabled
+                          },
+                          {
+                            label: "Мои",
+                            value: "my",
+                            disabled: this.state.filterDisabled
+                          }
+                        ]}
+                        style={this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
+                        onChange={(value) => this.onFilterChange(value)}
+                        value={this.state.filter}
+                      />
+                    </Div>
+                    {this.state.listLoading ? <PanelSpinner /> :
+                      <List>
+                        {this.state.comments.length > 0 ?
+                          <>
+                            {this.state.comments.map((comment, idx) => (
+                              <Cell
+                                className="clubHelper--Cell"
+                                hasHover={false}
+                                hasActive={false}
+                                key={idx}
+                                description={comment.comand}
+                                before={<Icon28CommentOutline />}
+                                after={<IconButton onClick={() => this.getCommentById(idx)}><Icon28InfoCircleOutline /></IconButton>}
+                                onClick={() => this.getCommentById(idx)}
+                              >
+                                {comment.title}
+                              </Cell>
+                            ))}
+                            {!this.state.listLoading &&
                               <>
-                                {this.state.comments.map((comment, idx) => (
-                                  <Cell
-                                    className="clubHelper--Cell"
-                                    hasHover={false}
-                                    hasActive={false}
-                                    key={idx}
-                                    description={comment.comand}
-                                    before={<Icon28CommentOutline />}
-                                    after={<IconButton onClick={() => this.getCommentById(idx)}><Icon28InfoCircleOutline/></IconButton>}
-                                    onClick={() => this.getCommentById(idx)}
-                                  >
-                                    {comment.title}
-                                  </Cell>
-                                ))}
-                                {this.state.availability.limit ?
+                                {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit ?
                                   <Footer>
                                     Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["комментарий", "комментария", "комментариев"])}
                                   </Footer>
@@ -485,37 +498,40 @@ export default class CommentsList extends Component {
                                     Достигнут лимит шаблонов комментариев. Оплатите подписку VK Donut или удалите ненужные шаблоны, чтобы создать больше.
                                   </Footer>
                                 }
-                                {this.state.availability.creat &&
-                                  <div>
-                                    <Spacing size={20} separator />
-                                    <CellButton
-                                      before={<Icon24AddCircleDottedOutline />}
-                                      onClick={() => {
-                                        this.props.toggleShowMobileMenu(false);
-                                        this.setState({
-                                         activeModal: "create-comment"
-                                        })
-                                      }}
-                                    >
-                                      Создать шаблон
-                                    </CellButton>
-                                  </div>
-                                }
                               </>
-                              :
-                              <Placeholder
-                                action={<Button onClick={() => {
-                                  this.props.toggleShowMobileMenu(false);
-                                  this.setState({ activeModal: "create-comment" })
-                                }}
-                                >Создать комментарий</Button>}
-                              >
-                                Не найдено ни одного шаблона комментария.
-                              </Placeholder>
                             }
-                          </List>
+
+                            {this.state.availability.creat &&
+                              <div>
+                                <Spacing size={20} separator />
+                                <CellButton
+                                  before={<Icon24AddCircleDottedOutline />}
+                                  onClick={() => {
+                                    this.props.toggleShowMobileMenu(false);
+                                    this.setState({
+                                      activeModal: "create-comment"
+                                    })
+                                  }}
+                                >
+                                  Создать шаблон
+                                </CellButton>
+                              </div>
+                            }
+                          </>
+                          :
+                          <Placeholder
+                            action={<Button onClick={() => {
+                              this.props.toggleShowMobileMenu(false);
+                              this.setState({ activeModal: "create-comment" })
+                            }}
+                            >Создать комментарий</Button>}
+                          >
+                            Не найдено ни одного шаблона комментария.
+                          </Placeholder>
                         }
-                    </PullToRefresh>
+                      </List>
+                    }
+                  </PullToRefresh>
                 </SplitCol>
               }
               {!this.state.isEnabled &&

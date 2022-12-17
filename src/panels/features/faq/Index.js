@@ -97,7 +97,7 @@ export default class FAQIndex extends Component {
             <Panel>
               <PanelHeader
                 left={
-                  !this.props.showMenu && <PanelHeaderBack onClick={() => this.props.goBack()} />
+                  !this.props.showMenu && <PanelHeaderBack onClick={() => this.props.setActiveStory("club_info")} />
                 }
               >
                 Помощь
