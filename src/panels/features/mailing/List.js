@@ -289,7 +289,7 @@ export default class MailingList extends Component {
     } else if (this.state.mailingText.length > 600) {
       this.setState({ sendMessageValidation: "Текст рассылки должен содержать не более 600 символов" });
       this.setState({ sendBtnWorking: false });
-    } else if (e.target.value.match(/^[ ]+$/)) {
+    } else if (this.state.mailingText.match(/^[ ]+$/)) {
       this.setState({ sendMessageValidation: "Текст рассылки не может состоять только из пробелов" });
       this.setState({ sendBtnWorking: false });
     } else {
