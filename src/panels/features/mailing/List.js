@@ -751,7 +751,7 @@ export default class MailingList extends Component {
                             </Placeholder>}
                     </PullToRefresh>
                   </List>
-                  {this.state.availability.limit &&
+                  {(this.state.availability.limit && this.state.list.length != 0) &&
                     <Footer>
                       Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["рассылку", "рассылки", "рассылок"])}.
                     </Footer>
