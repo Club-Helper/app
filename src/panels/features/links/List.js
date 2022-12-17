@@ -299,8 +299,8 @@ export default class Links extends Component {
         this.setState({ buttonLoading: true })
 
         this.props.req("links.creat", {
-          title: decodeURI(this.state.title),
-          pattern: decodeURI(this.state.pattern),
+          title: encodeURI(this.state.title),
+          pattern: encodeURI(this.state.pattern),
           token: this.props.token
         },
           (data) => {
