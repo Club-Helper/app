@@ -213,6 +213,8 @@
   transform: scale(0);
   animation-name: comment_2;
   margin-bottom: 100px;
+  position: absolute;
+  width: calc(100% - 50px);
 }
 
 @keyframes comment_1 {
@@ -224,10 +226,17 @@
 }
 
 @keyframes comment_2 {
+  75% {
+    margin-top: -55px;
+    opacity: 1;
+    transform: scale(1);
+  }
+
   to {
     margin-top: -55px;
     opacity: 1;
     transform: scale(1);
+    position: relative;
   }
 }
 
