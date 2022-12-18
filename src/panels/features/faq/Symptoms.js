@@ -74,7 +74,7 @@ export default class FAQSymptoms extends Component {
                 ?
                     <List>
                       {this.props.symptoms.length > 0 ?
-                      this.props.symptoms.map((item, idx) => (
+                      this.props.symptoms?.map((item, idx) => (
                         <Cell
                           multiline
                           key={idx}
@@ -102,8 +102,8 @@ export default class FAQSymptoms extends Component {
                 :
                 <Group>
                   <List>
-                    {this.props.symptoms.length > 0 ?
-                      this.props.symptoms.map((item, idx) => (
+                    {this.props.symptoms?.length > 0 ?
+                      this.props.symptoms?.map((item, idx) => (
                         <Cell
                           multiline
                           key={idx}

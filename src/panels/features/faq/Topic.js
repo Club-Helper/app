@@ -142,9 +142,9 @@ export default class FAQTopic extends Component {
                   <Spacing size={30} separator />
                   {this.state.isLoading ? <PanelSpinner /> :
                     <List>
-                      {this.props.topic ?
-                        this.props.topic.count > 0 ?
-                          this.props.topic.items.map((item, idx) => (
+                      {this.props?.topic ?
+                        this.props?.topic.count > 0 ?
+                          this.props?.topic?.items?.map((item, idx) => (
                             <Cell
                               multiline
                               key={idx}
@@ -171,7 +171,7 @@ export default class FAQTopic extends Component {
                         : <PanelSpinner />}
                     </List>
                   }
-                  {this.props.topic.items.length === 1 &&
+                  {this.props?.topic?.items.length === 1 &&
                     <Footer>
                       Показаны все решения.
                     </Footer>
