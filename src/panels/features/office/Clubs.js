@@ -217,8 +217,9 @@ export default class Clubs extends Component {
                                 {club.title}
                               </Cell>
                             </a>
-                              )) : <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>}
-
+                          )) :
+                          <Placeholder>У вас пока нет ни одного сообщества.</Placeholder>
+                      }
                     </List>
                   }
                 </Group>

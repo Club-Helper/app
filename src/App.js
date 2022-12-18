@@ -23,7 +23,6 @@ const App = () => {
   const platformname = (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
   const platformwithPlat = usePlatform();
   const platform = useRef();
-  const [activePanel, setActivePanel] = useState('home');
   const [activeStory, setActiveStory] = useState('start_page');
   const [fetchedUser, setUser] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
@@ -147,7 +146,7 @@ const App = () => {
         <ConfigProvider platform={platform.current} popout={popout} appearance={appearance}>
           <AdaptivityProvider>
             <AppRoot>
-              <SplitLayout activePanel={activePanel} popout={popout}>
+              <SplitLayout popout={popout}>
                 <Home
                   id='home'
                   log={log}

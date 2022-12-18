@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Cell, ConfigProvider, Div, Group, Header, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderBack, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
+import { Avatar, Cell, ConfigProvider, Div, Group, List, ModalPage, ModalPageHeader, ModalRoot, Panel, PanelHeader, PanelHeaderBack, PanelHeaderButton, PanelSpinner, Placeholder, PullToRefresh, ScreenSpinner, Spacing, SplitCol, SplitLayout, Title } from '@vkontakte/vkui';
 
 import { Icon12Chevron, Icon24Dismiss, Icon28LifebuoyOutline } from '@vkontakte/icons';
 import FAQTopic from './Topic';
