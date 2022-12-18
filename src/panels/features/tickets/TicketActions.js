@@ -55,7 +55,7 @@ export default class TicketActions extends Component {
           <Spacing size={15} />
           {this.state.mailingList.length > 0 ?
             <>
-          <Title level='3' style={{ marginLeft: "15px" }}>Доступные для подписки</Title>
+              <Title level='3' style={{ marginLeft: "15px" }}>Доступные для подписки</Title>
               {this.state.mailingList.map((item) => {
                 if (item.status === "open") {
                   return (
@@ -70,7 +70,9 @@ export default class TicketActions extends Component {
                     </CustomSelectOption>
                   )
                 }
-              })}</> :
+              })}
+            </>
+            :
             <Placeholder
               icon={<Icon56AdvertisingOutline />}
               action={<Button
@@ -103,8 +105,9 @@ export default class TicketActions extends Component {
                     </CustomSelectOption>
                   )
                 }
-              })}</div>) : ""}
-
+              })}
+            </div>) : ""
+          }
           <Spacing size={15} />
         </>
     )

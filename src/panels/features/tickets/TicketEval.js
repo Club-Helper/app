@@ -101,8 +101,6 @@ export default class TicketEval extends Component {
         selectedReason: null,
       });
 
-      //let reasons = this.state.formReasons;
-
       const title = {
         "bad": "Что Вам не понравилось?",
         "normal": "Чего Вам не хватило?",

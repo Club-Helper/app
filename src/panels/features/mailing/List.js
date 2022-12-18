@@ -9,8 +9,42 @@
  *******************************************************/
 
 
-import React, { Component } from 'react'
-import { Cell, ConfigProvider, Group, Panel, PanelHeader, PanelSpinner, List, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, SimpleCell, MiniInfoCell, SplitLayout, SplitCol, Placeholder, Title, FormLayout, FormItem, Input, Button, Snackbar, Avatar, PullToRefresh, Footer, Textarea, IconButton, Alert, Div, ButtonGroup, Separator, Caption } from '@vkontakte/vkui'
+import React, { Component } from 'react';
+
+import {
+  Cell,
+  ConfigProvider,
+  Group,
+  Panel,
+  PanelSpinner,
+  List,
+  PanelHeaderButton,
+  ModalRoot,
+  ModalPage,
+  ModalPageHeader,
+  SimpleCell,
+  MiniInfoCell,
+  SplitLayout,
+  SplitCol,
+  Placeholder,
+  Title,
+  FormLayout,
+  FormItem,
+  Input,
+  Button,
+  Snackbar,
+  Avatar,
+  PullToRefresh,
+  Footer,
+  Textarea,
+  IconButton,
+  Alert,
+  Div,
+  ButtonGroup,
+  Separator,
+  PanelHeader
+} from '@vkontakte/vkui';
+
 import {
   Icon28EditOutline,
   Icon20UserOutline,
@@ -23,6 +57,7 @@ import {
   Icon24CancelOutline,
   Icon56AdvertisingOutline
 } from '@vkontakte/icons';
+
 import bridge from '@vkontakte/vk-bridge';
 
 export default class MailingList extends Component {
@@ -729,15 +764,18 @@ export default class MailingList extends Component {
                                 after={
                                   <IconButton
                                     onClick={() => {
+                                      this.getMailingUsers(this.state.list[idx].id);
+
                                       this.setState(
                                         {
                                           openedItem: this.state.list[idx],
                                           openedItemCreator: this.state.list[idx].creator,
                                           openedItemTime: this.state.list[idx].time,
-                                          openedItemUsers: this.getMailingUsers(this.state.list[idx].id),
                                           mailingEditTitle: this.state.list[idx].title,
                                           mailingEditDescription: this.state.list[idx]?.description
-                                        }); this.openModal("mailingListItem")
+                                        });
+
+                                      this.openModal("mailingListItem")
                                     }}
                                   >
                                     <Icon24InfoCircleOutline/>

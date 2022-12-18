@@ -9,7 +9,7 @@
  *******************************************************/
 
 import React from 'react'
-import { ConfigProvider, Group, Placeholder, Footer, Link, Separator, SimpleCell, Button } from '@vkontakte/vkui'
+import { ConfigProvider, Group, Placeholder, Footer, Link, Separator, Button } from '@vkontakte/vkui'
 import { Icon28UserTagOutline, Icon56FaceIdOutline } from '@vkontakte/icons';
 
 export default function CallAdmin(props) {

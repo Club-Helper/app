@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import { Avatar, Button, Cell, ConfigProvider, PanelHeader, Panel, Placeholder, SplitCol, SplitLayout, Tabbar, TabbarItem, useAdaptivity, View, ViewWidth, VKCOM, Alert, Footer, Link, SimpleCell, Spinner, PanelHeaderBack, Spacing, ScreenSpinner, ModalRoot, ModalPage, Div } from '@vkontakte/vkui';
-import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28AddCircleOutline, Icon28UserTagOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
+import { Icon24Linked, Icon28MessagesOutline, Icon28SettingsOutline, Icon28CommentOutline, Icon28AdvertisingOutline, Icon28StatisticsOutline, Icon28ArticlesOutline, Icon36Users3Outline, Icon32AdvertisingOutline, Icon28UserTagOutline, Icon28LifebuoyOutline, Icon24BroadcastOutline } from '@vkontakte/icons';
 import { Epic } from '@vkontakte/vkui/dist/components/Epic/Epic';
 
 import Donut from './features/landings/Donut';
@@ -181,8 +181,8 @@ function Home({
             setBan(data.response)
           } else {
             let role = params.get("vk_viewer_group_role");
-            setGroupId(params.get("vk_group_id"));
-            setUserId(params.get("vk_user_id"));
+            setGroupId(Number(params.get("vk_group_id")));
+            setUserId(Number(params.get("vk_user_id")));
             setRole(role);
             setToken(data.response.token);
             setLanguageCode(params.get("vk_language"));
@@ -564,10 +564,10 @@ function Home({
         .then(response => response.json())
         .then(data => {
           if (!data.error) {
-            console.log('%c [CH API] ', 'background: #FFCB89; color: #F19263; font-weight: bold', `/${method}`, data);
+            console.log(`/${method}`, data);
             callback(data);
           } else {
-            console.error('%c [CH API] ', 'background: #FFCB89; color: #F19263; font-weight: bold', `/${method}`, data);
+            console.error(`/${method}`, data);
             if (!onError) {
               if (data.error?.error_msg) {
                 createError(data.error?.error_msg)
@@ -1233,7 +1233,6 @@ function Home({
             <ConfigProvider platform={platform.current} appearance={appearance}>
               <SplitLayout
                 modal={modal}
-                header={false && <PanelHeader separator={false} />}
                 style={needToShowClubStartOnboarding ? {
                   justifyContent: "center",
                   background: "rgb(63, 138, 224)",
@@ -1363,7 +1362,7 @@ function Home({
                       <Footer onClick={() => {
                         activeStory !== "app_info" && go("app_info")
                       }}>
-                        v1.0.7-beta
+                        v1.0.8-beta
                       </Footer>
                     </Panel>
                   </SplitCol>
@@ -1449,7 +1448,6 @@ function Home({
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
                   modal={modal}
-                  header={false && <PanelHeader separator={false} />}
                   style={isDesktop ? {
                     justifyContent: "center",
                     paddingTop: "10px",
@@ -1555,13 +1553,6 @@ function Home({
                           )}
                         </Group>
 
-                        {false && <Group>
-                          <SimpleCell onClick={() => bridge.send("VKWebAppAddToCommunity")} multiline before={<Icon28AddCircleOutline />}>
-                            Новое сообщество
-                          </SimpleCell>
-                        </Group>
-                        }
-
                         <Group>
                           <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
                             <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
@@ -1575,7 +1566,7 @@ function Home({
                         <Footer onClick={() => {
                           activeStory !== "app_info" && go("app_info")
                         }}>
-                          v1.0.7-beta
+                          v1.0.8-beta
                         </Footer>
                       </Panel>
                     </SplitCol>
@@ -1591,7 +1582,6 @@ function Home({
               <ConfigProvider platform={platform.current} appearance={appearance}>
                 <SplitLayout
                   modal={modal}
-                  header={false && <PanelHeader separator={false} />}
                   style={isDesktop ? {
                     justifyContent: "center",
                     paddingTop: "10px",
@@ -1606,24 +1596,7 @@ function Home({
                     width={isDesktop ? '660px' : '100%'}
                     maxWidth={isDesktop ? '660px' : '100%'}
                   >
-                    <Epic activeStory={activeStory} tabbar={false && clubCard && showMenu && (
-                      <Tabbar>
-                        {clubMenuItems.map(menuItem =>
-                          menuItem.show &&
-                          <TabbarItem
-                            key={menuItem.id}
-                            onClick={() => go(menuItem.id)}
-                            selected={menuItem.triggers.includes(activeStory)}
-                            disabled={activeStory === menuItem.id}
-                            data-story={menuItem.id}
-                            text={menuItem.name}
-                            style={menuItem.style ? menuItem.style : {}}
-                          >
-                            {menuItem.before}
-                          </TabbarItem>
-                        )}
-                      </Tabbar>
-                    )}>
+                    <Epic activeStory={activeStory}>
                       <View
                         id="club-card"
                         activePanel="club-card"
@@ -1662,57 +1635,6 @@ function Home({
                       </View>
                     </Epic>
                   </SplitCol>
-                  {false && (
-                    <SplitCol fixed width="280px" maxWidth="280px">
-                      <Panel>
-                        {hasHeader && <PanelHeader />}
-
-                        <Group>
-                          {clubCard ?
-                            <>
-                              <Cell
-                                disabled
-                                before={
-                                  <Avatar
-                                    size={28}
-                                    src={clubCard.photo}
-                                    onClick={() => go("club-card")}
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                }
-                                style={activeStory === "club-card" ? {
-                                  backgroundColor: "var(--button_secondary_background)",
-                                  borderRadius: 8
-                                } : {}}
-                              >
-                                <div onClick={() => go("club-card")} style={{ cursor: "pointer" }}>{clubCard.name}</div>
-                              </Cell>
-                            </> : <Spinner />}
-                        </Group>
-
-                        <Group>
-                          {clubMenuItems.map(menuItem =>
-                            menuItem.show &&
-                            <>
-                              <Cell
-                                key={menuItem.id}
-                                disabled={activeStory === menuItem.id}
-                                style={menuItem.triggers.includes(activeStory) ? {
-                                  backgroundColor: "var(--button_secondary_background)",
-                                  borderRadius: 8
-                                } : {}}
-                                data-story={menuItem.id}
-                                onClick={() => go(menuItem.id)}
-                                before={menuItem.before}
-                              >
-                                {menuItem.name}
-                              </Cell>
-                            </>
-                          )}
-                        </Group>
-                      </Panel>
-                    </SplitCol>)
-                  }
                 </SplitLayout>
               </ConfigProvider>
             )

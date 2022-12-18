@@ -52,20 +52,9 @@ export default class Settings extends Component {
       saveButtonLoading: false
     };
 
-    this.openFAQModal = this.openFAQModal.bind(this);
     this.closeFAQModal = this.closeFAQModal.bind(this);
     this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
     this.handleSaveButton = this.handleSaveButton.bind(this);
-  }
-
-  openFAQModal() {
-    this.setState({
-      activeModal: "faq",
-      faqInfo: {
-        title: "Название",
-        text: "АбобаАбобаАбобаАбобаАбобаАбобаАбоба"
-      }
-    });
   }
 
   closeFAQModal() {
@@ -263,7 +252,6 @@ export default class Settings extends Component {
         </ModalPage>
       </ModalRoot>
     );
-
 
     return (
       this.props.isLoading ? <PanelSpinner /> :
