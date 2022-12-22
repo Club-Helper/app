@@ -776,6 +776,7 @@ function Home({
           setIsNew={setIsNew}
           parseLinks={parseLinks}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },
