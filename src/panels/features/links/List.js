@@ -339,7 +339,7 @@ export default class Links extends Component {
           },
           (error) => {
             this.setState({ buttonLoading: false })
-            this.props.createError(data.error.error_msg);
+            this.props.createError(error.error.error_msg);
           }
         )
       }
