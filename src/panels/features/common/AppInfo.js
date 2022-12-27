@@ -63,7 +63,7 @@ export default class AppInfo extends Component {
                       }
                       }
                     >Поделиться</SimpleCell>
-                    <Link href={"https://vk.com/ch_app"} style={{ textDecoration: "none" }} target={"_blank"}>
+                    <Link href={"https://vk.com/cloud_apps"} style={{ textDecoration: "none" }} target={"_blank"}>
                       <SimpleCell before={<Icon24Users3Outline />}>Перейти в сообщество</SimpleCell>
                     </Link>
                     <Link href={"https://github.com/Club-Helper/app"} style={{ textDecoration: "none" }} target={"_blank"}>

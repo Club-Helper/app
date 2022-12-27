@@ -356,7 +356,7 @@ export default class TicketsList extends Component {
               </CellButton>
             }
             {this.state.ticketOptions.includes("get_support") &&
-              <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+              <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
                 <CellButton
                   mode="secondary"
                   size="m"
@@ -545,7 +545,7 @@ export default class TicketsList extends Component {
                       </CellButton>
                     }
                     {this.state.ticketOptions.includes("get_support") &&
-                      <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                      <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
                         <CellButton
                           style={{ color: this.props.color }}
                           mode="secondary"
