@@ -26,7 +26,7 @@ const App = () => {
   const [activeStory, setActiveStory] = useState('start_page');
   const [fetchedUser, setUser] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
-  const api_url = 'https://ch.n1rwana.ml/api/';
+  const api_url = 'https://cloud-apps.ru/api/';
   const [token, setToken] = useState("");
   const timerRef = useRef(null);
   const [appearance, setAppearance] = useState('light');

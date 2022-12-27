@@ -170,6 +170,8 @@ export default class TicketsList extends Component {
         }
       );
     }
+
+    this.props.toggleShowMobileMenu(true);
   }
 
   openTicketButtonsModal(id, options) {

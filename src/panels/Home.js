@@ -147,6 +147,14 @@ function Home({
   let queryString = window.location.search;
   const params = new URLSearchParams(queryString);
 
+  const [canViewTickets, toggleCanViewTickets] = useState(null);
+  const [canViewPattern, toggleCanViewPattern] = useState(null);
+  const [canViewMailing, toggleCanViewMailing] = useState(null);
+  const [canViewPush, toggleCanViewPush] = useState(null);
+  const [canViewClubs, toggleCanViewClubs] = useState(null);
+  const [canViewSupport, toggleCanViewSupport] = useState(null);
+  const [canViewDonut, toggleCanViewDonut] = useState(null);
+
   useEffect(() => {
     bridge.send("VKWebAppGetClientVersion")
       .then((data) => {
@@ -155,7 +163,7 @@ function Home({
         }
       })
 
-    /*fetch(`${apiScheme}://ch.n1rwana.ml/translation/ru`)
+    /*fetch(`${apiScheme}://cloud-apps.ru/translation/ru`)
       .then(response => response.json())
       .then(data => {
         console.log("RU LOCALE", data);
@@ -164,7 +172,7 @@ function Home({
       })
 
     if (params.get("vk_language") != "ru") {
-      fetch(`${apiScheme}://ch.n1rwana.ml/translation/${params.get("vk_language")}`)
+      fetch(`${apiScheme}://cloud-apps.ru/translation/${params.get("vk_language")}`)
         .then(response => response.json())
         .then(data => {
           console.log(`LOCALE (${params.get("vk_language")})`, data);
@@ -172,7 +180,7 @@ function Home({
         })
     }*/
 
-    fetch(`${apiScheme}://ch.n1rwana.ml/api/app.start${window.location.search}`)
+    fetch(`${apiScheme}://cloud-apps.ru/api/app.start${window.location.search}`)
       .then(response => response.json())
       .then(data => {
         if (data.error == null) {
@@ -191,12 +199,20 @@ function Home({
 
             setLastClubID(data.response.last_club)
 
+            toggleCanViewTickets(data.response.can_view_tickets);
+            toggleCanViewPattern(data.response.can_view_pattern);
+            toggleCanViewMailing(data.response.can_view_mailing);
+            toggleCanViewPush(data.response.can_view_push);
+            toggleCanViewClubs(data.response.can_view_clubs);
+            toggleCanViewSupport(data.response.can_view_support);
+            toggleCanViewDonut(data.response.can_view_donut);
+
             if (data.response.page === "app") {
               setPage("app");
               setRole(role)
               setIsNew(false);
 
-              fetch(`${apiScheme}://ch.n1rwana.ml/api/clubs.get?token=${data.response.token}`)
+              fetch(`${apiScheme}://cloud-apps.ru/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(data => {
                   if (!data.error) {
@@ -222,7 +238,7 @@ function Home({
                         toggleShowMenu(false);
                         setActiveStory('call_admin');
                       } else {
-                        setActiveStory('tickets_list');
+                        setActiveStory(data.response.can_view_tickets ? 'tickets_list' : 'club_info');
                       }
                     }
                   } else {
@@ -246,15 +262,20 @@ function Home({
             } else if (data.response.page === "office") {
               setIsNew(false);
 
-              fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${data.response.token}`)
+              fetch(`${apiScheme}://cloud-apps.ru/api/office.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(data => {
                   setOffice(data.response);
                 })
 
               setPage("office");
-              setHistory(["office-clubs"]);
-              setActiveStory("office-clubs");
+              if (data.response.can_view_clubs) {
+                setHistory(["office-clubs"]);
+                setActiveStory("office-clubs");
+              } else {
+                setHistory(["office"]);
+                setActiveStory("office");
+              }
             } else if (data.response.page === "club") {
               setIsNew(false);
               setToken(data.response.token)
@@ -263,11 +284,11 @@ function Home({
                 session_id: data.response.session_id
               });*/
 
-              fetch(`${apiScheme}://ch.n1rwana.ml/api/clubs.get?token=${data.response.token}`)
+              fetch(`${apiScheme}://cloud-apps.ru/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
                 .then(res => {
                   setClubCard(res.response);
-                  fetch(`${apiScheme}://ch.n1rwana.ml/api/mailings.get?token=${data.response.token}&my=true`)
+                  fetch(`${apiScheme}://cloud-apps.ru/api/mailings.get?token=${data.response.token}&my=true`)
                     .then(response => response.json())
                     .then(cc => setClubCardMailings(cc.response));
                 })
@@ -289,7 +310,7 @@ function Home({
   }
 
   const updateOffice = () => {
-    fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${token}`)
+    fetch(`${apiScheme}://cloud-apps.ru/api/office.get?token=${token}`)
       .then(response => response.json())
       .then(data => {
         setOffice(data.response);
@@ -297,7 +318,7 @@ function Home({
   }
 
   const updateCCMailings = () => {
-    fetch(`${apiScheme}://ch.n1rwana.ml/api/mailings.get?token=${token}&my=true`)
+    fetch(`${apiScheme}://cloud-apps.ru/api/mailings.get?token=${token}&my=true`)
       .then(response => response.json())
       .then(cc => setClubCardMailings(cc.response));
   }
@@ -415,7 +436,7 @@ function Home({
       ],
       name: "Обращения",
       before: <Icon28MessagesOutline />,
-      show: (club_role === "admin" || messages_enabled)
+      show: (club_role === "admin" || messages_enabled) && canViewTickets
     },
     {
       id: "links",
@@ -437,14 +458,14 @@ function Home({
       triggers: ["templates"],
       name: "Шаблоны",
       before: <Icon28ArticlesOutline />,
-      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled)
+      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern
     },
     {
       id: "mailing_list",
       triggers: ["mailing_list", "mailing"],
       name: "Рассылки",
       before: <Icon28AdvertisingOutline />,
-      show: true
+      show: canViewMailing
     },
     {
       id: "settings",
@@ -467,7 +488,7 @@ function Home({
       triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: club?.name,
       before: <Avatar size={28} src={club?.photo} />,
-      show: !isDesktop
+      show: !isDesktop && canViewClubs
     },
   ];
 
@@ -484,21 +505,21 @@ function Home({
       triggers: ["office-clubs"],
       name: "Сообщества",
       before: <Icon36Users3Outline width={28} height={28} />,
-      show: true
+      show: canViewClubs
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
       name: "Рассылки",
       before: <Icon32AdvertisingOutline width={28} height={28} />,
-      show: true
+      show: canViewMailing
     },
     {
       id: "faq",
       triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
       before: <Icon28LifebuoyOutline />,
-      show: true
+      show: canViewSupport
     }
   ];
 
@@ -557,7 +578,7 @@ function Home({
     }
 
     if (navigator.onLine) {
-      fetch(`${apiScheme}://ch.n1rwana.ml/api/${method}`, {
+      fetch(`${apiScheme}://cloud-apps.ru/api/${method}`, {
         method: "POST",
         body: JSON.stringify(body)
       })
@@ -600,7 +621,7 @@ function Home({
   const changeMode = (mode) => {
     if (mode == "office") {
       setPopout(<ScreenSpinner />);
-      fetch(`${apiScheme}://ch.n1rwana.ml/api/office.get?token=${token}`)
+      fetch(`${apiScheme}://cloud-apps.ru/api/office.get?token=${token}`)
         .then(response => response.json())
         .then(data => {
           setOffice(data.response);
@@ -776,6 +797,7 @@ function Home({
           setIsNew={setIsNew}
           parseLinks={parseLinks}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          toggleShowMobileMenu={toggleShowMobileMenu}
         />
       )
     },

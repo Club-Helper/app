@@ -96,7 +96,7 @@ export default class FAQTriggers extends Component {
                     <List>
                       {this.props.openedTrigger ?
                       this.props.openedTrigger?.count > 0 ?
-                      this.props.openedTrigger.items.map((item, idx) => (
+                      this.props.openedTrigger?.items?.map((item, idx) => (
                         <Group
                           key={idx}
                         >
@@ -110,7 +110,7 @@ export default class FAQTriggers extends Component {
                                 mode="horizontal"
                               >
                                 {
-                                  item.buttons.map((btn, idx) => (
+                                  item.buttons?.map((btn, idx) => (
                                     <>
                                       <Button
                                         key={idx}
@@ -195,7 +195,7 @@ export default class FAQTriggers extends Component {
                       </Div>
                     </Group>
                   )}
-                  {this.state.solution === "getSupport" && this.state.getSupportSolution?.solutionsGroups && this.state.getSupportSolution.solutionsGroups.map((item, idx) => (
+                  {this.state.solution === "getSupport" && this.state.getSupportSolution?.solutionsGroups && this.state.getSupportSolution.solutionsGroups?.map((item, idx) => (
                     item.groupType === "TILE_GROUP" && (
                       <Group
                         mode="plain"
@@ -203,7 +203,7 @@ export default class FAQTriggers extends Component {
                         header={<Title level="2">{item.title}</Title>}
                       >
                         {item.subtitle && <Title level="3">{item.subtitle}</Title>}
-                        {item.solutions.map((solution, idx) => (
+                        {item.solutions?.map((solution, idx) => (
                           !solution.isHero && (
                             <Group>
                               <Placeholder
@@ -250,7 +250,7 @@ export default class FAQTriggers extends Component {
                     <List>
                       {this.props.openedTrigger ?
                     this.props.openedTrigger?.count > 0 ?
-                      this.props.openedTrigger.items.map((item, idx) => (
+                      this.props.openedTrigger?.items?.map((item, idx) => (
                         <Group
                           key={idx}
                         >
@@ -264,7 +264,7 @@ export default class FAQTriggers extends Component {
                                 mode="horizontal"
                               >
                                 {
-                                  item.buttons.map((btn, idx) => (
+                                  item.buttons?.map((btn, idx) => (
                                     <>
                                       <Button
                                         key={idx}
@@ -349,7 +349,7 @@ export default class FAQTriggers extends Component {
                       </Div>
                     </Group>
                   )}
-                  {this.state.solution === "getSupport" && this.state.getSupportSolution?.solutionsGroups && this.state.getSupportSolution.solutionsGroups.map((item, idx) => (
+                  {this.state.solution === "getSupport" && this.state.getSupportSolution?.solutionsGroups && this.state.getSupportSolution.solutionsGroups?.map((item, idx) => (
                     item.groupType === "TILE_GROUP" && (
                       <Group
                         mode="plain"
@@ -357,7 +357,7 @@ export default class FAQTriggers extends Component {
                         header={<Title level="2">{item.title}</Title>}
                       >
                         {item.subtitle && <Title level="3">{item.subtitle}</Title>}
-                        {item.solutions.map((solution, idx) => (
+                        {item.solutions?.map((solution, idx) => (
                           !solution.isHero && (
                             <Group>
                               <Placeholder

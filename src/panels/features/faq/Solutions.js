@@ -37,7 +37,7 @@ export default class FAQSolutions extends Component {
               }
               {this.props.openedTSolution.banners.length > 0 &&
                 <Group>
-                  {this.props.openedTSolution.banners.map((banner, idx) => (
+                  {this.props.openedTSolution.banners?.map((banner, idx) => (
                     <Banner
                       header={banner.title}
                       subheader={banner.body}
@@ -54,7 +54,7 @@ export default class FAQSolutions extends Component {
                   ))}
                 </Group>
               }
-              {this.props.openedTSolution.solutionsGroups.map((item, idx) => (
+              {this.props.openedTSolution.solutionsGroups?.map((item, idx) => (
                 item.groupType === "TILE_GROUP" && (
                   <Group
                     key={idx}
@@ -62,7 +62,7 @@ export default class FAQSolutions extends Component {
                   >
                     {item.subtitle && <Title level="3">{item.subtitle}</Title>}
                     <Gallery className="clubHelper--solutions" withSpaces={true} showArrows slideWidth={"90%"}>
-                      {item.solutions.map((solution, idx) => (
+                      {item.solutions?.map((solution, idx) => (
                         !solution.isHero && (
                           <Card
                             mode="outline"
@@ -125,7 +125,7 @@ export default class FAQSolutions extends Component {
                     key={idx}
                   >
                       <List>
-                        {item.solutions.map((solution, idx) => (
+                        {item.solutions?.map((solution, idx) => (
                           <Link
                             key={idx}
                             href={solution.url ? solution.url : undefined}
@@ -161,7 +161,7 @@ export default class FAQSolutions extends Component {
                     key={idx}
                   >
                       <Div>
-                        {item.solutions.map((solution, idx) => (
+                        {item.solutions?.map((solution, idx) => (
                           <Link href={solution.url ?? undefined} key={idx} target="_blank">
                             <Card
                               className="clubHelper--solution-contact"

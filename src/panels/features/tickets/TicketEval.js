@@ -75,7 +75,7 @@ export default class TicketEval extends Component {
     this.getMarkTypeByMarkName = this.getMarkTypeByMarkName.bind(this);
     this.getMarkTextByMarkName = this.getMarkTextByMarkName.bind(this);
 
-    fetch("https://ch.n1rwana.ml/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
+    fetch("https://cloud-apps.ru/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
       .then(response => response.json())
       .then(data => {
         if (data.error) {
@@ -129,14 +129,14 @@ export default class TicketEval extends Component {
   }
 
   setMarks() {
-    fetch("https://ch.n1rwana.ml/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
+    fetch("https://cloud-apps.ru/api/app.marks" + window.location.search + "&ticket=" + window.location.hash.split("/")[1])
       .then(response => response.json())
       .then(data => {
           console.log(data)
           if (data.error) {
             this.props.createError(data.error.error_msg);
           } else {
-            fetch("https://ch.n1rwana.ml/api/app.setMarks", {
+            fetch("https://cloud-apps.ru/api/app.setMarks", {
               method: "POST",
               body: JSON.stringify({
                 "token": data.response.token,
