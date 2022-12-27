@@ -61,20 +61,20 @@ export default class Office extends Component {
                   }}
                   mode=""
                 >
-                  <Avatar size={96} src={this.props.office.user.photo} />
+                  <Avatar size={96} src={this.props.office?.user.photo} />
                   <Title
                     style={{ marginBottom: 8, marginTop: 20 }}
                     level="2"
                     weight="2"
                   >
-                    {this.props.office.user.first_name} {this.props.office.user.last_name}
+                    {this.props.office?.user.first_name} {this.props.office?.user.last_name}
                   </Title>
                 </Gradient>
               </Group>
               <Group separator={!this.props.isMobile}>
                 <List>
-                  {this.props.office.push.length > 0 ?
-                    <Notifies notifies={this.props.office.push} />
+                  {this.props.office?.push.length > 0 ?
+                    <Notifies notifies={this.props.office?.push} />
                     :
                     <Placeholder icon={<Icon56NotificationOutline />}>
                       Здесь будут уведомления...

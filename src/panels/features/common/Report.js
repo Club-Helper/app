@@ -37,7 +37,7 @@ export default class ClubCard extends Component {
 
   openReportForm() {
     this.setState({ activeModal: "report" });
-    fetch("https://ch.n1rwana.ml/api/reports.getReportFormData?token=" + this.props.token)
+    fetch("https://cloud-apps.ru/api/reports.getReportFormData?token=" + this.props.token)
       .then(response => response.json())
       .then(data => {
         this.setState({ reportForm: data.response })

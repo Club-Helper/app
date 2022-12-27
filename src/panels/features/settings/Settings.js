@@ -114,7 +114,7 @@ export default class Settings extends Component {
   }
 
   componentDidMount() {
-    fetch("https://ch.n1rwana.ml/api/clubs.get?token=" + this.props.token)
+    fetch("https://cloud-apps.ru/api/clubs.get?token=" + this.props.token)
       .then(response => response.json())
       .then(data => {
         let features = [];

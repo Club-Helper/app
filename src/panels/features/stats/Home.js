@@ -27,7 +27,7 @@ export default class StatsHome extends Component {
 
   getStats() {
     this.setState({ isStatsLoading: true });
-    fetch("https://ch.n1rwana.ml/api/stats.get?token=" + this.props.token)
+    fetch("https://cloud-apps.ru/api/stats.get?token=" + this.props.token)
       .then(response => response.json())
       .then(data => {
         this.setState({ stats: data.response, isStatsLoading: false })

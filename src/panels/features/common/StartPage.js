@@ -190,7 +190,7 @@ class StartPage extends React.Component {
           .then((data) => {
             console.log("Получено разрешение на права доступа.");
 
-            fetch(`${this.props.apiScheme}://ch.n1rwana.ml/api/clubs.creat?access_token=${data.access_token}&token=${this.props.token}`)
+            fetch(`${this.props.apiScheme}://cloud-apps.ru/api/clubs.creat?access_token=${data.access_token}&token=${this.props.token}`)
               .then((response) => response.json())
               .then((data) => {
                 if (!data?.error && !data?.response?.error) {

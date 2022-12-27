@@ -82,7 +82,7 @@ export default class TicketsList extends Component {
 
   handleOptionClick(actionName) {
     this.setState({ buttonLoading: actionName });
-    fetch("https://ch.n1rwana.ml/api/ticket.action?id=" + this.props.ticket.id + "&action=" + actionName + "&token=" + this.props.token)
+    fetch("https://cloud-apps.ru/api/ticket.action?id=" + this.props.ticket.id + "&action=" + actionName + "&token=" + this.props.token)
       .then(response => response.json())
       .then(data => {
         if (!data.response.status) {
