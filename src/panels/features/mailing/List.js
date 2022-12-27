@@ -146,7 +146,7 @@ export default class MailingList extends Component {
   }
 
   onFormSubmit() {
-    if (this.state.formTitle.length　< 5) {
+    if (this.state.formTitle.length < 5) {
       this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
     } else if (this.state.formTitle.length > 25) {
       this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
@@ -170,46 +170,46 @@ export default class MailingList extends Component {
       return false;
     }
 
-      this.setState({ formValidation: "", formWorking: true });
+    this.setState({ formValidation: "", formWorking: true });
 
-      this.props.req("mailings.creat", {
-        title: this.state.formTitle,
-        description: this.state.formDescription,
-        token: this.props.token
+    this.props.req("mailings.creat", {
+      title: this.state.formTitle,
+      description: this.state.formDescription,
+      token: this.props.token
+    },
+      (data) => {
+        this.closeModal();
+        this.getMailing(true);
+        this.setState({
+          formWorking: false,
+          snackbar: (
+            <Snackbar
+              onClose={() => this.setState({ snackbar: null })}
+              before={
+                <Avatar
+                  size={24}
+                  style={{ background: "var(--button_commerce_background)" }}
+                >
+                  <Icon16Done fill="#FFF" width={14} height={14} />
+                </Avatar>
+              }
+            >
+              Рассылка создана
+            </Snackbar>
+          ),
+          formTitle: "",
+          formDescription: "",
+          formValidationTitle: "",
+          formValidationDescription: ""
+        });
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
-        (data) => {
-          this.closeModal();
-          this.getMailing(true);
-          this.setState({
-            formWorking: false,
-            snackbar: (
-              <Snackbar
-                onClose={() => this.setState({ snackbar: null })}
-                before={
-                  <Avatar
-                    size={24}
-                    style={{ background: "var(--button_commerce_background)" }}
-                  >
-                    <Icon16Done fill="#FFF" width={14} height={14} />
-                  </Avatar>
-                }
-              >
-                Рассылка создана
-              </Snackbar>
-            ),
-            formTitle: "",
-            formDescription: "",
-            formValidationTitle: "",
-            formValidationDescription: ""
-          });
-          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
-        },
-        (error) => {
-          this.closeModal();
-          this.setState({ formWorking: false });
-          this.props.createError(error.error.error_msg);
-        }
-      )
+      (error) => {
+        this.closeModal();
+        this.setState({ formWorking: false });
+        this.props.createError(error.error.error_msg);
+      }
+    )
 
   }
 
@@ -405,7 +405,7 @@ export default class MailingList extends Component {
                 <Div style={{ padding: "10%" }}>
                   <FormItem
                     onChange={(e) => {
-                      this.setState({mailingEditTitle: e.target.value})
+                      this.setState({ mailingEditTitle: e.target.value })
                       if (e.target.value.length < 5) {
                         this.setState({ mailingEditTitleValidation: "Название рассылки должно содержать не менее 5 символов." });
                       } else if (e.target.value.length > 25) {
@@ -428,7 +428,7 @@ export default class MailingList extends Component {
                 this.state.openedItem.title
               }
             </ModalPageHeader>
-        }
+          }
           onClose={() => {
             this.closeModal();
             if (this.state.mailingEditMode) {
@@ -439,62 +439,62 @@ export default class MailingList extends Component {
         >
           <Group>
             {this.state.mailingEditTitleValidation &&
-            <center>
-              <Div>
-                {this.state.mailingEditTitleValidation}
-              </Div>
-              <Separator />
-            </center>
+              <center>
+                <Div>
+                  {this.state.mailingEditTitleValidation}
+                </Div>
+                <Separator />
+              </center>
             }
             <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>{this.state.openedItem.id}</MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>{this.state.openedItemTime.label}</MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>Автор: {this.state.openedItemCreator.first_name} {this.state.openedItemCreator.last_name}</MiniInfoCell>
             {this.state.openedItem.description ?
-                this.state.mailingEditMode ?
-                  <FormItem
-                    top={"Описание"}
-                    onChange={(e) => {
-                      this.setState({ mailingEditDescription: e.target.value })
-                      if (e.target.value.length < 10) {
-                        this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
-                      } else if (e.target.value.length > 25) {
-                        this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
-                      } else if (e.target.value.match(/^[ ]+$/)) {
-                        this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
-                      } else {
-                        this.setState({ mailingEditDescriptionValidation: "" });
-                      }
-                    }}
-                    status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
-                    bottom={this.state.mailingEditDescriptionValidation}
-                  >
-                    <Textarea value={this.state.mailingEditDescription} />
-                  </FormItem>
-                  :
-                  <Div>
-                    {this.state.openedItem?.description}
-                  </Div>
+              this.state.mailingEditMode ?
+                <FormItem
+                  top={"Описание"}
+                  onChange={(e) => {
+                    this.setState({ mailingEditDescription: e.target.value })
+                    if (e.target.value.length < 10) {
+                      this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
+                    } else if (e.target.value.length > 25) {
+                      this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                    } else if (e.target.value.match(/^[ ]+$/)) {
+                      this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
+                    } else {
+                      this.setState({ mailingEditDescriptionValidation: "" });
+                    }
+                  }}
+                  status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
+                  bottom={this.state.mailingEditDescriptionValidation}
+                >
+                  <Textarea value={this.state.mailingEditDescription} />
+                </FormItem>
+                :
+                <Div>
+                  {this.state.openedItem?.description}
+                </Div>
               :
-                this.state.mailingEditMode &&
-                  <FormItem
-                    top={"Описание"}
-                    onChange={(e) => {
-                      this.setState({ mailingEditDescription: e.target.value })
-                      if (e.target.value.length < 10) {
-                        this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
-                      } else if (e.target.value.length > 25) {
-                        this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
-                      } else if (e.target.value.match(/^[ ]+$/)) {
-                        this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
-                      } else {
-                        this.setState({ mailingEditDescriptionValidation: "" });
-                      }
-                    }}
-                    status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
-                    bottom={this.state.mailingEditDescriptionValidation}
-                  >
-                    <Textarea value={this.state.mailingEditDescription} />
-                  </FormItem>
+              this.state.mailingEditMode &&
+              <FormItem
+                top={"Описание"}
+                onChange={(e) => {
+                  this.setState({ mailingEditDescription: e.target.value })
+                  if (e.target.value.length < 10) {
+                    this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
+                  } else if (e.target.value.length > 25) {
+                    this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.match(/^[ ]+$/)) {
+                    this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
+                  } else {
+                    this.setState({ mailingEditDescriptionValidation: "" });
+                  }
+                }}
+                status={this.state.mailingEditDescriptionValidation ? "error" : "default"}
+                bottom={this.state.mailingEditDescriptionValidation}
+              >
+                <Textarea value={this.state.mailingEditDescription} />
+              </FormItem>
             }
             <Div>
               {!this.state.mailingEditMode ?
@@ -514,7 +514,7 @@ export default class MailingList extends Component {
                     Удалить
                   </Button>
                 </ButtonGroup>
-              :
+                :
                 <ButtonGroup
                   stretched
                 >
@@ -585,6 +585,7 @@ export default class MailingList extends Component {
                     onClick={() => this.sendMailing()}
                     disabled={this.state.sendBtnWorking}
                     loading={this.state.sendBtnWorking}
+                    style={{ backgroundColor: this.props.color }}
                   >Отправить</Button>
                 </FormItem>
               </FormLayout>
@@ -603,16 +604,16 @@ export default class MailingList extends Component {
                   before={<Avatar src={user.photo_200} />}
                   description={user.status}
                   after={
-                      <IconButton
-                        onClick={() => this.unsubscribe(user.subscriptions_id)}
-                      >
-                        <Icon24CancelOutline />
-                      </IconButton>
+                    <IconButton
+                      onClick={() => this.unsubscribe(user.subscriptions_id)}
+                    >
+                      <Icon24CancelOutline fill={this.props.color} />
+                    </IconButton>
                   }
                 >
-                      {`${user.first_name} ${user.last_name}`}
-                    </SimpleCell>
-                )
+                  {`${user.first_name} ${user.last_name}`}
+                </SimpleCell>
+              )
               )
               : <Placeholder>
                 Ни один пользователь не подписан на эту рассылку.
@@ -691,100 +692,101 @@ export default class MailingList extends Component {
           <SplitCol>
             {this.props.isLoading ? <Group><PanelSpinner /></Group> :
               this.state.isEnabled ?
-              <Panel>
-                <PanelHeader left={
-                  <React.Fragment>
-                    {this.state.list.length > 0 && <PanelHeaderButton onClick={() => {
-                      this.setState({ editMode: !this.state.editMode })}
-                    }>
-                      <Icon28EditOutline fill={this.state.editMode ? "var(--accent)" : ""} />
-                    </PanelHeaderButton>}
-                    {this.state.availability.creat && <PanelHeaderButton onClick={() => this.openModal("createMailing")}>
-                      <Icon28AddOutline />
-                    </PanelHeaderButton>}
-                  </React.Fragment>
-                }>Рассылки</PanelHeader>
-                <Group>
-                  <List>
-                    <PullToRefresh
-                      isFetching={this.state.listFetching}
-                      onRefresh={() => this.getMailing(true)}
-                    >
-                      {
-                        this.state.listLoading ? <Group><PanelSpinner /></Group> :
-                          this.state.list.length != 0 ?
-                            this.state.list.map((item, idx) => (
-                              <Cell
-                                key={idx}
-                                disabled
-                                multiline
-                                description={"#" + item.id}
-                                {...this.state.editMode && { "mode": "removable" }}
-                                onDragFinish={({ from, to }) =>
-                                  this.updateList({ from, to }, this.state.list)
-                                }
-                                className="clubHelper--Cell"
-                                hasHover={false}
-                                hasActive={false}
-                                onRemove={() => this.removeItem(item.id)}
-                                after={
-                                  <IconButton
-                                    onClick={() => {
-                                      this.setState(
-                                        {
-                                          openedItem: this.state.list[idx],
-                                          openedItemCreator: this.state.list[idx].creator,
-                                          openedItemTime: this.state.list[idx].time,
-                                          openedItemUsers: this.getMailingUsers(this.state.list[idx].id),
-                                          mailingEditTitle: this.state.list[idx].title,
-                                          mailingEditDescription: this.state.list[idx]?.description
-                                        }); this.openModal("mailingListItem")
-                                    }}
-                                  >
-                                    <Icon24InfoCircleOutline/>
-                                  </IconButton>}
-                              >
-                                {item.title}
-                              </Cell>
-                            )) :
-                            <Placeholder>
-                              Здесь пока ничего нет...
-                            </Placeholder>}
-                    </PullToRefresh>
-                  </List>
-                  {(this.state.availability.limit && this.state.list.length != 0) &&
-                    <Footer>
-                      Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["рассылку", "рассылки", "рассылок"])}.
-                    </Footer>
-                  }
-                  {!this.state.availability.creat &&
-                    <Footer>
-                      Достигнут лимит рассылок. Оплатите подписку VK Donut или удалите ненужные рассылки, чтобы создать больше.
-                    </Footer>
-                  }
-                </Group>
-                {this.state.snackbar}
-              </Panel>
-              : <Panel>
-                <Group>
-                  <Placeholder
-                    icon={<Icon56AdvertisingOutline />}
-                    action={
-                      <Button
-                        size="m"
-                        onClick={() => {
-                          this.props.toggleNeedToOpenSettingsOnClubMount(true);
-                          this.props.go("club_info");
-                        }}
+                <Panel>
+                  <PanelHeader left={
+                    <React.Fragment>
+                      {this.state.list.length > 0 && <PanelHeaderButton onClick={() => {
+                        this.setState({ editMode: !this.state.editMode })
+                      }
+                      }>
+                        <Icon28EditOutline fill={this.state.editMode ? this.props.color : ""} />
+                      </PanelHeaderButton>}
+                      {this.state.availability.creat && <PanelHeaderButton onClick={() => this.openModal("createMailing")}>
+                        <Icon28AddOutline />
+                      </PanelHeaderButton>}
+                    </React.Fragment>
+                  }>Рассылки</PanelHeader>
+                  <Group>
+                    <List>
+                      <PullToRefresh
+                        isFetching={this.state.listFetching}
+                        onRefresh={() => this.getMailing(true)}
                       >
-                        Перейти в настройки
-                      </Button>
+                        {
+                          this.state.listLoading ? <Group><PanelSpinner /></Group> :
+                            this.state.list.length != 0 ?
+                              this.state.list.map((item, idx) => (
+                                <Cell
+                                  key={idx}
+                                  disabled
+                                  multiline
+                                  description={"#" + item.id}
+                                  {...this.state.editMode && { "mode": "removable" }}
+                                  onDragFinish={({ from, to }) =>
+                                    this.updateList({ from, to }, this.state.list)
+                                  }
+                                  className="clubHelper--Cell"
+                                  hasHover={false}
+                                  hasActive={false}
+                                  onRemove={() => this.removeItem(item.id)}
+                                  after={
+                                    <IconButton
+                                      onClick={() => {
+                                        this.setState(
+                                          {
+                                            openedItem: this.state.list[idx],
+                                            openedItemCreator: this.state.list[idx].creator,
+                                            openedItemTime: this.state.list[idx].time,
+                                            openedItemUsers: this.getMailingUsers(this.state.list[idx].id),
+                                            mailingEditTitle: this.state.list[idx].title,
+                                            mailingEditDescription: this.state.list[idx]?.description
+                                          }); this.openModal("mailingListItem")
+                                      }}
+                                    >
+                                      <Icon24InfoCircleOutline fill={this.props.color} />
+                                    </IconButton>}
+                                >
+                                  {item.title}
+                                </Cell>
+                              )) :
+                              <Placeholder>
+                                Здесь пока ничего нет...
+                              </Placeholder>}
+                      </PullToRefresh>
+                    </List>
+                    {(this.state.availability.limit && this.state.list.length != 0) &&
+                      <Footer>
+                        Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["рассылку", "рассылки", "рассылок"])}.
+                      </Footer>
                     }
-                  >
-                    Вам нужно включить Рассылки в Настройках, чтобы использовать этот раздел.
-                  </Placeholder>
-                </Group>
-              </Panel>
+                    {!this.state.availability.creat &&
+                      <Footer>
+                        Достигнут лимит рассылок. Оплатите подписку VK Donut или удалите ненужные рассылки, чтобы создать больше.
+                      </Footer>
+                    }
+                  </Group>
+                  {this.state.snackbar}
+                </Panel>
+                : <Panel>
+                  <Group>
+                    <Placeholder
+                      icon={<Icon56AdvertisingOutline />}
+                      action={
+                        <Button
+                          size="m"
+                          onClick={() => {
+                            this.props.toggleNeedToOpenSettingsOnClubMount(true);
+                            this.props.go("club_info");
+                          }}
+                        >
+                          Перейти в настройки
+                        </Button>
+                      }
+                    >
+                      Вам нужно включить Рассылки в Настройках, чтобы использовать этот раздел.
+                    </Placeholder>
+                  </Group>
+                </Panel>
             }
           </SplitCol>
         </SplitLayout>

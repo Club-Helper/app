@@ -248,7 +248,7 @@ export default class TicketsList extends Component {
         <ConfigProvider platform={this.props.platform.current} appearance={this.props.appearance}>
           <Group>
             <Placeholder
-              icon={<Icon56MessagesOutline />}
+              icon={<Icon56MessagesOutline fill={this.props.color} />}
               action={
                 <Button
                   size="m"
@@ -256,6 +256,7 @@ export default class TicketsList extends Component {
                     this.props.toggleNeedToOpenSettingsOnClubMount(true);
                     this.props.go("club_info");
                   }}
+                  style={{ backgroundColor: this.props.color }}
                 >
                   Перейти в настройки
                 </Button>
@@ -284,6 +285,7 @@ export default class TicketsList extends Component {
                         <TabsItem
                           onClick={() => { this.getTickets("all", false); this.setState({ activeTab: "all" }) }}
                           selected={this.state.activeTab === "all"}
+                          style={{ borderColor: this.props.color }}
                         >
                           Все
                         </TabsItem>
@@ -368,7 +370,7 @@ export default class TicketsList extends Component {
                                             disabled
                                             multiline
                                             before={<Avatar size={36} src={item.user.photo} />}
-                                            after={<Icon28RecentOutline />}
+                                            after={<Icon28RecentOutline fill={this.props.color} />}
                                             description={item.time.label}
                                           >
                                             {item.user.first_name} {item.user.last_name}
@@ -392,7 +394,7 @@ export default class TicketsList extends Component {
                                               {item.user.first_name} {item.user.last_name}
                                             </Cell>
                                           }
-                                          before={<Icon28RecentOutline />}
+                                          before={<Icon28RecentOutline fill={this.props.color} />}
                                           key={item.id}
                                         >
                                           Обращение #{item.id}
@@ -426,9 +428,9 @@ export default class TicketsList extends Component {
                                               getScrollToRight={(i) => i + 120}
                                             >
                                               <ButtonGroup>
-                                                {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
-                                                {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
-                                                {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
+                                                {item.options.includes("watch") && <Button style={{ backgroundColor: this.props.color }} onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
+                                                {item.options.includes("assign") && <Button style={{ backgroundColor: this.props.color }} onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
+                                                {item.options.includes("get_support") && <Link style={{ color: this.props.color }} href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
                                                 {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
                                                   <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
                                                   : ""}
@@ -454,7 +456,7 @@ export default class TicketsList extends Component {
                                           disabled
                                           multiline
                                           before={<Avatar size={36} src={item.user.photo} />}
-                                          after={<Icon28RecentOutline />}
+                                          after={<Icon28RecentOutline fill={this.props.color} />}
                                           description={item.time.label}
                                         >
                                           {item.user.first_name} {item.user.last_name}
@@ -478,7 +480,7 @@ export default class TicketsList extends Component {
                                             {item.user.first_name} {item.user.last_name}
                                           </Cell>
                                         }
-                                        before={<Icon28RecentOutline />}
+                                        before={<Icon28RecentOutline fill={this.props.color} />}
                                         key={item.id}
                                       >
                                         Обращение #{item.id}
@@ -512,9 +514,9 @@ export default class TicketsList extends Component {
                                             getScrollToRight={(i) => i + 120}
                                           >
                                             <ButtonGroup>
-                                              {item.options.includes("watch") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
-                                              {item.options.includes("assign") && <Button onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
-                                              {item.options.includes("get_support") && <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
+                                              {item.options.includes("watch") && <Button style={{ backgroundColor: this.props.color }} onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Посмотреть обращение</Button>}
+                                              {item.options.includes("assign") && <Button style={{ backgroundColor: this.props.color }} onClick={() => { this.props.setTicket(item); this.props.go('ticket') }}>Взять обращение</Button>}
+                                              {item.options.includes("get_support") && <Link style={{ color: this.props.color }} href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("tickets_get_support") + "&ref=" + item.id}><Button mode="secondary" size="m">Написать в Поддержку</Button></Link>}
                                               {item.options.includes("request_information") || item.options.includes("cancel_request_information") || item.options.includes("get_support") ?
                                                 <Button mode="secondary" onClick={() => this.openTicketButtonsModal(item.id, item.options)}><Icon24MoreHorizontal /></Button>
                                                 : ""}

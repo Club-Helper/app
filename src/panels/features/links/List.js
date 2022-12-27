@@ -416,7 +416,7 @@ export default class Links extends Component {
           <Div>{this.state.faqInfo.text}</Div>
           <Div>
             <ButtonGroup style={{ width: "100%" }}>
-              <Button size="m" appearance="accent" stretched>
+              <Button style={{ backgroundColor: this.props.color }} size="m" appearance="accent" stretched>
                 Написать в Поддержку
               </Button>
             </ButtonGroup>
@@ -440,10 +440,10 @@ export default class Links extends Component {
               {this.state.openedPattern.id}
             </MiniInfoCell>
             <MiniInfoCell before={<Icon24Linked width={20} height={20} />}>
-              <Link href={this.state.openedPattern.link} target="_blank">{this.state.openedPattern.link}</Link>
+              <Link style={{ color: this.props.color }} href={this.state.openedPattern.link} target="_blank">{this.state.openedPattern.link}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedPattern.creat.user.id} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
+              <Link style={{ color: this.props.color }} href={"https://vk.com/id" + this.state.openedPattern.creat.user.id} target="_blank">{this.state.openedPattern.creat.user.first_name} {this.state.openedPattern.creat.user.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedPattern.creat.time.label}
@@ -498,6 +498,7 @@ export default class Links extends Component {
                 onClick={this.createLink}
                 loading={this.state.buttonLoading}
                 disabled={this.state.buttonLoading || (this.state.formPatternStatus === "error" || this.state.formTitleStatus === "error")}
+                style={{ backgroundColor: this.props.color }}
               >Создать ссылку</Button>
             </FormItem>
           </FormLayout>
@@ -551,7 +552,7 @@ export default class Links extends Component {
                           />
                         </Div>
                       </Group>
-                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal}>Создать ссылку</Button>}>Не найдено ни одного шаблона ссылки.</Placeholder> : <>
+                    {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal} style={{ backgroundColor: this.props.color }}>Создать ссылку</Button>}>Не найдено ни одного шаблона ссылки.</Placeholder> : <>
                       <Group mode='plain'>
                         <List>
                           {this.state.linksLoading ? <PanelSpinner /> :
@@ -570,12 +571,12 @@ export default class Links extends Component {
                                       <IconButton
                                         onClick={() => this.copyLink(item.link)}
                                       >
-                                        <Icon24Linked />
+                                        <Icon24Linked fill={this.props.color} />
                                       </IconButton>
                                       <IconButton
                                         onClick={() => this.openPatternModal(item.id)}
                                       >
-                                        <Icon24InfoCircleOutline />
+                                        <Icon24InfoCircleOutline fill={this.props.color} />
                                       </IconButton>
                                     </div>
                                   }
@@ -640,6 +641,7 @@ export default class Links extends Component {
                       this.props.toggleNeedToOpenSettingsOnClubMount(true);
                       this.props.go("club_info");
                     }}
+                    style={{ backgroundColor: this.props.color }}
                   >
                     Перейти в настройки
                   </Button>
