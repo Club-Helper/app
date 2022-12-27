@@ -1028,7 +1028,7 @@ function Home({
       id: "office",
       panelHeader: null,
       obj: (
-        <Office appearance={appearance} platform={platform} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} color={color} setColor={setColor} menuPosition={menuPosition} setMenuPosition={setMenuPosition} isDesktop={isDesktop} />
+        <Office appearance={appearance} platform={platform} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} color={color} setColor={setColor} menuPosition={menuPosition} setMenuPosition={setMenuPosition} setAppearance={setAppearance} isDesktop={isDesktop} />
       )
     },
     {

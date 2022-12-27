@@ -21,7 +21,8 @@ export default class Office extends Component {
     this.state = {
       activeModal: "",
       color: this.props.color,
-      menuPosition: this.props.menuPosition
+      menuPosition: this.props.menuPosition,
+      appearance: this.props.appearance
     }
 
     this.handlePushClick = this.handlePushClick.bind(this);
@@ -110,6 +111,26 @@ export default class Office extends Component {
                   />
                 </FormItem>
               }
+              <FormItem
+                top={"Схема оформления"}
+              >
+                <SegmentedControl
+                  value={this.state.appearance}
+                  options={[
+                    {
+                      label: "Светлая",
+                      value: "light",
+                    },
+                    {
+                      label: "Тёмная",
+                      value: "dark",
+                    }
+                  ]}
+                  onChange={(value) => {
+                    this.props.setAppearance(value);
+                  }}
+                />
+              </FormItem>
               <FormItem>
                 <CellButton onClick={() => {
                   this.props.setColor("var(--accent)");
