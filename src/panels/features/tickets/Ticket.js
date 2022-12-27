@@ -410,7 +410,7 @@ export default class TicketsList extends Component {
                   <Separator style={{ margin: "10px 0 10px 0" }} />
 
                   <MiniInfoCell before={<Icon20UserOutline />}>
-                    <Link href={"https://vk.com/id" + this.state.ticketUser.id} target="_blank">{this.state.ticketUser.first_name} {this.state.ticketUser.last_name}</Link>
+                    <Link style={{ color: this.props.color }} href={"https://vk.com/id" + this.state.ticketUser.id} target="_blank">{this.state.ticketUser.first_name} {this.state.ticketUser.last_name}</Link>
                   </MiniInfoCell>
                   <MiniInfoCell before={<Icon20ClockOutline />}>
                     {this.state.ticket.time}
