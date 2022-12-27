@@ -79,7 +79,7 @@ export default class Menu extends Component {
         <Group>
           <Link href='https://vk.me/cloud_apps' target='_blank'>
             <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-              Команда Club Helper ищет сотрудников
+              Команда Cloud Apps ищет сотрудников
               <br /><br />
               <Button size="s" stretched mode="secondary">Подробнее</Button>
             </SimpleCell>
