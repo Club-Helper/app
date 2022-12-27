@@ -9,7 +9,7 @@
  *******************************************************/
 
 import React, { Component } from 'react'
-import { ConfigProvider, Group, Panel, PanelSpinner, SplitCol, SplitLayout, Avatar, Gradient, Title, Text, List, SimpleCell, Link } from '@vkontakte/vkui'
+import { ConfigProvider, Group, Panel, PanelSpinner, SplitCol, SplitLayout, Avatar, Gradient, Title, Text, List, SimpleCell, Link, Footer, Spacing, Separator } from '@vkontakte/vkui'
 import { Icon24ShareOutline, Icon24Users3Outline, Icon24BugOutline } from '@vkontakte/icons';
 import bridge from "@vkontakte/vk-bridge";
 
@@ -39,7 +39,7 @@ export default class AppInfo extends Component {
                     textAlign: "center",
                     padding: 32,
                   }}>
-                    <Avatar size={96} src={"https://sun9-81.userapi.com/impg/1WJhNCxzY5IH0zVlgo-Dx94UY3wlypTy_8Pvgw/_nyEsJVD35g.jpg?size=450x450&quality=95&sign=4b597b57c9c5675d491efb5476c25d43&type=album"} />
+                    <Avatar shadow={false} size={96} src={"https://sun9-81.userapi.com/impg/1WJhNCxzY5IH0zVlgo-Dx94UY3wlypTy_8Pvgw/_nyEsJVD35g.jpg?size=450x450&quality=95&sign=4b597b57c9c5675d491efb5476c25d43&type=album"} />
                     <Title
                       style={{ marginBottom: 8, marginTop: 20 }}
                       level="2"
@@ -55,23 +55,32 @@ export default class AppInfo extends Component {
                       v1.0.9-beta
                     </Text>
                   </Gradient>
-                  <List>
-                    <SimpleCell
-                      before={<Icon24ShareOutline />}
-                      onClick={() => {
-                        bridge.send("VKWebAppShare", {"link": "https://vk.com/app7938346"});
-                      }
-                      }
-                    >Поделиться</SimpleCell>
-                    <Link href={"https://vk.com/cloud_apps"} style={{ textDecoration: "none" }} target={"_blank"}>
-                      <SimpleCell before={<Icon24Users3Outline />}>Перейти в сообщество</SimpleCell>
-                    </Link>
-                    <Link href={"https://github.com/Club-Helper/app"} style={{ textDecoration: "none" }} target={"_blank"}>
-                      <SimpleCell before={<Icon24BugOutline />}>GitHub</SimpleCell>
-                    </Link>
-                  </List>
+                  <Spacing />
+                  <Separator />
+                  <Spacing />
+                  <SimpleCell disabled multiline>
+                    Тикет-система прямо в Вашем сообществе!
+                  </SimpleCell>
                 </Group>
               }
+              <Group>
+                <List>
+                  <SimpleCell
+                    before={<Icon24ShareOutline />}
+                    onClick={() => {
+                      bridge.send("VKWebAppShare", { "link": "https://vk.com/app7938346" });
+                    }}>Поделиться</SimpleCell>
+                  <Link href={"https://vk.com/cloud_apps"} style={{ textDecoration: "none" }} target={"_blank"}>
+                    <SimpleCell before={<Icon24Users3Outline />}>Перейти в сообщество</SimpleCell>
+                  </Link>
+                  <Link href={"https://github.com/Club-Helper/app"} style={{ textDecoration: "none" }} target={"_blank"}>
+                    <SimpleCell before={<Icon24BugOutline />}>GitHub</SimpleCell>
+                  </Link>
+                </List>
+              </Group>
+              <Footer>
+                From Cloud Apps with 💖
+              </Footer>
             </Panel>
           </SplitCol>
         </SplitLayout>
