@@ -1406,7 +1406,7 @@ function Home({
                         <Footer onClick={() => {
                           activeStory !== "app_info" && go("app_info")
                         }}>
-                          v1.0.7-beta
+                          v1.0.9-beta
                         </Footer>
                       </Panel>
                     </SplitCol>
@@ -1489,7 +1489,7 @@ function Home({
                           <Footer onClick={() => {
                             activeStory !== "app_info" && go("app_info")
                           }}>
-                            v1.0.7-beta
+                            v1.0.9-beta
                           </Footer>
                         </Panel>
                       </SplitCol>
@@ -1747,7 +1747,7 @@ function Home({
                             <Footer onClick={() => {
                               activeStory !== "app_info" && go("app_info")
                             }}>
-                              v1.0.7-beta
+                              v1.0.9-beta
                             </Footer>
                           </Panel>
                         </SplitCol>
@@ -1829,7 +1829,7 @@ function Home({
                             <Footer onClick={() => {
                               activeStory !== "app_info" && go("app_info")
                             }}>
-                              v1.0.7-beta
+                              v1.0.9-beta
                             </Footer>
                           </Panel>
                         </SplitCol>
