@@ -397,6 +397,10 @@ export default class MailingList extends Component {
                   this.closeModal();
                   if (this.state.mailingEditMode) {
                     this.toggleEditMode();
+                    this.setState({
+                      mailingEditTitleValidation: false,
+                      mailingEditDescriptionValidation: false
+                    })
                   }
                 }}><Icon24Dismiss /></PanelHeaderButton>
               }
@@ -433,6 +437,11 @@ export default class MailingList extends Component {
             this.closeModal();
             if (this.state.mailingEditMode) {
               this.toggleEditMode();
+              this.toggleEditMode();
+              this.setState({
+                mailingEditTitleValidation: false,
+                mailingEditDescriptionValidation: false
+              })
             }
           }}
           settlingHeight={100}
@@ -519,7 +528,13 @@ export default class MailingList extends Component {
                   stretched
                 >
                   <Button
-                    onClick={() => this.toggleEditMode()}
+                    onClick={() => {
+                      this.toggleEditMode()
+                      this.setState({
+                        mailingEditTitleValidation: false,
+                        mailingEditDescriptionValidation: false
+                      })
+                    }}
                     mode={"secondary"}
                     stretched
                   >
@@ -676,6 +691,7 @@ export default class MailingList extends Component {
                   onClick={this.onFormSubmit}
                   disabled={this.state.formWorking || this.state.formValidation || this.state.formValidationDescription}
                   loading={this.state.formWorking}
+                  style={{ backgroundColor: this.props.color }}
                 >
                   Создать
                 </Button>
