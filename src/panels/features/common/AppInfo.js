@@ -52,7 +52,7 @@ export default class AppInfo extends Component {
                         color: "var(--vkui--color_text_secondary)",
                       }}
                     >
-                      v1.1.0-beta-beta
+                      v1.1.0-beta
                     </Text>
                   </Gradient>
                   <Spacing />

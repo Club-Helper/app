@@ -87,7 +87,7 @@ export default class Menu extends Component {
         </Group>
 
         <Footer onClick={() => this.props.go("app_info")}>
-          v1.1.0-beta-beta
+          v1.1.0-beta
         </Footer>
       </Panel>
     )
