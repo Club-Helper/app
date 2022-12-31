@@ -76,42 +76,41 @@ export default class ClubCardMailings extends Component {
 
   render() {
     return (
-        !this.props?.mailings?.length > 0 ?
-            <Placeholder>
-              Вы пока не подписаны ни на одну рассылку в этом сообществе.
-            </Placeholder>
-          :
-          <List>
-            {this.props?.mailings.map((item, idx) => (
-              <Group mode={"plain"} header={<Header>Рассылки</Header>}>
-                <List>
-                  {item.items.map((mailing, idx) => (
-                    <Cell
-                      before={
-                        <React.Fragment>
-                          {mailing.lock && (
-                            <Avatar size={28}>
-                              <Icon12Lock />
-                            </Avatar>
-                          )}
-                        </React.Fragment>
-                      }
-                      after={
-                        <IconButton onClick={() => this.doUnsubscribe(mailing.subscriptions_id)}>
-                          <Icon24CancelOutline />
-                        </IconButton>
-                      }
-                      description={mailing.description}
-                    >
-                      {mailing.title}
-                    </Cell>
-                  ))}
-                </List>
-              </Group>
-            ))}
-          </List>
-
-  )
+      !this.props?.mailings?.length > 0 ?
+          <Placeholder>
+            Вы пока не подписаны ни на одну рассылку в этом сообществе.
+          </Placeholder>
+        :
+        <List>
+          {this.props?.mailings.map((item, idx) => (
+            <Group mode={"plain"} header={<Header>Рассылки</Header>}>
+              <List>
+                {item.items.map((mailing, idx) => (
+                  <Cell
+                    before={
+                      <React.Fragment>
+                        {mailing.lock && (
+                          <Avatar size={28}>
+                            <Icon12Lock />
+                          </Avatar>
+                        )}
+                      </React.Fragment>
+                    }
+                    after={
+                      <IconButton onClick={() => this.doUnsubscribe(mailing.subscriptions_id)}>
+                        <Icon24CancelOutline />
+                      </IconButton>
+                    }
+                    description={mailing.description}
+                  >
+                    {mailing.title}
+                  </Cell>
+                ))}
+              </List>
+            </Group>
+          ))}
+        </List>
+    );
   }
 }
 

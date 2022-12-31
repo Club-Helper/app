@@ -65,7 +65,7 @@ export default function Donut(props) {
             return (<Text className="clubHelper--donut_note" dangerouslySetInnerHTML={{__html: props.parseLinks(element.text)}}/>);
           }
         })}
-        <a href="https://vk.com/donut/ch_app" target="_blank" className="clubHelper--donut_button"><Button sizeY="regular" stretched={true} appearance="overlay">Подключить</Button></a>
+        <a href="https://vk.com/donut/cloud_apps" target="_blank" className="clubHelper--donut_button"><Button sizeY="regular" stretched={true} appearance="overlay">Подключить</Button></a>
         <br /><br />
       </div>}
     </Panel>

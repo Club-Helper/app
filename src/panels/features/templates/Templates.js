@@ -53,16 +53,8 @@ export default class Templates extends Component {
           <SplitLayout>
             <SplitCol>
               <Group>
-                {this.state.activeTab === "links" &&
-                  <>
-                    <LinksList {...this.props} />
-                  </>
-                }
-                {this.state.activeTab === "comments" &&
-                  <>
-                    <CommentsList {...this.props} />
-                  </>
-                }
+                {this.state.activeTab === "links" && <LinksList {...this.props} />}
+                {this.state.activeTab === "comments" && <CommentsList {...this.props} />}
               </Group>
             </SplitCol>
           </SplitLayout>

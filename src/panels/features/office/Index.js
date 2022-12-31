@@ -189,24 +189,6 @@ export default class Office extends Component {
                       Здесь будут уведомления...
                     </Placeholder>
                   }
-                  {/*this.props.office.activity_history.length > 0 ?
-                    this.props.office.activity_history.map((item, idx) => (
-                      <Cell
-                        key={idx}
-                        description={item.time.label}
-                        before={
-                          <React.Fragment>
-                            {item.type == "laptop" && <Icon28LaptopOutline />}
-                            {item.type == "ios" && <Icon56AppleDeviceOutline width={28} height={28} />}
-                            {item.type == "android" && <Icon56AndroidDeviceOutline width={28} height={28} />}
-                          </React.Fragment>
-                        }
-                      >
-                        {item.platform} {item.browser && "· " + item.browser}
-                      </Cell>
-                    ))
-                    :
-                      <Placeholder>Здесь будет история активности</Placeholder>*/}
                 </List>
                 {false && <CellButton
                   onClick={() => {

@@ -56,23 +56,19 @@ export default class Menu extends Component {
 
         <Group>
           {this.props.menuItems.map(menuItem =>
-            menuItem.show &&
-            <>
-              <Cell
-                key={menuItem.id}
-                disabled={this.props.activeStory === menuItem.id}
-                style={menuItem.triggers.includes(this.props.activeStory) ? {
-                  backgroundColor: "var(--button_secondary_background)",
-                  borderRadius: 8
-                } : {}}
-                data-story={menuItem.id}
-                onClick={() => go(menuItem.id)}
-                before={menuItem.before}
-              >
-                {menuItem.name}
-              </Cell>
-              {/* menuItem.id === "mailing_list" && <Spacing separator /> */}
-            </>
+            menuItem.show && <Cell
+              key={menuItem.id}
+              disabled={this.props.activeStory === menuItem.id}
+              style={menuItem.triggers.includes(this.props.activeStory) ? {
+                backgroundColor: "var(--button_secondary_background)",
+                borderRadius: 8
+              } : {}}
+              data-story={menuItem.id}
+              onClick={() => go(menuItem.id)}
+              before={menuItem.before}
+            >
+              {menuItem.name}
+            </Cell>
           )}
         </Group>
 
@@ -87,7 +83,7 @@ export default class Menu extends Component {
         </Group>
 
         <Footer onClick={() => this.props.go("app_info")}>
-          v1.0.9-beta
+          v1.1.0-beta
         </Footer>
       </Panel>
     )

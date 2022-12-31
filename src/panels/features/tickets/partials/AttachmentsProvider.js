@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Gallery, Spinner, Card, Placeholder, Cell, RichCell, Title, Div, Spacing, Link } from '@vkontakte/vkui';
-import { Icon48PictureOutline, Icon48Video, Icon56MicrophoneOutline, Icon56MusicOutline, Icon56VideoOutline } from '@vkontakte/icons';
+import { Card, Placeholder, RichCell, Title, Spacing } from '@vkontakte/vkui';
+import { Icon48PictureOutline, Icon56MicrophoneOutline, Icon56MusicOutline, Icon56VideoOutline } from '@vkontakte/icons';
 
 export const AttachmentsProvider = ({ item }) => {
     if (!item) return null;
@@ -14,7 +14,7 @@ export const AttachmentsProvider = ({ item }) => {
                         display: "block",
                         maxHeight: "20vh",
                         borderRadius: "10px"
-                    }} />
+                    }} alt=""/>
                 </Card>
             );
         } else {
