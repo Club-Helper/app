@@ -15,13 +15,13 @@ import { Gallery } from '@vkontakte/vkui';
 import { AttachmentsProvider } from './AttachmentsProvider';
 
 /**
-* Системное сообщение
-*
-* @param noLast - Последнее ли это системное сообщение в блоке
-* @param children - Текст сообщения
-* @returns {JSX.Element}
-* @constructor
-*/
+ * Системное сообщение
+ *
+ * @param noLast - Последнее ли это системное сообщение в блоке
+ * @param children - Текст сообщения
+ * @returns {JSX.Element}
+ * @constructor
+ */
 
 export const SystemMessage = ({ noLast, children }) => {
   return (
@@ -31,16 +31,17 @@ export const SystemMessage = ({ noLast, children }) => {
 };
 
 /**
-* Сообщение от пользователя
-*
-* @param key - порядковый номер сообщения в рамках обращения
-* @param user - ID пользователя
-* @param noLast - Последнее ли это сообщение в блоке от этого пользователя
-* @param photoUser - Фотография автора собщения
-* @param time - Время отправки
-* @param sticker - Сообщение - стикер
-* @param children - Содержимое сообщения
-*/
+ * Сообщение от пользователя
+ *
+ * @param key - порядковый номер сообщения в рамках обращения
+ * @param user - ID пользователя
+ * @param noLast - Последнее ли это сообщение в блоке от этого пользователя
+ * @param photoUser - Фотография автора собщения
+ * @param time - Время отправки
+ * @param sticker - Сообщение - стикер
+ * @param children - Содержимое сообщения
+ * @param attachments - Вложения
+ */
 
 export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, children, attachments }) => {
   if (!sticker && !children[0] && attachments.lenght === 0) return false;
@@ -64,11 +65,8 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
               }
               {attachments && attachments?.length > 0 &&
                 <Gallery align="center" slideWidth="100%" bullets={attachments?.length > 1 ? "dark" : "none"} showArrows
-                style={
-                  children != null ?
-                  { marginTop: "1vh" }
-                  : {}
-                }>
+                         style={children.length > 0 ? { marginTop: "1vh" } : {}}
+                >
                   {attachments.map((item, idx) => (
                     <center style={{ width:"100%" }}>
                       <AttachmentsProvider key={idx} item={item} />
@@ -85,16 +83,18 @@ export const UserMessage = ({ key, user, noLast, photoUser, time, sticker, child
 };
 
 /**
-* Сообщение сотрудника
-*
-* @param key - порядковый номер сообщения в рамках обращения
-* @param user - ID пользователя
-* @param noLast - Последнее ли это сообщение в блоке от этого сотрудника
-* @param photoUser - Фотография автора сообщения
-* @param time - Время отправки
-* @param sticker - Сообщение - стикер
-* @param children - Содержимое сообщения
-*/
+ * Сообщение сотрудника
+ *
+ * @param key - порядковый номер сообщения в рамках обращения
+ * @param user - ID пользователя
+ * @param noLast - Последнее ли это сообщение в блоке от этого сотрудника
+ * @param photoUser - Фотография автора сообщения
+ * @param time - Время отправки
+ * @param sticker - Сообщение - стикер
+ * @param children - Содержимое сообщения
+ * @param attachments - Вложения
+ */
+
 export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, children, attachments }) => {
   if (!sticker && !children) return false;
 
@@ -115,11 +115,8 @@ export const ClubMessage = ({ key, user, noLast, photoUser, time, sticker, child
               }
               {attachments && attachments?.length > 0 &&
                 <Gallery align="center" slideWidth="100%" bullets={attachments?.length > 1 ? "dark" : "none"} showArrows
-                style={
-                  children != null ?
-                  { marginTop: "1vh" }
-                  : {}
-                }>
+                         style={children.length > 0 ? { marginTop: "1vh" } : {}}
+                >
                   {attachments.map((item, idx) => (
                     <center style={{ width:"100%" }}>
                       <AttachmentsProvider key={idx} item={item} />

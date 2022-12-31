@@ -8,9 +8,9 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard, IconButton, ActionSheet, ActionSheetItem, List, CellButton, FixedLayout, Card } from '@vkontakte/vkui'
+import { ConfigProvider, ModalPage, ModalPageHeader, ModalRoot, PanelHeader, PanelHeaderButton, Div, Button, ButtonGroup, Group, SplitLayout, SplitCol, Separator, Cell, PanelHeaderBack, Title, MiniInfoCell, Link, PanelSpinner, PullToRefresh, Spinner, Snackbar, Avatar, ModalCard, IconButton, List, CellButton, FixedLayout, Card } from '@vkontakte/vkui'
 import { Icon24Dismiss, Icon12Circle, Icon20UserOutline, Icon20ClockOutline, Icon16Done, Icon28AdvertisingOutline, Icon28MessagesOutline, Icon28MoreHorizontal, Icon28InfoCircleOutline, Icon28RecentOutline, Icon28CancelOutline, Icon28DoneOutline } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 import { SystemMessage, UserMessage, ClubMessage } from './partials/Message';
@@ -179,6 +179,7 @@ export default class TicketsList extends Component {
     },
       (data) => {
         let color;
+
         switch (data.response.status.color) {
           case "green":
             color = "#32b332"
@@ -199,6 +200,7 @@ export default class TicketsList extends Component {
           default:
             break;
         }
+
         this.setState(
           {
             ticket: data.response,
@@ -208,7 +210,9 @@ export default class TicketsList extends Component {
             ticketUser: data.response.user,
             ticketHistory: data.response.history.items
           })
+
         this.props.setLoading(false);
+
         if (data.response.history.items.length <= 2) {
           this.props.toggleShowMobileMenu(false);
           this.setState({ activeModal: "send-hello-msg" });

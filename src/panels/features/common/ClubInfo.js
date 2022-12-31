@@ -8,7 +8,7 @@
  * распространение кода приложения запрещены
  *******************************************************/
 
-import { ConfigProvider, Gradient, Group, Panel, PanelHeader, PanelSpinner, SplitCol, SplitLayout, Avatar, Title, Link, MiniInfoCell, List, PullToRefresh, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, Separator, Snackbar, ContentCard, Caption, CardScroll, Banner, Button, Div, Placeholder, CellButton, Spacing, Cell, SimpleCell, Card, Gallery } from '@vkontakte/vkui'
+import { ConfigProvider, Gradient, Group, Panel, PanelHeader, PanelSpinner, SplitCol, SplitLayout, Avatar, Title, Link, MiniInfoCell, List, PullToRefresh, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, Separator, Snackbar, Banner, Button, Div, Placeholder, CellButton, Spacing, SimpleCell } from '@vkontakte/vkui'
 import React, { Component } from 'react';
 import {
   Icon16Hashtag,
@@ -28,8 +28,7 @@ import {
   Icon20ChevronRightOutline,
   Icon56NotificationOutline,
   Icon28UserTagOutline,
-  Icon24Error,
-  Icon24Comment, Icon24CommentOutline
+  Icon24Error, Icon24CommentOutline
 } from '@vkontakte/icons';
 
 import Donut from '../landings/Donut';

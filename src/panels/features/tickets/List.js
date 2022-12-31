@@ -58,7 +58,7 @@ export default class TicketsList extends Component {
         text: null
       },
       messages: [],
-      count: 1,
+      count: 0,
       isEnabled: true,
       fetching: false,
       popout: null,
@@ -103,7 +103,7 @@ export default class TicketsList extends Component {
    * @param {string} filter
    * @param needLoading
    */
-  getTickets(filter, needLoading) {
+  getTickets(filter, needLoading = false) {
     this.setState({ fetching: true });
     needLoading ? this.setState({ ticketsLoading: true }) : this.setState({ fetching: true });
     let timeout = setTimeout(() => this.props.setPopout(<ScreenSpinner />), 10000);
@@ -113,12 +113,10 @@ export default class TicketsList extends Component {
       filter: filter
     },
       (data) => {
-        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
-        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
+        this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true, ticketsLoading: false, fetching: false });
       },
       (error) => {
-        this.setState({ isEnabled: false });
-        needLoading ? this.setState({ ticketsLoading: false }) : this.setState({ fetching: false });
+        this.setState({ isEnabled: false, ticketsLoading: false, fetching: false });
       }
     );
 
@@ -151,7 +149,7 @@ export default class TicketsList extends Component {
 
     this.props.setPopout(null);
 
-    this.interval = setInterval(() => this.getTickets(this.state.activeTab, false), 60000);
+    this.interval = setInterval(() => this.getTickets(this.state.activeTab), 60000);
 
     if (localStorage.getItem("tickets_list_activeTab")) {
       this.setState({ activeTab: localStorage.getItem("tickets_list_activeTab"), ticketsLoading: false });
@@ -163,11 +161,11 @@ export default class TicketsList extends Component {
         filter: this.state.activeTab
       },
         (data) => {
-          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true })
+          this.setState({ messages: data.response.items, count: data.response.count, isEnabled: true, ticketsLoading: false })
           this.props.setLoading(false);
         },
         (error) => {
-          this.setState({ isEnabled: false });
+          this.setState({ isEnabled: false, ticketsLoading: false });
           this.props.setLoading(false);
         }
       );
@@ -283,26 +281,26 @@ export default class TicketsList extends Component {
                     <PanelHeader>
                       <Tabs mode="default" style={{ padding: "0 15px 0 15px" }}>
                         <TabsItem
-                          onClick={() => { this.getTickets("all", false); this.setState({ activeTab: "all" }) }}
+                          onClick={() => { this.getTickets("all", true); this.setState({ activeTab: "all" }) }}
                           selected={this.state.activeTab === "all"}
                           style={{ borderColor: this.props.color }}
                         >
                           Все
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("waiting_specialist", false); this.setState({ activeTab: "waiting_specialist" }) }}
+                          onClick={() => { this.getTickets("waiting_specialist", true); this.setState({ activeTab: "waiting_specialist" }) }}
                           selected={this.state.activeTab === "waiting_specialist"}
                         >
                           Ожидают специалиста
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("work", false); this.setState({ activeTab: "work" }) }}
+                          onClick={() => { this.getTickets("work", true); this.setState({ activeTab: "work" }) }}
                           selected={this.state.activeTab === "work"}
                         >
                           В работе
                         </TabsItem>
                         <TabsItem
-                          onClick={() => { this.getTickets("closed", false); this.setState({ activeTab: "closed" }) }}
+                          onClick={() => { this.getTickets("closed", true); this.setState({ activeTab: "closed" }) }}
                           selected={this.state.activeTab === "closed"}
                         >
                           Закрыты

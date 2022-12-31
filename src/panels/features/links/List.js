@@ -9,7 +9,7 @@
  *******************************************************/
 
 import React, { Component } from 'react'
-import { ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Input, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell, Snackbar } from '@vkontakte/vkui'
+import { ConfigProvider, Group, SplitLayout, SplitCol, List, SimpleCell, Avatar, ButtonGroup, Button, FormLayout, FormItem, Textarea, Footer, ModalRoot, ModalPage, Div, ModalPageHeader, PanelHeaderButton, IconButton, MiniInfoCell, Link, Alert, Placeholder, Title, PanelSpinner, PullToRefresh, CellButton, Spacing, SegmentedControl, Cell, Snackbar } from '@vkontakte/vkui'
 import { Icon24Linked, Icon24InfoCircleOutline, Icon24Dismiss, Icon16Hashtag, Icon20UserOutline, Icon20CalendarOutline, Icon48Linked, Icon24AddCircleDottedOutline, Icon16Done } from '@vkontakte/icons';
 
 import bridge from '@vkontakte/vk-bridge';
@@ -58,7 +58,6 @@ export default class Links extends Component {
 
     this.state = this.props.linksState !== null ? this.props.linksState : initialState
 
-    this.openFAQModal = this.openFAQModal.bind(this);
     this.openPatternModal = this.openPatternModal.bind(this);
     this.openCreateLinkModal = this.openCreateLinkModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -70,16 +69,6 @@ export default class Links extends Component {
     this.updateNewLinkPattern = this.updateNewLinkPattern.bind(this);
     this.copyLink = this.copyLink.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-  }
-
-  openFAQModal() {
-    this.setState({
-      activeModal: "faq",
-      faqInfo: {
-        title: "Название",
-        text: "АбобаАбобаАбобаАбобаАбобаАбобаАбоба"
-      }
-    });
   }
 
   /**
@@ -630,8 +619,7 @@ export default class Links extends Component {
                 {this.state.snackbar}
               </SplitLayout>
             </>}
-            {
-              !this.state.isEnabled &&
+            {!this.state.isEnabled &&
               <Placeholder
                 icon={<Icon48Linked width={56} height={56} />}
                 action={

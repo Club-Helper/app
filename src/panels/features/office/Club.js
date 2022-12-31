@@ -60,7 +60,6 @@ export default class ClubCard extends Component {
     this.setState({ sendButtonDisabled: true, sendButtonLoading: true });
     bridge.send("VKWebAppAllowMessagesFromGroup", { "group_id": 207049707, "key": this.props.token })
       .then(data => {
-
         this.props.req("reports.add", {
           reason: this.state.selectedReason.id || this.state.openedReason?.reasons[0].id,
           comment: this.state.comment,
@@ -319,34 +318,34 @@ export default class ClubCard extends Component {
             <Group>
               {this.props.club ?
                 <>
-                <Gradient
-                  style={{
-                    margin: this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    padding: 32,
-                  }}
-                  mode={this.props.appearance == "white" ? "white" : "black"}
-                >
-                  <Avatar size={96} src={this.props.club?.photo} />
-                  <Title
-                    style={{ marginBottom: 8, marginTop: 20 }}
-                    level="2"
-                    weight="2"
+                  <Gradient
+                    style={{
+                      margin: this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      padding: 32,
+                    }}
+                    mode={this.props.appearance == "white" ? "white" : "black"}
                   >
-                    {this.props.club?.name}
-                  </Title>
-                  <Cell
-                    after={
-                      <svg color="var(--dynamic_orange)" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><path fill="currentcolor" d="M5.5.5c.3-.7.7-.7 1 0l1.5 3.5 3.3.3c.7.1.9.5.3 1l-2.6 2.3 1 3.7c.2.7-.1.9-.7.5l-3.3-2.4-3.3 2.4c-.6.4-.9.2-.7-.5l1-3.7-2.6-2.3c-.6-.5-.4-.9.3-1l3.3-.3 1.5-3.5z"/></svg>
-                    }
-                  >
-                    <b>{this.props.club?.rating}</b>&nbsp;
-                  </Cell>
-                </Gradient>
+                    <Avatar size={96} src={this.props.club?.photo} />
+                    <Title
+                      style={{ marginBottom: 8, marginTop: 20 }}
+                      level="2"
+                      weight="2"
+                    >
+                      {this.props.club?.name}
+                    </Title>
+                    <Cell
+                      after={
+                        <svg color="var(--dynamic_orange)" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><path fill="currentcolor" d="M5.5.5c.3-.7.7-.7 1 0l1.5 3.5 3.3.3c.7.1.9.5.3 1l-2.6 2.3 1 3.7c.2.7-.1.9-.7.5l-3.3-2.4-3.3 2.4c-.6.4-.9.2-.7-.5l1-3.7-2.6-2.3c-.6-.5-.4-.9.3-1l3.3-.3 1.5-3.5z"/></svg>
+                      }
+                    >
+                      <b>{this.props.club?.rating}</b>&nbsp;
+                    </Cell>
+                  </Gradient>
                   <Spacing size={20} separator />
                   <ClubCardMailings
                     setPopout={this.props.setPopout}
@@ -358,7 +357,9 @@ export default class ClubCard extends Component {
                     req={this.props.req}
                   />
                 </>
-                : <PanelSpinner />}
+                :
+                <PanelSpinner />
+              }
             </Group>
           </Panel>
         </SplitCol>

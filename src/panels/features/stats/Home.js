@@ -47,10 +47,9 @@ export default class StatsHome extends Component {
             <Panel>
               <PullToRefresh isFetching={this.state.isStatsLoading} onRefresh={this.getStats}>
                 <Group header={<Title level='3' style={{ marginLeft: "10px", marginTop: "15px" }}>Сообщество</Title>}>
-                  {this.state.isStatsLoading ? <PanelSpinner /> :
-                    <>
-                      <MiniInfoCell before={<Icon20Users3Outline fill="var(--dynamic_violet)" />}>Кол-во администраторов: {this.state.stats.club?.managers}</MiniInfoCell>
-                    </>
+                  {this.state.isStatsLoading ?
+                    <PanelSpinner /> :
+                    <MiniInfoCell before={<Icon20Users3Outline fill="var(--dynamic_violet)" />}>Кол-во администраторов: {this.state.stats.club?.managers}</MiniInfoCell>
                   }
                 </Group>
                 <Group header={<Title level='3' style={{ marginLeft: "10px", marginTop: "15px" }}>Обращения</Title>}>
@@ -64,10 +63,9 @@ export default class StatsHome extends Component {
                   }
                 </Group>
                 <Group header={<Title level='3' style={{ marginLeft: "10px", marginTop: "15px" }}>Ссылки</Title>}>
-                  {this.state.isStatsLoading ? <PanelSpinner /> :
-                    <>
-                      <MiniInfoCell before={<Icon24Linked fill="var(--dynamic_raspberry_pink)" />}>Всего: {this.state.stats.links?.all}</MiniInfoCell>
-                    </>
+                  {this.state.isStatsLoading ?
+                    <PanelSpinner /> :
+                    <MiniInfoCell before={<Icon24Linked fill="var(--dynamic_raspberry_pink)" />}>Всего: {this.state.stats.links?.all}</MiniInfoCell>
                   }
                 </Group>
               </PullToRefresh>
