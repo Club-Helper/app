@@ -324,6 +324,7 @@ export default class TicketsList extends Component {
             }
             {this.state.ticketOptions.includes("request_information") &&
               <CellButton
+                style={{ color: this.props.color }}
                 onClick={() => this.handleOptionClick("request_information")}
                 loading={this.state.buttonLoading === "request_information"}>
                 Ожидается информация
@@ -359,7 +360,7 @@ export default class TicketsList extends Component {
               </CellButton>
             }
             {this.state.ticketOptions.includes("get_support") &&
-              <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+              <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
                 <CellButton
                   mode="secondary"
                   size="m"
@@ -380,7 +381,7 @@ export default class TicketsList extends Component {
               <PanelHeaderBack onClick={() => this.props.go("tickets_list")} />
               <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28AdvertisingOutline /></PanelHeaderButton>
               {this.state.ticketOptions?.length > 0 &&
-                  <PanelHeaderButton onClick={() => this.setState({ showOptions: !this.state.showOptions })}><Icon28MoreHorizontal /></PanelHeaderButton>
+                <PanelHeaderButton onClick={() => this.setState({ showOptions: !this.state.showOptions })}><Icon28MoreHorizontal /></PanelHeaderButton>
               }
               {this.state.fetchingHeader && <PanelHeaderButton><Spinner /></PanelHeaderButton>}
             </React.Fragment>
@@ -413,7 +414,7 @@ export default class TicketsList extends Component {
                   <Separator style={{ margin: "10px 0 10px 0" }} />
 
                   <MiniInfoCell before={<Icon20UserOutline />}>
-                    <Link href={"https://vk.com/id" + this.state.ticketUser.id} target="_blank">{this.state.ticketUser.first_name} {this.state.ticketUser.last_name}</Link>
+                    <Link style={{ color: this.props.color }} href={"https://vk.com/id" + this.state.ticketUser.id} target="_blank">{this.state.ticketUser.first_name} {this.state.ticketUser.last_name}</Link>
                   </MiniInfoCell>
                   <MiniInfoCell before={<Icon20ClockOutline />}>
                     {this.state.ticket.time}
@@ -497,60 +498,66 @@ export default class TicketsList extends Component {
               {this.state.showOptions &&
                 <Card mode={"shadow"}>
                   <List>
-                  {this.state.ticketOptions.includes("received_information") &&
-                    <CellButton
-                      onClick={() => this.handleOptionClick("received_information")}
-                      before={this.state.buttonLoading === "received_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28InfoCircleOutline />}
-                      mode="commerce"
-                    >
-                      Информация получена
-                    </CellButton>
-                  }
-                  {this.state.ticketOptions.includes("request_information") &&
-                    <CellButton
-                      onClick={() => this.handleOptionClick("request_information")}
-                      before={this.state.buttonLoading === "request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28RecentOutline />}>
-                      Ожидается информация
-                    </CellButton>
-                  }
-                  {this.state.ticketOptions.includes("cancel_request_information") &&
-                    <CellButton
-                      mode="destructive"
-                      onClick={() => this.handleOptionClick("cancel_request_information")}
-                      before={this.state.buttonLoading === "cancel_request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28CancelOutline />}
-                    >
-                      Отменить ожидание информации
-                    </CellButton>}
-                  {this.state.ticketOptions.includes("close") &&
-                    <CellButton
-                      mode="destructive"
-                      onClick={() => this.handleOptionClick("close")}
-                      before={this.state.buttonLoading === "close" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28DoneOutline />}
-                    >
-                      Закрыть обращение
-                    </CellButton>}
-                  {this.state.ticketOptions.includes("invitation_mailing") &&
-                    <CellButton
-                      mode="outline"
-                      onClick={() => this.setState({
-                        activeModal: "actions",
-                        buttonLoading: "invitation_mailing"
-                      })}
-                      before={this.state.buttonLoading === "invitation_mailing" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28AdvertisingOutline />}
-                      disabled={this.state.buttonLoading === "invitation_mailing"}
-                    >
-                      Пригласить в рассылку
-                    </CellButton>
-                  }
-                  {this.state.ticketOptions.includes("get_support") &&
-                    <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                    {this.state.ticketOptions.includes("received_information") &&
                       <CellButton
-                        mode="secondary"
-                        size="m"
+                        style={{ color: this.props.color }}
+                        onClick={() => this.handleOptionClick("received_information")}
+                        before={this.state.buttonLoading === "received_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28InfoCircleOutline fill={this.props.color} />}
+                        mode="commerce"
                       >
-                        Написать в Поддержку
+                        Информация получена
                       </CellButton>
-                    </Link>}
+                    }
+                    {this.state.ticketOptions.includes("request_information") &&
+                      <CellButton
+                        style={{ color: this.props.color }}
+                        onClick={() => this.handleOptionClick("request_information")}
+                        before={this.state.buttonLoading === "request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28RecentOutline fill={this.props.color} />}>
+                        Ожидается информация
+                      </CellButton>
+                    }
+                    {this.state.ticketOptions.includes("cancel_request_information") &&
+                      <CellButton
+                        style={{ color: this.props.color }}
+                        mode="destructive"
+                        onClick={() => this.handleOptionClick("cancel_request_information")}
+                        before={this.state.buttonLoading === "cancel_request_information" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28CancelOutline fill={this.props.color} />}
+                      >
+                        Отменить ожидание информации
+                      </CellButton>}
+                    {this.state.ticketOptions.includes("close") &&
+                      <CellButton
+                        style={{ color: this.props.color }}
+                        mode="destructive"
+                        onClick={() => this.handleOptionClick("close")}
+                        before={this.state.buttonLoading === "close" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28DoneOutline fill={this.props.color} />}
+                      >
+                        Закрыть обращение
+                      </CellButton>}
+                    {this.state.ticketOptions.includes("invitation_mailing") &&
+                      <CellButton
+                        style={{ color: this.props.color }}
+                        mode="outline"
+                        onClick={() => this.setState({
+                          activeModal: "actions",
+                          buttonLoading: "invitation_mailing"
+                        })}
+                        before={this.state.buttonLoading === "invitation_mailing" ? <IconButton style={{ marginLeft: "-10px", marginRight: "10px" }}><Spinner /></IconButton> : <Icon28AdvertisingOutline fill={this.props.color} />}
+                        disabled={this.state.buttonLoading === "invitation_mailing"}
+                      >
+                        Пригласить в рассылку
+                      </CellButton>
+                    }
+                    {this.state.ticketOptions.includes("get_support") &&
+                      <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("ticket_get_support") + "&ref=" + this.state.ticket.id}>
+                        <CellButton
+                          style={{ color: this.props.color }}
+                          mode="secondary"
+                          size="m"
+                        >
+                          Написать в Поддержку
+                        </CellButton>
+                      </Link>}
                   </List>
                 </Card>
               }

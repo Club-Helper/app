@@ -376,6 +376,7 @@ export default class CommentsList extends Component {
                 onClick={() => this.createComment()}
                 loading={this.state.newCommentButtonWorking}
                 disabled={this.state.newCommentButtonWorking || this.state.titleValidation || this.state.commandValidation || this.state.patternValidation}
+                style={{ backgroundColor: this.props.color }}
               >
                 Создать шаблон
               </Button>
@@ -403,7 +404,7 @@ export default class CommentsList extends Component {
               {this.state.openedComment?.comand}
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20UserOutline />}>
-              <Link href={"https://vk.com/id" + this.state.openedComment?.creat?.user?.id} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
+              <Link style={{ color: this.props.color }} href={"https://vk.com/id" + this.state.openedComment?.creat?.user?.id} target="_blank">{this.state.openedComment?.creat?.user?.first_name} {this.state.openedComment?.creat?.user?.last_name}</Link>
             </MiniInfoCell>
             <MiniInfoCell before={<Icon20CalendarOutline />}>
               {this.state.openedComment?.creat?.time?.label}
@@ -478,8 +479,8 @@ export default class CommentsList extends Component {
                                 hasActive={false}
                                 key={idx}
                                 description={comment.comand}
-                                before={<Icon28CommentOutline />}
-                                after={<IconButton onClick={() => this.getCommentById(idx)}><Icon28InfoCircleOutline /></IconButton>}
+                                before={<Icon28CommentOutline fill={this.props.color} />}
+                                after={<IconButton onClick={() => this.getCommentById(idx)}><Icon28InfoCircleOutline fill={this.props.color} /></IconButton>}
                                 onClick={() => this.getCommentById(idx)}
                               >
                                 {comment.title}
@@ -523,6 +524,7 @@ export default class CommentsList extends Component {
                               this.props.toggleShowMobileMenu(false);
                               this.setState({ activeModal: "create-comment" })
                             }}
+                              style={{ backgroundColor: this.props.color }}
                             >Создать комментарий</Button>}
                           >
                             Не найдено ни одного шаблона комментария.
@@ -543,6 +545,7 @@ export default class CommentsList extends Component {
                         this.props.toggleNeedToOpenSettingsOnClubMount(true);
                         this.props.go("club_info");
                       }}
+                      style={{ backgroundColor: this.props.color }}
                     >
                       Перейти в настройки
                     </Button>

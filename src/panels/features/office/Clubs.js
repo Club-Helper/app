@@ -189,7 +189,7 @@ export default class Clubs extends Component {
               </PanelHeader>
               <PullToRefresh isFetching={this.state.isFetching} onRefresh={() => this.onRefresh()}>
                 <Group>
-                  {this.state.isFetching ? <PanelSpinner /> :
+                  {this.props.isLoading ? <PanelSpinner /> :
                     <List>
                       {!this.props.office?.clubs ? <PanelSpinner /> :
                         this.props.office.clubs.length > 0 ?

@@ -154,6 +154,8 @@ function Home({
   const [canViewClubs, toggleCanViewClubs] = useState(null);
   const [canViewSupport, toggleCanViewSupport] = useState(null);
   const [canViewDonut, toggleCanViewDonut] = useState(null);
+  const [color, setColor] = useState("");
+  const [menuPosition, setMenuPosition] = useState("");
 
   useEffect(() => {
     bridge.send("VKWebAppGetClientVersion")
@@ -162,6 +164,20 @@ function Home({
           setScheme('vkcors');
         }
       })
+
+    if (!localStorage.getItem("ch_appearance_color")) {
+      localStorage.setItem("ch_appearance_color", "var(--accent)");
+      setColor("var(--accent)");
+    } else {
+      setColor(localStorage.getItem("ch_appearance_color"));
+    }
+
+    if (!localStorage.getItem("ch_appearance_menu")) {
+      localStorage.setItem("ch_appearance_menu", "right");
+      setMenuPosition("right");
+    } else {
+      setMenuPosition(localStorage.getItem("ch_appearance_menu"));
+    }
 
     /*fetch(`${apiScheme}://cloud-apps.ru/translation/ru`)
       .then(response => response.json())
@@ -435,14 +451,14 @@ function Home({
         "ticket"
       ],
       name: "Обращения",
-      before: <Icon28MessagesOutline />,
+      before: <Icon28MessagesOutline fill={color} />,
       show: (club_role === "admin" || messages_enabled) && canViewTickets
     },
     {
       id: "links",
       triggers: ["links"],
       name: "Ссылки",
-      before: <Icon24Linked width={28} height={28} />,
+      before: <Icon24Linked width={28} height={28} fill={color} />,
       show: false
     },
 
@@ -450,28 +466,28 @@ function Home({
       id: "comments",
       triggers: ["comments"],
       name: "Комментарии",
-      before: <Icon28CommentOutline />,
+      before: <Icon28CommentOutline fill={color} />,
       show: false
     },
     {
       id: "templates",
       triggers: ["templates"],
       name: "Шаблоны",
-      before: <Icon28ArticlesOutline />,
+      before: <Icon28ArticlesOutline fill={color} />,
       show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern
     },
     {
       id: "mailing_list",
       triggers: ["mailing_list", "mailing"],
       name: "Рассылки",
-      before: <Icon28AdvertisingOutline />,
+      before: <Icon28AdvertisingOutline fill={color} />,
       show: canViewMailing
     },
     {
       id: "settings",
       triggers: ["settings"],
       name: "Настройки",
-      before: <Icon28SettingsOutline />,
+      before: <Icon28SettingsOutline fill={color} />,
       // show: (club_role === "admin")
       show: false
     },
@@ -479,7 +495,7 @@ function Home({
       id: "stats_home",
       triggers: ["stats_home"],
       name: "Статистика",
-      before: <Icon28StatisticsOutline />,
+      before: <Icon28StatisticsOutline fill={color} />,
       // show: (club_role === "admin")
       show: false
     },
@@ -504,21 +520,21 @@ function Home({
       id: "office-clubs",
       triggers: ["office-clubs"],
       name: "Сообщества",
-      before: <Icon36Users3Outline width={28} height={28} />,
+      before: <Icon36Users3Outline width={28} height={28} fill={color} />,
       show: canViewClubs
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} />,
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
       show: canViewMailing
     },
     {
       id: "faq",
       triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
-      before: <Icon28LifebuoyOutline />,
+      before: <Icon28LifebuoyOutline fill={color} />,
       show: canViewSupport
     }
   ];
@@ -528,14 +544,14 @@ function Home({
       id: "club-card",
       triggers: ["club-card"],
       name: clubCard?.name,
-      before: <Avatar src={clubCard?.photo} size={28} />,
+      before: <Avatar src={clubCard?.photo} size={28} fill={color} />,
       show: !isDesktop
     },
     {
       id: "clubCard-mailings",
       triggers: ["clubCard-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} />,
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
       show: true
     }
   ]
@@ -654,7 +670,11 @@ function Home({
     toggleShowMenu: toggleShowMenu,
     parseLinks: parseLinks,
     params: params,
-    t: t
+    t: t,
+    color: color,
+    setColor: setColor,
+    menuPosition: menuPosition,
+    setMenuPosition: setMenuPosition
   };
 
   const panels = [
@@ -1008,7 +1028,7 @@ function Home({
       id: "office",
       panelHeader: null,
       obj: (
-        <Office appearance={appearance} platform={platform} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} />
+        <Office appearance={appearance} platform={platform} go={go} parseLinks={parseLinks} setPage={setPage} setActiveStory={setActiveStory} setPopout={setPopout} office={office} req={req} color={color} setColor={setColor} menuPosition={menuPosition} setMenuPosition={setMenuPosition} setAppearance={setAppearance} isDesktop={isDesktop} />
       )
     },
     {
@@ -1267,129 +1287,257 @@ function Home({
                   justifyContent: "center"
                 })}
               >
-                <SplitCol
-                  animate={true}
-                  spaced={!needToShowClubStartOnboarding && isDesktop}
-                  width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
-                  maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
-                >
-                  <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && showMobileMenu && (
-                    <Tabbar>
-                      {menuItems.map(menuItem =>
-                        menuItem.show &&
-                        <TabbarItem
-                          key={menuItem.id}
-                          onClick={() => go(menuItem.id)}
-                          selected={menuItem.triggers.includes(activeStory)}
-                          disabled={activeStory === menuItem.id}
-                          data-story={menuItem.id}
-                          text={menuItem.name}
-                          style={menuItem.style ? menuItem.style : {}}
-                        >
-                          {menuItem.before}
-                        </TabbarItem>
-                      )}
-                    </Tabbar>
-                  )}>
-                    <View
-                      id={activeStory}
-                      activePanel={activeStory}
-                      history={history}
-                      onSwipeBack={() => goBack()}
-                    >
-                      {panels.map((panel, idx) => (
-                        <Panel
-                          key={idx}
-                          id={panel.id}
-                        >
-                          {panel.panelHeader}
-                          {panel.obj}
-                        </Panel>
-                      ))}
-                    </View>
-                  </Epic>
-                </SplitCol>
-                {showMenu && isDesktop && !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
-                  <SplitCol fixed width="280px" maxWidth="280px">
-                    <Panel>
-                      {hasHeader && <PanelHeader />}
-                      <Group>
-                        <Cell
-                          onClick={() => changeMode("office")}
-                          before={
-                            <Icon28UserTagOutline />
-                          }
-                        >
-                          Личный кабинет
-                        </Cell>
-                        <Spacing separator />
-                        {club ?
-                          <>
-                            <Cell
-                              onClick={() => go("club_info")}
-                              before={
-                                <Avatar
-                                  size={28}
-                                  src={club.photo}
-                                  onClick={() => go("club_info")}
-                                  badge={donutStatus ? <img src={DonutIcon} style={{
-                                    width: '14px',
-                                    height: '14px'
-                                  }} alt="" /> : ""}
-                                />
-                              }
-                              style={activeStory == "club_info" ? {
-                                cursor: "pointer",
-                                backgroundColor: "var(--button_secondary_background)",
-                                borderRadius: 8
-                              } : { cursor: "pointer" }}
-                              disabled={activeStory == "club_info"}
-                            >
-                              {club.name}
-                            </Cell>
-                          </> : <Spinner />}
-                      </Group>
-
-                      <Group>
+                {menuPosition === "right" ? <>
+                  <SplitCol
+                    animate={true}
+                    spaced={!needToShowClubStartOnboarding && isDesktop}
+                    width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                    maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                  >
+                    <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && showMobileMenu && (
+                      <Tabbar>
                         {menuItems.map(menuItem =>
                           menuItem.show &&
-                          <>
-                            <Cell
-                              key={menuItem.id}
-                              disabled={activeStory === menuItem.id}
-                              style={menuItem.triggers.includes(activeStory) ? {
-                                backgroundColor: "var(--button_secondary_background)",
-                                borderRadius: 8
-                              } : {}}
-                              data-story={menuItem.id}
-                              onClick={() => go(menuItem.id)}
-                              before={menuItem.before}
-                            >
-                              {menuItem.name}
-                            </Cell>
-                          </>
+                          <TabbarItem
+                            key={menuItem.id}
+                            onClick={() => go(menuItem.id)}
+                            selected={menuItem.triggers.includes(activeStory)}
+                            disabled={activeStory === menuItem.id}
+                            data-story={menuItem.id}
+                            text={menuItem.name}
+                            style={menuItem.style ? menuItem.style : {}}
+                          >
+                            {menuItem.before}
+                          </TabbarItem>
                         )}
-                      </Group>
-
-                      <Group>
-                        <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
-                          <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-                            Команда Club Helper ищет сотрудников
-                            <br /><br />
-                            <Button size="s" stretched mode="secondary">Подробнее</Button>
-                          </SimpleCell>
-                        </Link>
-                      </Group>
-
-                      <Footer onClick={() => {
-                        activeStory !== "app_info" && go("app_info")
-                      }}>
-                        v1.0.8-beta
-                      </Footer>
-                    </Panel>
+                      </Tabbar>
+                    )}>
+                      <View
+                        id={activeStory}
+                        activePanel={activeStory}
+                        history={history}
+                        onSwipeBack={() => goBack()}
+                      >
+                        {panels.map((panel, idx) => (
+                          <Panel
+                            key={idx}
+                            id={panel.id}
+                          >
+                            {panel.panelHeader}
+                            {panel.obj}
+                          </Panel>
+                        ))}
+                      </View>
+                    </Epic>
                   </SplitCol>
+                  {showMenu && isDesktop && !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
+                    <SplitCol fixed width="280px" maxWidth="280px">
+                      <Panel>
+                        {hasHeader && <PanelHeader />}
+                        <Group>
+                          <Cell
+                            onClick={() => changeMode("office")}
+                            before={
+                              <Icon28UserTagOutline fill={color} />
+                            }
+                          >
+                            Личный кабинет
+                          </Cell>
+                          <Spacing separator />
+                          {club ?
+                            <>
+                              <Cell
+                                onClick={() => go("club_info")}
+                                before={
+                                  <Avatar
+                                    size={28}
+                                    src={club.photo}
+                                    onClick={() => go("club_info")}
+                                    badge={donutStatus ? <img src={DonutIcon} style={{
+                                      width: '14px',
+                                      height: '14px'
+                                    }} alt="" /> : ""}
+                                  />
+                                }
+                                style={activeStory == "club_info" ? {
+                                  cursor: "pointer",
+                                  backgroundColor: "var(--button_secondary_background)",
+                                  borderRadius: 8
+                                } : { cursor: "pointer" }}
+                                disabled={activeStory == "club_info"}
+                              >
+                                {club.name}
+                              </Cell>
+                            </> : <Spinner />}
+                        </Group>
 
-                ) : ""}
+                        <Group>
+                          {menuItems.map(menuItem =>
+                            menuItem.show &&
+                            <>
+                              <Cell
+                                key={menuItem.id}
+                                disabled={activeStory === menuItem.id}
+                                style={menuItem.triggers.includes(activeStory) ? {
+                                  backgroundColor: "var(--button_secondary_background)",
+                                  borderRadius: 8
+                                } : {}}
+                                data-story={menuItem.id}
+                                onClick={() => go(menuItem.id)}
+                                before={menuItem.before}
+                              >
+                                {menuItem.name}
+                              </Cell>
+                            </>
+                          )}
+                        </Group>
+
+                        <Group>
+                          <Link href={"https://vk.me/cloud_apps?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
+                            <SimpleCell multiline before={<Avatar src="https://sun1-30.userapi.com/s/v1/ig2/huS_WYDpyzONDEF6thCzF5iJR7tkaemWgqLDELYRZjCs7lEN_Phi-pmYzlp-wGQJC43111s2hgBk_L323Jh6rx4t.jpg?size=100x100&quality=95&crop=0,0,400,400&ava=1" shadow={false} />}>
+                              Команда Cloud Apps ищет сотрудников
+                              <br /><br />
+                              <Button size="s" stretched mode="secondary">Подробнее</Button>
+                            </SimpleCell>
+                          </Link>
+                        </Group>
+
+                        <Footer onClick={() => {
+                          activeStory !== "app_info" && go("app_info")
+                        }}>
+                          v1.1.0-beta
+                        </Footer>
+                      </Panel>
+                    </SplitCol>
+
+                  ) : ""}
+                </> :
+                  <>
+                    {showMenu && isDesktop && !(messages_enabled == false && links_enabled == false && comments_enabled == false && club_role != "admin") ? (
+                      <SplitCol fixed width="280px" maxWidth="280px">
+                        <Panel>
+                          {hasHeader && <PanelHeader />}
+                          <Group>
+                            <Cell
+                              onClick={() => changeMode("office")}
+                              before={
+                                <Icon28UserTagOutline fill={color} />
+                              }
+                            >
+                              Личный кабинет
+                            </Cell>
+                            <Spacing separator />
+                            {club ?
+                              <>
+                                <Cell
+                                  onClick={() => go("club_info")}
+                                  before={
+                                    <Avatar
+                                      size={28}
+                                      src={club.photo}
+                                      onClick={() => go("club_info")}
+                                      badge={donutStatus ? <img src={DonutIcon} style={{
+                                        width: '14px',
+                                        height: '14px'
+                                      }} alt="" /> : ""}
+                                    />
+                                  }
+                                  style={activeStory == "club_info" ? {
+                                    cursor: "pointer",
+                                    backgroundColor: "var(--button_secondary_background)",
+                                    borderRadius: 8
+                                  } : { cursor: "pointer" }}
+                                  disabled={activeStory == "club_info"}
+                                >
+                                  {club.name}
+                                </Cell>
+                              </> : <Spinner />}
+                          </Group>
+
+                          <Group>
+                            {menuItems.map(menuItem =>
+                              menuItem.show &&
+                              <>
+                                <Cell
+                                  key={menuItem.id}
+                                  disabled={activeStory === menuItem.id}
+                                  style={menuItem.triggers.includes(activeStory) ? {
+                                    backgroundColor: "var(--button_secondary_background)",
+                                    borderRadius: 8
+                                  } : {}}
+                                  data-story={menuItem.id}
+                                  onClick={() => go(menuItem.id)}
+                                  before={menuItem.before}
+                                >
+                                  {menuItem.name}
+                                </Cell>
+                              </>
+                            )}
+                          </Group>
+
+                          <Group>
+                            <Link href={"https://vk.me/cloud_apps?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
+                              <SimpleCell multiline before={<Avatar src="https://sun1-30.userapi.com/s/v1/ig2/huS_WYDpyzONDEF6thCzF5iJR7tkaemWgqLDELYRZjCs7lEN_Phi-pmYzlp-wGQJC43111s2hgBk_L323Jh6rx4t.jpg?size=100x100&quality=95&crop=0,0,400,400&ava=1" shadow={false} />}>
+                                Команда Cloud Apps ищет сотрудников
+                                <br /><br />
+                                <Button size="s" stretched mode="secondary">Подробнее</Button>
+                              </SimpleCell>
+                            </Link>
+                          </Group>
+
+                          <Footer onClick={() => {
+                            activeStory !== "app_info" && go("app_info")
+                          }}>
+                            v1.1.0-beta
+                          </Footer>
+                        </Panel>
+                      </SplitCol>
+
+                    ) : ""}
+                    <SplitCol
+                      animate={true}
+                      spaced={!needToShowClubStartOnboarding && isDesktop}
+                      width={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                      maxWidth={needToShowClubStartOnboarding ? (isDesktop ? '80%' : '100%') : (isDesktop ? '660px' : '100%')}
+                    >
+                      <Epic activeStory={activeStory} tabbar={!isDesktop && club && showMenu && showMobileMenu && (
+                        <Tabbar>
+                          {menuItems.map(menuItem =>
+                            menuItem.show &&
+                            <TabbarItem
+                              key={menuItem.id}
+                              onClick={() => go(menuItem.id)}
+                              selected={menuItem.triggers.includes(activeStory)}
+                              disabled={activeStory === menuItem.id}
+                              data-story={menuItem.id}
+                              text={menuItem.name}
+                              style={menuItem.style ? menuItem.style : {}}
+                            >
+                              {menuItem.before}
+                            </TabbarItem>
+                          )}
+                        </Tabbar>
+                      )}>
+                        <View
+                          id={activeStory}
+                          activePanel={activeStory}
+                          history={history}
+                          onSwipeBack={() => goBack()}
+                        >
+                          {panels.map((panel, idx) => (
+                            <Panel
+                              key={idx}
+                              id={panel.id}
+                            >
+                              {panel.panelHeader}
+                              {panel.obj}
+                            </Panel>
+                          ))}
+                        </View>
+                      </Epic>
+                    </SplitCol>
+                  </>
+                }
               </SplitLayout>
             </ConfigProvider>
           )
@@ -1478,122 +1626,256 @@ function Home({
                     justifyContent: "center"
                   }}
                 >
-                  <SplitCol
-                    animate={true}
-                    spaced={isDesktop}
-                    width={isDesktop ? '660px' : '100%'}
-                    maxWidth={isDesktop ? '660px' : '100%'}
-                  >
-                    <Epic activeStory={activeStory} tabbar={!isDesktop && office && showMenu && (
-                      <Tabbar>
-                        {officeMenuItems.map(menuItem =>
-                          menuItem.show &&
-                          <TabbarItem
-                            key={menuItem.id}
-                            onClick={() => go(menuItem.id)}
-                            selected={menuItem.triggers.includes(activeStory)}
-                            disabled={activeStory === menuItem.id}
-                            data-story={menuItem.id}
-                            text={menuItem.name}
-                            style={menuItem.style ? menuItem.style : {}}
-                          >
-                            {menuItem.before}
-                          </TabbarItem>
-                        )}
-                      </Tabbar>
-                    )}>
-                      <View
-                        id={activeStory}
-                        activePanel={activeStory}
-                        history={history}
-                        onSwipeBack={() => goBack()}
+                  {menuPosition === "right" ?
+                    <>
+                      <SplitCol
+                        animate={true}
+                        spaced={isDesktop}
+                        width={isDesktop ? '660px' : '100%'}
+                        maxWidth={isDesktop ? '660px' : '100%'}
                       >
-                        {officePanels.map((panel, idx) => (
-                          <Panel
-                            key={idx}
-                            id={panel.id}
-                          >
-                            {panel.panelHeader}
-                            {panel.obj}
-                          </Panel>
-                        ))}
-                      </View>
-                    </Epic>
-                  </SplitCol>
-                  {isDesktop ? (
-                    <SplitCol fixed width="280px" maxWidth="280px">
-                      <Panel>
-                        {hasHeader && <PanelHeader />}
-
-                        <Group>
-                          {office ?
-                            <>
-                              <Cell
-                                onClick={() => go("office")}
-                                disabled={activeStory === "office"}
-                                before={
-                                  <Avatar
-                                    size={28}
-                                    src={office.user.photo}
-                                    onClick={() => go("office")}
-                                    badge={donutStatus ? <img src={DonutIcon} style={{
-                                      width: '14px',
-                                      height: '14px'
-                                    }} alt="" /> : ""}
-                                    style={{ cursor: "pointer" }}
-                                  />
-                                }
-                                style={activeStory === "office" ? {
-                                  backgroundColor: "var(--button_secondary_background)",
-                                  borderRadius: 8
-                                } : {}}
-                              >
-                                <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name}</div>
-                              </Cell>
-                            </> : <Spinner />}
-                        </Group>
-
-                        <Group>
-                          {officeMenuItems.map(menuItem =>
-                            menuItem.show &&
-                            <>
-                              <Cell
+                        <Epic activeStory={activeStory} tabbar={!isDesktop && office && showMenu && (
+                          <Tabbar>
+                            {officeMenuItems.map(menuItem =>
+                              menuItem.show &&
+                              <TabbarItem
                                 key={menuItem.id}
-                                disabled={activeStory === menuItem.id}
-                                style={menuItem.triggers.includes(activeStory) ? {
-                                  backgroundColor: "var(--button_secondary_background)",
-                                  borderRadius: 8
-                                } : {}}
-                                data-story={menuItem.id}
                                 onClick={() => go(menuItem.id)}
-                                before={menuItem.before}
+                                selected={menuItem.triggers.includes(activeStory)}
+                                disabled={activeStory === menuItem.id}
+                                data-story={menuItem.id}
+                                text={menuItem.name}
+                                style={menuItem.style ? menuItem.style : {}}
                               >
-                                {menuItem.name}
-                              </Cell>
-                              {menuItem.id === "office-mailings" && <Spacing separator />}
-                            </>
-                          )}
-                        </Group>
+                                {menuItem.before}
+                              </TabbarItem>
+                            )}
+                          </Tabbar>
+                        )}>
+                          <View
+                            id={activeStory}
+                            activePanel={activeStory}
+                            history={history}
+                            onSwipeBack={() => goBack()}
+                          >
+                            {officePanels.map((panel, idx) => (
+                              <Panel
+                                key={idx}
+                                id={panel.id}
+                              >
+                                {panel.panelHeader}
+                                {panel.obj}
+                              </Panel>
+                            ))}
+                          </View>
+                        </Epic>
+                      </SplitCol>
+                      {isDesktop ? (
+                        <SplitCol fixed width="280px" maxWidth="280px">
+                          <Panel>
+                            {hasHeader && <PanelHeader />}
 
-                        <Group>
-                          <Link href={"https://vk.me/ch_app?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
-                            <SimpleCell multiline before={<Avatar src="https://sun1-94.userapi.com/s/v1/ig2/2ZZ91o5aMVUzBqPXSfYoRPSWiUS_obR7Tmp1ZHx02BFU9odQGmFGBNrZpwZwgOKnpJSsRkwBHPBtzCj_DxCXyAmn.jpg?size=50x50&quality=95&crop=9,7,441,441&ava=1" shadow={false} />}>
-                              Команда Club Helper ищет сотрудников
-                              <br /><br />
-                              <Button size="s" stretched mode="secondary">Подробнее</Button>
-                            </SimpleCell>
-                          </Link>
-                        </Group>
+                            <Group>
+                              {office ?
+                                <>
+                                  <Cell
+                                    onClick={() => go("office")}
+                                    disabled={activeStory === "office"}
+                                    before={
+                                      <Avatar
+                                        size={28}
+                                        src={office.user.photo}
+                                        onClick={() => go("office")}
+                                        badge={donutStatus ? <img src={DonutIcon} style={{
+                                          width: '14px',
+                                          height: '14px'
+                                        }} alt="" /> : ""}
+                                        style={{ cursor: "pointer" }}
+                                      />
+                                    }
+                                    style={activeStory === "office" ? {
+                                      backgroundColor: "var(--button_secondary_background)",
+                                      borderRadius: 8
+                                    } : {}}
+                                  >
+                                    <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name}</div>
+                                  </Cell>
+                                </> : <Spinner />}
+                            </Group>
 
-                        <Footer onClick={() => {
-                          activeStory !== "app_info" && go("app_info")
-                        }}>
-                          v1.0.8-beta
-                        </Footer>
-                      </Panel>
-                    </SplitCol>
+                            <Group>
+                              {officeMenuItems.map(menuItem =>
+                                menuItem.show &&
+                                <>
+                                  <Cell
+                                    key={menuItem.id}
+                                    disabled={activeStory === menuItem.id}
+                                    style={menuItem.triggers.includes(activeStory) ? {
+                                      backgroundColor: "var(--button_secondary_background)",
+                                      borderRadius: 8
+                                    } : {}}
+                                    data-story={menuItem.id}
+                                    onClick={() => go(menuItem.id)}
+                                    before={menuItem.before}
+                                  >
+                                    {menuItem.name}
+                                  </Cell>
+                                  {menuItem.id === "office-mailings" && <Spacing separator />}
+                                </>
+                              )}
+                            </Group>
 
-                  ) : ""}
+                            {false && <Group>
+                              <SimpleCell onClick={() => bridge.send("VKWebAppAddToCommunity")} multiline before={<Icon28AddCircleOutline />}>
+                                Новое сообщество
+                              </SimpleCell>
+                            </Group>
+                            }
+
+                            <Group>
+                              <Link href={"https://vk.me/cloud_apps?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
+                                <SimpleCell multiline before={<Avatar src="https://sun1-30.userapi.com/s/v1/ig2/huS_WYDpyzONDEF6thCzF5iJR7tkaemWgqLDELYRZjCs7lEN_Phi-pmYzlp-wGQJC43111s2hgBk_L323Jh6rx4t.jpg?size=100x100&quality=95&crop=0,0,400,400&ava=1" shadow={false} />}>
+                                  Команда Cloud Apps ищет сотрудников
+                                  <br /><br />
+                                  <Button size="s" stretched mode="secondary">Подробнее</Button>
+                                </SimpleCell>
+                              </Link>
+                            </Group>
+
+                            <Footer onClick={() => {
+                              activeStory !== "app_info" && go("app_info")
+                            }}>
+                              v1.1.0-beta
+                            </Footer>
+                          </Panel>
+                        </SplitCol>
+
+                      ) : ""}
+                    </> : <>
+                      {isDesktop ? (
+                        <SplitCol fixed width="280px" maxWidth="280px">
+                          <Panel>
+                            {hasHeader && <PanelHeader />}
+
+                            <Group>
+                              {office ?
+                                <>
+                                  <Cell
+                                    onClick={() => go("office")}
+                                    disabled={activeStory === "office"}
+                                    before={
+                                      <Avatar
+                                        size={28}
+                                        src={office.user.photo}
+                                        onClick={() => go("office")}
+                                        badge={donutStatus ? <img src={DonutIcon} style={{
+                                          width: '14px',
+                                          height: '14px'
+                                        }} alt="" /> : ""}
+                                        style={{ cursor: "pointer" }}
+                                      />
+                                    }
+                                    style={activeStory === "office" ? {
+                                      backgroundColor: "var(--button_secondary_background)",
+                                      borderRadius: 8
+                                    } : {}}
+                                  >
+                                    <div onClick={() => go("office")} style={{ cursor: "pointer" }}>{office.user.first_name}</div>
+                                  </Cell>
+                                </> : <Spinner />}
+                            </Group>
+
+                            <Group>
+                              {officeMenuItems.map(menuItem =>
+                                menuItem.show &&
+                                <>
+                                  <Cell
+                                    key={menuItem.id}
+                                    disabled={activeStory === menuItem.id}
+                                    style={menuItem.triggers.includes(activeStory) ? {
+                                      backgroundColor: "var(--button_secondary_background)",
+                                      borderRadius: 8
+                                    } : {}}
+                                    data-story={menuItem.id}
+                                    onClick={() => go(menuItem.id)}
+                                    before={menuItem.before}
+                                  >
+                                    {menuItem.name}
+                                  </Cell>
+                                  {menuItem.id === "office-mailings" && <Spacing separator />}
+                                </>
+                              )}
+                            </Group>
+
+                            {false && <Group>
+                              <SimpleCell onClick={() => bridge.send("VKWebAppAddToCommunity")} multiline before={<Icon28AddCircleOutline />}>
+                                Новое сообщество
+                              </SimpleCell>
+                            </Group>
+                            }
+
+                            <Group>
+                              <Link href={"https://vk.me/cloud_apps?ref=" + generateRefSourceString("employee_searching")} target='_blank'>
+                                <SimpleCell multiline before={<Avatar src="https://sun1-30.userapi.com/s/v1/ig2/huS_WYDpyzONDEF6thCzF5iJR7tkaemWgqLDELYRZjCs7lEN_Phi-pmYzlp-wGQJC43111s2hgBk_L323Jh6rx4t.jpg?size=100x100&quality=95&crop=0,0,400,400&ava=1" shadow={false} />}>
+                                  Команда Cloud Apps ищет сотрудников
+                                  <br /><br />
+                                  <Button size="s" stretched mode="secondary">Подробнее</Button>
+                                </SimpleCell>
+                              </Link>
+                            </Group>
+
+                            <Footer onClick={() => {
+                              activeStory !== "app_info" && go("app_info")
+                            }}>
+                              v1.1.0-beta
+                            </Footer>
+                          </Panel>
+                        </SplitCol>
+
+                      ) : ""}
+                      <SplitCol
+                        animate={true}
+                        spaced={isDesktop}
+                        width={isDesktop ? '660px' : '100%'}
+                        maxWidth={isDesktop ? '660px' : '100%'}
+                      >
+                        <Epic activeStory={activeStory} tabbar={!isDesktop && office && showMenu && (
+                          <Tabbar>
+                            {officeMenuItems.map(menuItem =>
+                              menuItem.show &&
+                              <TabbarItem
+                                key={menuItem.id}
+                                onClick={() => go(menuItem.id)}
+                                selected={menuItem.triggers.includes(activeStory)}
+                                disabled={activeStory === menuItem.id}
+                                data-story={menuItem.id}
+                                text={menuItem.name}
+                                style={menuItem.style ? menuItem.style : {}}
+                              >
+                                {menuItem.before}
+                              </TabbarItem>
+                            )}
+                          </Tabbar>
+                        )}>
+                          <View
+                            id={activeStory}
+                            activePanel={activeStory}
+                            history={history}
+                            onSwipeBack={() => goBack()}
+                          >
+                            {officePanels.map((panel, idx) => (
+                              <Panel
+                                key={idx}
+                                id={panel.id}
+                              >
+                                {panel.panelHeader}
+                                {panel.obj}
+                              </Panel>
+                            ))}
+                          </View>
+                        </Epic>
+                      </SplitCol>
+                    </>}
                 </SplitLayout>
               </ConfigProvider>
             )

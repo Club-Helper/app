@@ -10,13 +10,20 @@
 
 
 import React, { Component } from 'react'
-import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, CellButton, ConfigProvider, SplitLayout, SplitCol } from '@vkontakte/vkui';
-import { Icon28CheckShieldOutline, Icon56NotificationOutline } from '@vkontakte/icons';
+import { Group, Panel, Gradient, Avatar, Title, List, Placeholder, CellButton, ConfigProvider, SplitLayout, SplitCol, PanelHeader, PanelHeaderButton, ModalRoot, ModalPage, ModalPageHeader, PanelHeaderClose, Div, FormLayout, FormItem, Input, SegmentedControl } from '@vkontakte/vkui';
+import { Icon28CheckShieldOutline, Icon28SettingsOutline, Icon56NotificationOutline } from '@vkontakte/icons';
 import Notifies from '../common/Notifies';
 
 export default class Office extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      activeModal: "",
+      color: this.props.color,
+      menuPosition: this.props.menuPosition,
+      appearance: this.props.appearance
+    }
 
     this.handlePushClick = this.handlePushClick.bind(this);
   }
@@ -43,11 +50,113 @@ export default class Office extends Component {
       moderation: <Icon28CheckShieldOutline width={24} height={24} />
     };
 
+    const modal = (
+      <ModalRoot activeModal={this.state.activeModal}>
+        <ModalPage
+          id={"personal-settings"}
+          header={
+            <ModalPageHeader
+              right={this.props.isMobile && <PanelHeaderClose onClick={() => {
+                this.setState({ activeModal: "" })
+              }} />}
+            >
+              Настройки
+            </ModalPageHeader>
+          }
+          settlingHeight={100}
+          onClose={() => {
+            this.setState({ activeModal: "" })
+          }}
+        >
+          <Div>
+            <FormLayout>
+              <FormItem
+                top={"Основной цвет приложения"}
+              >
+                <Input
+                  after={
+                    <input
+                      type={"color"}
+                      style={{ border: "none", background: "none", marginLeft: "-25%" }}
+                      onChange={(e) => {
+                        this.props.setColor(e.target.value);
+                        localStorage.setItem("ch_appearance_color", e.target.value);
+                      }}
+                      value={this.props.color}
+                    />
+                  }
+                  value={this.props.color}
+                />
+              </FormItem>
+              {this.props.isDesktop &&
+                <FormItem
+                  top={"Расположение меню"}
+                >
+                  <SegmentedControl
+                    value={this.state.menuPosition}
+                    options={[
+                      {
+                        label: "Слева",
+                        value: "left",
+                      },
+                      {
+                        label: "Справа",
+                        value: "right",
+                      }
+                    ]}
+                    onChange={(value) => {
+                      this.props.setMenuPosition(value);
+                      localStorage.setItem("ch_appearance_menu", value);
+                    }}
+                  />
+                </FormItem>
+              }
+              <FormItem
+                top={"Схема оформления"}
+              >
+                <SegmentedControl
+                  value={this.state.appearance}
+                  options={[
+                    {
+                      label: "Светлая",
+                      value: "light",
+                    },
+                    {
+                      label: "Тёмная",
+                      value: "dark",
+                    }
+                  ]}
+                  onChange={(value) => {
+                    this.props.setAppearance(value);
+                  }}
+                />
+              </FormItem>
+              <FormItem>
+                <CellButton onClick={() => {
+                  this.props.setColor("var(--accent)");
+                  localStorage.setItem("ch_appearance_color", "var(--accent)");
+                }}>Сбросить</CellButton>
+              </FormItem>
+            </FormLayout>
+          </Div>
+        </ModalPage>
+      </ModalRoot>
+    );
+
     return (
       <ConfigProvider appearance={this.props.appearance} platform={this.props.platform.current}>
-        <SplitLayout>
+        <SplitLayout modal={modal}>
           <SplitCol>
             <Panel id="office">
+              <PanelHeader
+                left={
+                  <PanelHeaderButton onClick={() => {
+                    this.setState({ activeModal: "personal-settings" });
+                  }}>
+                    <Icon28SettingsOutline />
+                  </PanelHeaderButton>
+                }
+              />
               <Group>
                 <Gradient
                   style={{

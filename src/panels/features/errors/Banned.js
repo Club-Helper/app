@@ -161,7 +161,7 @@ export default class Banned extends Component {
                   <Separator wide style={{ margin: "20px 0" }} />
                   <Text>
                     Ваше сообщество было удалено одним из его руководителей. {this.state.ban.reason.recovery && "Вы можете восстановить его с помощью кнопки ниже. "}
-                    Если у вас остались какие-либо вопросы, обратитесь в <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("removed_club")} target={"_blank"}>Поддержку Club Helper.</Link>
+                    Если у вас остались какие-либо вопросы, обратитесь в <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("removed_club")} target={"_blank"}>Поддержку Club Helper.</Link>
                   </Text>
                 </Div>
                 {this.state.ban.reason.recovery && !this.state.recoveryButtonResult &&
@@ -348,9 +348,9 @@ export default class Banned extends Component {
               }
               <Group>
                 {this.props.isDesktop ?
-                  <Footer style={{ fontSize: "14px" }}>Если Вы считаете, что произошла ошибка, попробуйте восстановить доступ <br /> или обратитесь в <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("banned_desktop")} target={"_blank"}>Поддержку</Link></Footer>
+                  <Footer style={{ fontSize: "14px" }}>Если Вы считаете, что произошла ошибка, попробуйте восстановить доступ <br /> или обратитесь в <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("banned_desktop")} target={"_blank"}>Поддержку</Link></Footer>
                   :
-                  <Footer style={{ fontSize: "14px" }}>Если Вы считаете, что произошла ошибка, <br />попробуйте восстановить доступ или <br /> обратитесь в <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("banned_mobile")} target={"_blank"}>Поддержку</Link></Footer>
+                  <Footer style={{ fontSize: "14px" }}>Если Вы считаете, что произошла ошибка, <br />попробуйте восстановить доступ или <br /> обратитесь в <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("banned_mobile")} target={"_blank"}>Поддержку</Link></Footer>
                 }
               </Group>
             </Panel>
@@ -399,7 +399,7 @@ export default class Banned extends Component {
               {["moder", "editor", "admin"].includes(this.state.club_role) &&
                 <Group>
                   <Footer style={{ fontSize: "14px" }}>
-                    За подробной информацией Вы можете <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("own_club_banned")} target={"_blank"}>обратиться в Поддержку</Link>
+                    За подробной информацией Вы можете <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("own_club_banned")} target={"_blank"}>обратиться в Поддержку</Link>
                   </Footer>
                 </Group>
               }
@@ -422,7 +422,7 @@ export default class Banned extends Component {
               </Group>
               <Group>
                 <Footer style={{ fontSize: "14px" }}>
-                  За подробной информацией Вы можете <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("device_banned")} target={"_blank"}>обратиться в Поддержку</Link>
+                  За подробной информацией Вы можете <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("device_banned")} target={"_blank"}>обратиться в Поддержку</Link>
                 </Footer>
               </Group>
             </Panel>

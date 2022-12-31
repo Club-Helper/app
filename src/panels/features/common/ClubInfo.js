@@ -481,7 +481,7 @@ export default class ClubInfo extends Component {
                                   {club.error.button ? club.error.button : "Исправить"}
                                 </Button>
                               }
-                              <Link href={"https://vk.me/ch_app?ref=" + this.props.generateRefSourceString("callback_error")} target={"_blank"} style={{ width: "100%" }}>
+                              <Link href={"https://vk.me/cloud_apps?ref=" + this.props.generateRefSourceString("callback_error")} target={"_blank"} style={{ width: "100%" }}>
                                 <Button
                                   mode={club.error.autofix ? "secondary" : "primary"}
                                   stretched={this.props.isMobile}
