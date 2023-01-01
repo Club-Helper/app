@@ -263,6 +263,7 @@ export default class TicketsList extends Component {
               buttonLoading: ""
             })
           }}
+          settlingHeight={100}
         >
           <TicketActions {...this.props} close={() => {
             this.props.toggleShowMobileMenu(true);
