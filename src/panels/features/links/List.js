@@ -207,6 +207,7 @@ export default class Links extends Component {
     },
       (data) => {
         this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false, isEnabled: true })
+        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -507,40 +508,40 @@ export default class Links extends Component {
                     isFetching={this.state.fetching}
                   >
                     <Group mode='plain'>
-                        <Cell
-                          disabled
-                          before={<Title level='3' style={{
-                            marginLeft: "15px",
-                            marginTop: "15px",
-                            marginBottom: "0px"
-                          }}>Ссылки {this.state.count > 0 && <span style={{
-                            color: "var(--text_secondary)",
-                            fontSize: "12px"
-                          }}>{this.state.count}</span>}</Title>}
-                          style={{ margin: "0 -10px" }}
+                      <Cell
+                        disabled
+                        before={<Title level='3' style={{
+                          marginLeft: "15px",
+                          marginTop: "15px",
+                          marginBottom: "0px"
+                        }}>Ссылки {this.state.count > 0 && <span style={{
+                          color: "var(--text_secondary)",
+                          fontSize: "12px"
+                        }}>{this.state.count}</span>}</Title>}
+                        style={{ margin: "0 -10px" }}
+                      />
+                      <Div style={!this.props.isMobile ? { maxWidth: 300 } : {}}>
+                        <SegmentedControl
+                          size="m"
+                          name="filter"
+                          options={[
+                            {
+                              label: "Все",
+                              value: "all",
+                              disabled: this.state.filterDisabled
+                            },
+                            {
+                              label: "Мои",
+                              value: "my",
+                              disabled: this.state.filterDisabled
+                            }
+                          ]}
+                          style={this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
+                          onChange={(value) => this.onFilterChange(value)}
+                          value={this.state.filter}
                         />
-                        <Div style={ !this.props.isMobile ? { maxWidth: 300 } : { }}>
-                          <SegmentedControl
-                            size="m"
-                            name="filter"
-                            options={[
-                              {
-                                label: "Все",
-                                value: "all",
-                                disabled: this.state.filterDisabled
-                              },
-                              {
-                                label: "Мои",
-                                value: "my",
-                                disabled: this.state.filterDisabled
-                              }
-                            ]}
-                            style={ this.state.filterDisabled ? { height: "35px", padding: "5px", opacity: "0.5" } : { height: "35px", padding: "5px" }}
-                            onChange={(value) => this.onFilterChange(value)}
-                            value={this.state.filter}
-                          />
-                        </Div>
-                      </Group>
+                      </Div>
+                    </Group>
                     {this.state.count == 0 ? <Placeholder action={<Button onClick={this.openCreateLinkModal} style={{ backgroundColor: this.props.color }}>Создать ссылку</Button>}>Не найдено ни одного шаблона ссылки.</Placeholder> : <>
                       <Group mode='plain'>
                         <List>
@@ -592,28 +593,28 @@ export default class Links extends Component {
                     </>}
                   </PullToRefresh>
                   {!this.state.linksLoading &&
-                  <>
-                    {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
-                      <Footer>
-                        Вы можете создать
-                        ещё {
-                          this.state.availability.limit
-                          + " "
-                          + this.props.declOfNum(
-                            this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
-                          )
+                    <>
+                      {!(!this.props.donutStatus && this.state.count > 5) && this.state.availability.limit && this.state.count > 0 ?
+                        <Footer>
+                          Вы можете создать
+                          ещё {
+                            this.state.availability.limit
+                            + " "
+                            + this.props.declOfNum(
+                              this.state.availability.limit, ["ссылку", "ссылки", "ссылок"]
+                            )
                           }.
-                      </Footer>
-                      : ""
-                    }
-                    {
-                      !this.state.availability.creat &&
-                      <Footer>
-                        Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
-                        чтобы создать больше.
-                      </Footer>
-                    }
-                  </>
+                        </Footer>
+                        : ""
+                      }
+                      {
+                        !this.state.availability.creat &&
+                        <Footer>
+                          Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
+                          чтобы создать больше.
+                        </Footer>
+                      }
+                    </>
                   }
                 </SplitCol>
                 {this.state.snackbar}
