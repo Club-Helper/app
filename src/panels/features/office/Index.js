@@ -115,7 +115,7 @@ export default class Office extends Component {
                 top={"Схема оформления"}
               >
                 <SegmentedControl
-                  value={this.state.appearance}
+                  value={this.props.appearance}
                   options={[
                     {
                       label: "Светлая",
