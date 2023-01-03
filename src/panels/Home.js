@@ -168,7 +168,6 @@ function Home({
       })
 
     if (!localStorage.getItem("ch_appearance_color")) {
-      console.log(appearance);
       let _accent = isDesktop ? (appearance === "light" ? "#5181b8" : "#ffffff") : (appearance === "light" ? "#0077ff" : "#ffffff");
 
       localStorage.setItem("ch_appearance_color", _accent);
