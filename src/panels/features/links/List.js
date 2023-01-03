@@ -151,7 +151,7 @@ export default class Links extends Component {
               )
             })
             this.props.toggleShowMobileMenu(true);
-            if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+            if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
             this.props.setPopout(null);
             return true;
           },
@@ -207,7 +207,7 @@ export default class Links extends Component {
     },
       (data) => {
         this.setState({ links: data.response.items, count: data.response.count, availability: data.response.availability, linksLoading: false, isEnabled: true })
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -323,7 +323,7 @@ export default class Links extends Component {
                   )
                 })
                 this.closeModal();
-                if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+                if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
               }
             )
           },
@@ -359,7 +359,7 @@ export default class Links extends Component {
       )
     });
 
-    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+    if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   onRefresh() {
@@ -382,7 +382,7 @@ export default class Links extends Component {
   onFilterChange(value) {
     this.setState({ filter: value });
     this.getLinks(value);
-    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+    if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   componentWillUnmount() {

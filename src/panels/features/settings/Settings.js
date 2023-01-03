@@ -91,7 +91,7 @@ export default class Settings extends Component {
 
     this.props.req("clubs.setSetting", this.qParams({token: this.props.token}, this.props.serialize(this.state.changes)), (data) => {
       this.setState({ saveButtonDisabled: false, saveButtonLoading: false });
-      if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+      if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       this.props.isEmbedded && this.props.close();
       this.props.isEmbedded && this.props.settingsWasChanged();
     },

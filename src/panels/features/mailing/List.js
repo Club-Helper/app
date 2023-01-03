@@ -141,7 +141,7 @@ export default class MailingList extends Component {
     },
       (data) => {
         this.getMailing(false);
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.setState({ activeModal: "" });
         this.props.toggleShowMobileMenu(true);
       }
@@ -237,7 +237,7 @@ export default class MailingList extends Component {
           formValidationTitle: "",
           formValidationDescription: ""
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.closeModal();
@@ -282,7 +282,7 @@ export default class MailingList extends Component {
             </Snackbar>
           )
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailingUsers(this.state.openedItem?.id);
       }
     )
@@ -361,7 +361,7 @@ export default class MailingList extends Component {
           mailingText: "",
           sendBtnWorking: false
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -405,7 +405,7 @@ export default class MailingList extends Component {
           ),
           activeModal: ""
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailing();
         this.toggleEditMode();
         this.props.toggleShowMobileMenu(true);

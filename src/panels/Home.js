@@ -131,6 +131,8 @@ function Home({
 
   const [needToOpenSettingsOnClubMount, toggleNeedToOpenSettingsOnClubMount] = useState(false);
 
+  const [tapticEngineSupport, toggleTapticEngineSupport] = useState(false);
+
   const checkVersion = (a, b) => {
 
     const [majorA, minorA] = String(a).split('.').map(v => Number.parseInt(v));
@@ -178,6 +180,8 @@ function Home({
     } else {
       setMenuPosition(localStorage.getItem("ch_appearance_menu"));
     }
+
+    toggleTapticEngineSupport(bridge.supports("VKWebAppTapticNotificationOccurred"));
 
     /*fetch(`${apiScheme}://cloud-apps.ru/translation/ru`)
       .then(response => response.json())
@@ -674,7 +678,8 @@ function Home({
     color: color,
     setColor: setColor,
     menuPosition: menuPosition,
-    setMenuPosition: setMenuPosition
+    setMenuPosition: setMenuPosition,
+    tapticEngineSupport: tapticEngineSupport
   };
 
   const panels = [

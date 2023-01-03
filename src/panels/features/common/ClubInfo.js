@@ -247,7 +247,7 @@ export default class ClubInfo extends Component {
     } else {
       this.props.createError("Варианты автоисправления для данной ошибки не найдены. Обратитесь в Поддержку.")
     }
-    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+    if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
     this.setState({ autofixBtnWorking: false });
   }
 
@@ -260,7 +260,7 @@ export default class ClubInfo extends Component {
         this.props.toggleShowMobileMenu(false);
         this.setState({ supportCode: data.response });
         this.openModal("support_code_result");
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       }
     );
     this.setState({ codeBtnWorking: false });
@@ -274,7 +274,7 @@ export default class ClubInfo extends Component {
     },
       (data) => {
         this.setState({ notifiesFetching: false, notifies: data.response });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       }, (error) => {
         this.setState({ activeModal: "" });
         this.props.createError(error.error.error_msg);
