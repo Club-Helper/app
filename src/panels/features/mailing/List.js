@@ -141,7 +141,7 @@ export default class MailingList extends Component {
     },
       (data) => {
         this.getMailing(false);
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.setState({ activeModal: "" });
         this.props.toggleShowMobileMenu(true);
       }
@@ -237,7 +237,7 @@ export default class MailingList extends Component {
           formValidationTitle: "",
           formValidationDescription: ""
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.closeModal();
@@ -282,7 +282,7 @@ export default class MailingList extends Component {
             </Snackbar>
           )
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailingUsers(this.state.openedItem?.id);
       }
     )
@@ -361,7 +361,7 @@ export default class MailingList extends Component {
           mailingText: "",
           sendBtnWorking: false
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
@@ -405,7 +405,7 @@ export default class MailingList extends Component {
           ),
           activeModal: ""
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailing();
         this.toggleEditMode();
         this.props.toggleShowMobileMenu(true);
@@ -432,6 +432,10 @@ export default class MailingList extends Component {
                   this.closeModal();
                   if (this.state.mailingEditMode) {
                     this.toggleEditMode();
+                    this.setState({
+                      mailingEditTitleValidation: false,
+                      mailingEditDescriptionValidation: false
+                    })
                   }
                 }}><Icon24Dismiss /></PanelHeaderButton>
               }
@@ -468,6 +472,11 @@ export default class MailingList extends Component {
             this.closeModal();
             if (this.state.mailingEditMode) {
               this.toggleEditMode();
+              this.toggleEditMode();
+              this.setState({
+                mailingEditTitleValidation: false,
+                mailingEditDescriptionValidation: false
+              })
             }
           }}
           settlingHeight={100}
@@ -554,7 +563,13 @@ export default class MailingList extends Component {
                   stretched
                 >
                   <Button
-                    onClick={() => this.toggleEditMode()}
+                    onClick={() => {
+                      this.toggleEditMode()
+                      this.setState({
+                        mailingEditTitleValidation: false,
+                        mailingEditDescriptionValidation: false
+                      })
+                    }}
                     mode={"secondary"}
                     stretched
                   >
@@ -711,6 +726,7 @@ export default class MailingList extends Component {
                   onClick={this.onFormSubmit}
                   disabled={this.state.formWorking || this.state.formValidation || this.state.formValidationDescription}
                   loading={this.state.formWorking}
+                  style={{ backgroundColor: this.props.color }}
                 >
                   Создать
                 </Button>

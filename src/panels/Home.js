@@ -131,6 +131,8 @@ function Home({
 
   const [needToOpenSettingsOnClubMount, toggleNeedToOpenSettingsOnClubMount] = useState(false);
 
+  const [tapticEngineSupport, toggleTapticEngineSupport] = useState(false);
+
   const checkVersion = (a, b) => {
 
     const [majorA, minorA] = String(a).split('.').map(v => Number.parseInt(v));
@@ -166,8 +168,10 @@ function Home({
       })
 
     if (!localStorage.getItem("ch_appearance_color")) {
-      localStorage.setItem("ch_appearance_color", "var(--accent)");
-      setColor("var(--accent)");
+      let _accent = isDesktop ? (appearance === "light" ? "#5181b8" : "#ffffff") : (appearance === "light" ? "#0077ff" : "#ffffff");
+
+      localStorage.setItem("ch_appearance_color", _accent);
+      setColor(_accent);
     } else {
       setColor(localStorage.getItem("ch_appearance_color"));
     }
@@ -178,6 +182,8 @@ function Home({
     } else {
       setMenuPosition(localStorage.getItem("ch_appearance_menu"));
     }
+
+    toggleTapticEngineSupport(bridge.supports("VKWebAppTapticNotificationOccurred"));
 
     /*fetch(`${apiScheme}://cloud-apps.ru/translation/ru`)
       .then(response => response.json())
@@ -674,7 +680,8 @@ function Home({
     color: color,
     setColor: setColor,
     menuPosition: menuPosition,
-    setMenuPosition: setMenuPosition
+    setMenuPosition: setMenuPosition,
+    tapticEngineSupport: tapticEngineSupport
   };
 
   const panels = [

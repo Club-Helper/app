@@ -81,7 +81,7 @@ export default class CommentsList extends Component {
     },
       (data) => {
         this.setState({ comments: data.response.items, count: data.response.count, availability: data.response.availability, isEnabled: true, listLoading: false })
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.setState({ isEnabled: false, listLoading: false });
@@ -103,88 +103,92 @@ export default class CommentsList extends Component {
   getCommentById(id) {
     this.props.toggleShowMobileMenu(false);
     this.setState({ openedComment: this.state.comments[id], activeModal: "comment-info" })
-    if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+    if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
   }
 
   createComment() {
     this.setState({ newCommentButtonWorking: true });
 
+    let _violations = 0;
+
     if (!this.state.newCommentTitle || this.state.newCommentTitle == '') {
       this.setState({ titleValidation: "Поле обязательно для заполнения" });
+      _violations++;
     } else if (this.state.newCommentTitle.length > 50) {
       this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
-    } else if (/^\s+$/.test(this.state.newCommentTitle)) {
-      this.setState({ titleValidation: "Неверный формат" });
-    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentTitle) === false) {
-      this.setState({ titleValidation: "Неверный формат" });
+      _violations++;
     } else {
       this.setState({ titleValidation: "" });
     }
 
     if (!this.state.newCommentCommand || this.state.newCommentCommand == '') {
       this.setState({ commandValidation: "Поле обязательно для заполнения" });
+      _violations++;
+    } else if (this.state.newCommentCommand.length < 2) {
+      this.setState({ commandValidation: "Команда должна содержать не менее 2 символов" });
+      _violations++;
     } else if (!/^[!|\/].*/.test(this.state.newCommentCommand)) {
       this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
-    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentCommand) === false) {
-      this.setState({ commandValidation: "Неверный формат" });
+      _violations++;
     } else {
       this.setState({ commandValidation: "" });
     }
 
     if (!this.state.newCommentPattern || this.state.newCommentPattern == '') {
       this.setState({ patternValidation: "Поле обязательно для заполнения" });
+      _violations++;
     } else if (this.state.newCommentPattern.length < 10) {
       this.setState({ patternValidation: "Длина текста должна быть не менее 10 символов" });
+      _violations++;
     } else if (/^\s+$/.test(this.state.newCommentPattern)) {
       this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
-    } else if (/^[^\s]+(\s+[^\s]+)*$/.test(this.state.newCommentPattern) === false) {
-      this.setState({ patternValidation: "Неверный формат" });
+      _violations++;
     } else {
       this.setState({ patternValidation: "" });
     }
 
-    if (!this.state.newCommentTitle || !this.state.newCommentCommand || !this.state.newCommentPattern || this.state.titleValidation || this.state.commandValidation || this.state.patternValidation) {
+    if (!this.state.newCommentTitle || !this.state.newCommentCommand || !this.state.newCommentPattern || _violations > 0) {
       this.setState({ newCommentButtonWorking: false });
       return false;
-    }
-
-    this.props.req("comments.creat", {
-      token: this.props.token,
-      title: this.state.newCommentTitle,
-      comand: this.state.newCommentCommand,
-      pattern: this.state.newCommentPattern
-    },
-      (data) => {
-        this.closeModal();
-        this.setState({
-          snackbar: (
-            <Snackbar
-              onClose={() => this.setState({ snackbar: null })}
-              before={
-                <Avatar
-                  size={24}
-                  style={{ background: "var(--button_commerce_background)" }}
-                >
-                  <Icon16Done fill="#FFF" width={14} height={14} />
-                </Avatar>
-              }
-            >
-              Шаблон создан успешно
-            </Snackbar>
-          ),
-          newCommentButtonWorking: false,
-          newCommentTitle: "",
-          newCommentCommand: "/",
-          newCommentPattern: ""
-        });
-        this.getComments(this.state.filter);
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+    } else {
+      this.props.req("comments.creat", {
+        token: this.props.token,
+        title: this.state.newCommentTitle,
+        comand: this.state.newCommentCommand,
+        pattern: this.state.newCommentPattern
       },
-      (error) => {
-        this.props.createError(error.error.error_msg);
-        this.setState({ newCommentButtonWorking: false });
-      }
-    )
+        (data) => {
+          this.closeModal();
+          this.setState({
+            snackbar: (
+              <Snackbar
+                onClose={() => this.setState({ snackbar: null })}
+                before={
+                  <Avatar
+                    size={24}
+                    style={{ background: "var(--button_commerce_background)" }}
+                  >
+                    <Icon16Done fill="#FFF" width={14} height={14} />
+                  </Avatar>
+                }
+              >
+                Шаблон создан успешно
+              </Snackbar>
+            ),
+            newCommentButtonWorking: false,
+            newCommentTitle: "",
+            newCommentCommand: "/",
+            newCommentPattern: ""
+          });
+          this.getComments(this.state.filter);
+          if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        },
+        (error) => {
+          this.props.createError(error.error.error_msg);
+          this.setState({ newCommentButtonWorking: false });
+        }
+      )
+    }
   }
 
   deleteComment() {
@@ -211,7 +215,7 @@ export default class CommentsList extends Component {
             </Snackbar>
           )
         });
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getComments(this.state.filter);
         this.setState({ deleteCommentButtonWorking: false });
         this.props.setPopout(null);
@@ -300,10 +304,6 @@ export default class CommentsList extends Component {
                     this.setState({ titleValidation: "Заголовок должен содержать не менее 5 символов" });
                   } else if (e.target.value.length > 50) {
                     this.setState({ titleValidation: "Длина не должна превышать 50 символов" });
-                  } else if (/^\s+$/.test(e.target.value)) {
-                    this.setState({ titleValidation: "Неверный формат" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
-                    this.setState({ titleValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ titleValidation: "Заголовок не может состоять только из пробелов" });
                   } else {
@@ -331,8 +331,6 @@ export default class CommentsList extends Component {
                     this.setState({ commandValidation: "Команда должна содержать не менее 2 символов" });
                   } else if (!/^[!|\/].*/.test(e.target.value)) {
                     this.setState({ commandValidation: "Команда должна начинаться с ! или /" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
-                    this.setState({ commandValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ commandValidation: "Команда не может состоять только из пробелов" });
                   } else {
@@ -358,8 +356,6 @@ export default class CommentsList extends Component {
                     this.setState({ patternValidation: "Длина текста должна быть не менее 10 символов" });
                   } else if (/^\s+$/.test(e.target.value)) {
                     this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
-                  } else if (/^[^\s]+(\s+[^\s]+)*$/.test(e.target.value) === false) {
-                    this.setState({ patternValidation: "Неверный формат" });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ patternValidation: "Текст не может состоять только из пробелов" });
                   } else {

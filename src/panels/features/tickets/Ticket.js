@@ -90,7 +90,7 @@ export default class TicketsList extends Component {
           if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "error" }); }
         } else {
           this.updateTicket();
-          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+          if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         }
         this.setState({ buttonLoading: null });
       })
@@ -124,7 +124,7 @@ export default class TicketsList extends Component {
             activeModal: "",
             buttonLoading: ""
           });
-          if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+          if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         } else {
           this.props.createError(data.response.error);
           this.setState({ buttonLoading: "" });
@@ -161,7 +161,7 @@ export default class TicketsList extends Component {
           sendHelloMsgBtnWorking: false
         });
         this.updateTicket();
-        if (this.props.isMobile) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.setState({
@@ -263,6 +263,7 @@ export default class TicketsList extends Component {
               buttonLoading: ""
             })
           }}
+          settlingHeight={100}
         >
           <TicketActions {...this.props} close={() => {
             this.props.toggleShowMobileMenu(true);

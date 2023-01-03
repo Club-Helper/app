@@ -21,8 +21,7 @@ export default class Office extends Component {
     this.state = {
       activeModal: "",
       color: this.props.color,
-      menuPosition: this.props.menuPosition,
-      appearance: this.props.appearance
+      menuPosition: this.props.menuPosition
     }
 
     this.handlePushClick = this.handlePushClick.bind(this);
@@ -50,6 +49,8 @@ export default class Office extends Component {
       moderation: <Icon28CheckShieldOutline width={24} height={24} />
     };
 
+    const isAndroid = (/Android/i.test(navigator.userAgent));
+
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
@@ -76,7 +77,7 @@ export default class Office extends Component {
                 <Input
                   after={
                     <input
-                      type={"color"}
+                      type={isAndroid ? "text" : "color"}
                       style={{ border: "none", background: "none", marginLeft: "-25%" }}
                       onChange={(e) => {
                         this.props.setColor(e.target.value);
@@ -85,8 +86,19 @@ export default class Office extends Component {
                       value={this.props.color}
                     />
                   }
+                  placeholder={isAndroid ? "Введите HEX" : "Выберите цвет"}
                   value={this.props.color}
                 />
+                <CellButton
+                  onClick={() => {
+                    let _accent = this.props.isDesktop ? (this.props.appearance === "light" ? "#5181b8" : "#ffffff") : (this.props.appearance === "light" ? "#0077ff" : "#ffffff");
+
+                    localStorage.setItem("ch_appearance_color", _accent);
+                    this.props.setColor(_accent);
+                  }}
+                >
+                  Сбросить
+                </CellButton>
               </FormItem>
               {this.props.isDesktop &&
                 <FormItem
@@ -111,32 +123,6 @@ export default class Office extends Component {
                   />
                 </FormItem>
               }
-              <FormItem
-                top={"Схема оформления"}
-              >
-                <SegmentedControl
-                  value={this.state.appearance}
-                  options={[
-                    {
-                      label: "Светлая",
-                      value: "light",
-                    },
-                    {
-                      label: "Тёмная",
-                      value: "dark",
-                    }
-                  ]}
-                  onChange={(value) => {
-                    this.props.setAppearance(value);
-                  }}
-                />
-              </FormItem>
-              <FormItem>
-                <CellButton onClick={() => {
-                  this.props.setColor("var(--accent)");
-                  localStorage.setItem("ch_appearance_color", "var(--accent)");
-                }}>Сбросить</CellButton>
-              </FormItem>
             </FormLayout>
           </Div>
         </ModalPage>

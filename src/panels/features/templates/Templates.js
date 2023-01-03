@@ -22,12 +22,15 @@ export default class Templates extends Component {
     this.state = {
       showLinks: true,
       showComments: false,
-      activeTab: "links"
+      activeTab: localStorage.getItem("templates_activeTab") ? localStorage.getItem("templates_activeTab") : "links"
     }
   }
 
   componentDidMount() {
     this.props.setLoading(false);
+    if (localStorage.getItem("templates_activeTab")) {
+      this.setState({ activeTab: localStorage.getItem("templates_activeTab") });
+    }
   }
 
   render() {
