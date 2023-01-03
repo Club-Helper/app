@@ -50,6 +50,8 @@ export default class Office extends Component {
       moderation: <Icon28CheckShieldOutline width={24} height={24} />
     };
 
+    const isAndroid = (/Android/i.test(navigator.userAgent));
+
     const modal = (
       <ModalRoot activeModal={this.state.activeModal}>
         <ModalPage
@@ -76,7 +78,7 @@ export default class Office extends Component {
                 <Input
                   after={
                     <input
-                      type={"color"}
+                      type={isAndroid ? "text" : "color"}
                       style={{ border: "none", background: "none", marginLeft: "-25%" }}
                       onChange={(e) => {
                         this.props.setColor(e.target.value);
@@ -85,6 +87,7 @@ export default class Office extends Component {
                       value={this.props.color}
                     />
                   }
+                  placeholder={isAndroid ? "Введите HEX" : "Выберите цвет"}
                   value={this.props.color}
                 />
               </FormItem>
