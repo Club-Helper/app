@@ -89,6 +89,16 @@ export default class Office extends Component {
                   placeholder={isAndroid ? "Введите HEX" : "Выберите цвет"}
                   value={this.props.color}
                 />
+                <CellButton
+                  onClick={() => {
+                    let _accent = this.props.isDesktop ? (this.props.appearance === "light" ? "#5181b8" : "#ffffff") : (this.props.appearance === "light" ? "#0077ff" : "#ffffff");
+
+                    localStorage.setItem("ch_appearance_color", _accent);
+                    this.props.setColor(_accent);
+                  }}
+                >
+                  Сбросить
+                </CellButton>
               </FormItem>
               {this.props.isDesktop &&
                 <FormItem
