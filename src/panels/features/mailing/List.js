@@ -183,8 +183,8 @@ export default class MailingList extends Component {
   onFormSubmit() {
     if (this.state.formTitle.length < 5) {
       this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
-    } else if (this.state.formTitle.length > 25) {
-      this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
+    } else if (this.state.formTitle.length > 15) {
+      this.setState({ formValidation: "Длина названия рассылки не должна превышать 15 символов." });
     } else if (this.state.formTitle.match(/^[ ]+$/)) {
       this.setState({ formValidation: "Название не может состоять только из пробелов" });
     } else {
@@ -193,8 +193,8 @@ export default class MailingList extends Component {
 
     if (this.state.formDescription.length < 10) {
       this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
-    } else if (this.state.formDescription.length > 25) {
-      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
+    } else if (this.state.formDescription.length > 15) {
+      this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 15 символов." });
     } else if (this.state.formDescription.match(/^[ ]+$/)) {
       this.setState({ formValidationDescription: "Описание не может состоять только из пробелов" });
     } else {
@@ -372,6 +372,28 @@ export default class MailingList extends Component {
   }
 
   toggleEditMode() {
+    if (!this.state.mailingEditMode) {
+      if (this.state.mailingEditTitle.length < 5) {
+        this.setState({ mailingEditTitleValidation: "Название рассылки должно содержать не менее 5 символов." });
+      } else if (this.state.mailingEditTitle.length > 15) {
+        this.setState({ mailingEditTitleValidation: "Длина названия рассылки не должна превышать 15 символов." });
+      } else if (this.state.mailingEditTitle.match(/^[ ]+$/)) {
+        this.setState({ mailingEditTitleValidation: "Название не может состоять только из пробелов" });
+      } else {
+        this.setState({ mailingEditTitleValidation: "" });
+      }
+
+      if (this.state.mailingEditDescription.length < 10) {
+        this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
+      } else if (this.state.mailingEditDescription.length > 15) {
+        this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 15 символов." });
+      } else if (this.state.mailingEditDescription.match(/^[ ]+$/)) {
+        this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
+      } else {
+        this.setState({ mailingEditDescriptionValidation: "" });
+      }
+    }
+
     this.setState({ mailingEditMode: !this.state.mailingEditMode });
   }
 
@@ -403,11 +425,16 @@ export default class MailingList extends Component {
               Изменения сохранены.
             </Snackbar>
           ),
-          activeModal: ""
+          activeModal: "",
+          mailingEditMode: false,
+          mailingEditTitle: "",
+          mailingEditTitleValidation: false,
+          mailingEditDescription: "",
+          mailingEditDescriptionValidation: false
         });
         if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailing();
-        this.toggleEditMode();
+        //this.toggleEditMode();
         this.props.toggleShowMobileMenu(true);
       }
     );
@@ -447,8 +474,8 @@ export default class MailingList extends Component {
                       this.setState({ mailingEditTitle: e.target.value })
                       if (e.target.value.length < 5) {
                         this.setState({ mailingEditTitleValidation: "Название рассылки должно содержать не менее 5 символов." });
-                      } else if (e.target.value.length > 25) {
-                        this.setState({ mailingEditTitleValidation: "Длина названия рассылки не должна превышать 25 символов." });
+                      } else if (e.target.value.length > 15) {
+                        this.setState({ mailingEditTitleValidation: "Длина названия рассылки не должна превышать 15 символов." });
                       } else if (e.target.value.match(/^[ ]+$/)) {
                         this.setState({ mailingEditTitleValidation: "Название не может состоять только из пробелов" });
                       } else {
@@ -475,7 +502,9 @@ export default class MailingList extends Component {
               this.toggleEditMode();
               this.setState({
                 mailingEditTitleValidation: false,
-                mailingEditDescriptionValidation: false
+                mailingEditDescriptionValidation: false,
+                mailingEditTitle: "",
+                mailingEditDescription: ""
               })
             }
           }}
@@ -501,8 +530,8 @@ export default class MailingList extends Component {
                     this.setState({ mailingEditDescription: e.target.value })
                     if (e.target.value.length < 10) {
                       this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
-                    } else if (e.target.value.length > 25) {
-                      this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                    } else if (e.target.value.length > 15) {
+                      this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 15 символов." });
                     } else if (e.target.value.match(/^[ ]+$/)) {
                       this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
                     } else {
@@ -526,8 +555,8 @@ export default class MailingList extends Component {
                   this.setState({ mailingEditDescription: e.target.value })
                   if (e.target.value.length < 10) {
                     this.setState({ mailingEditDescriptionValidation: "Описание рассылки должно содержать не менее 10 символов" });
-                  } else if (e.target.value.length > 25) {
-                    this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.length > 15) {
+                    this.setState({ mailingEditDescriptionValidation: "Длина описания рассылки не должна превышать 15 символов." });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ mailingEditDescriptionValidation: "Описание не может состоять только из пробелов" });
                   } else {
@@ -685,8 +714,8 @@ export default class MailingList extends Component {
                   this.setState({ formTitle: e.target.value })
                   if (e.target.value.length < 5) {
                     this.setState({ formValidation: "Название рассылки должно содержать не менее 5 символов." });
-                  } else if (e.target.value.length > 25) {
-                    this.setState({ formValidation: "Длина названия рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.length > 15) {
+                    this.setState({ formValidation: "Длина названия рассылки не должна превышать 15 символов." });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ formValidation: "Название не может состоять только из пробелов" });
                   } else {
@@ -705,8 +734,8 @@ export default class MailingList extends Component {
                   this.setState({ formDescription: e.target.value })
                   if (e.target.value.length < 10) {
                     this.setState({ formValidationDescription: "Описание рассылки должно содержать не менее 10 символов" });
-                  } else if (e.target.value.length > 25) {
-                    this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 25 символов." });
+                  } else if (e.target.value.length > 15) {
+                    this.setState({ formValidationDescription: "Длина описания рассылки не должна превышать 15 символов." });
                   } else if (e.target.value.match(/^[ ]+$/)) {
                     this.setState({ formValidationDescription: "Описание не может состоять только из пробелов" });
                   } else {
