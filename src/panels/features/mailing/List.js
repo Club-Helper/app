@@ -434,7 +434,6 @@ export default class MailingList extends Component {
         });
         if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
         this.getMailing();
-        //this.toggleEditMode();
         this.props.toggleShowMobileMenu(true);
       }
     );
