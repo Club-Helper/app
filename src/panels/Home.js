@@ -457,60 +457,68 @@ function Home({
         "ticket"
       ],
       name: "Обращения",
-      before: <Icon28MessagesOutline fill={color} />,
-      show: (club_role === "admin" || messages_enabled) && canViewTickets
+      before: <Icon28MessagesOutline fill={["tickets_list", "ticket"].includes(activeStory) ? color : ""} />,
+      show: (club_role === "admin" || messages_enabled) && canViewTickets,
+      fill: ["tickets_list", "ticket"].includes(activeStory) ? color : ""
     },
     {
       id: "links",
       triggers: ["links"],
       name: "Ссылки",
-      before: <Icon24Linked width={28} height={28} fill={color} />,
-      show: false
+      before: <Icon24Linked width={28} height={28} fill={["links"].includes(activeStory) ? color : ""} />,
+      show: false,
+      fill: ["links"].includes(activeStory) ? color : ""
     },
 
     {
       id: "comments",
       triggers: ["comments"],
       name: "Комментарии",
-      before: <Icon28CommentOutline fill={color} />,
-      show: false
+      before: <Icon28CommentOutline fill={["comments"].includes(activeStory) ? color : ""} />,
+      show: false,
+      fill: ["comments"].includes(activeStory) ? color : ""
     },
     {
       id: "templates",
       triggers: ["templates"],
       name: "Шаблоны",
-      before: <Icon28ArticlesOutline fill={color} />,
-      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern
+      before: <Icon28ArticlesOutline fill={["templates"].includes(activeStory) ? color : ""} />,
+      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern,
+      fill: ["templates"].includes(activeStory) ? color : ""
     },
     {
       id: "mailing_list",
       triggers: ["mailing_list", "mailing"],
       name: "Рассылки",
-      before: <Icon28AdvertisingOutline fill={color} />,
-      show: canViewMailing
+      before: <Icon28AdvertisingOutline fill={["mailing_list", "mailing"].includes(activeStory) ? color : ""} />,
+      show: canViewMailing,
+      fill: ["mailing_list", "mailing"].includes(activeStory) ? color : ""
     },
     {
       id: "settings",
       triggers: ["settings"],
       name: "Настройки",
-      before: <Icon28SettingsOutline fill={color} />,
+      before: <Icon28SettingsOutline fill={["settings"].includes(activeStory) ? color : ""} />,
       // show: (club_role === "admin")
-      show: false
+      show: false,
+      fill: ["settings"].includes(activeStory) ? color : ""
     },
     {
       id: "stats_home",
       triggers: ["stats_home"],
       name: "Статистика",
-      before: <Icon28StatisticsOutline fill={color} />,
+      before: <Icon28StatisticsOutline fill={["stats_home"].includes(activeStory) ? color : ""} />,
       // show: (club_role === "admin")
-      show: false
+      show: false,
+      fill: ["stats_home"].includes(activeStory) ? color : ""
     },
     {
       id: "club_info",
       triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: club?.name,
       before: <Avatar size={28} src={club?.photo} />,
-      show: !isDesktop && canViewClubs
+      show: !isDesktop && canViewClubs,
+      fill: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""
     },
   ];
 
@@ -520,28 +528,32 @@ function Home({
       triggers: ["office"],
       name: office?.user?.first_name,
       before: <Avatar size={28} src={office?.user?.photo} />,
-      show: !isDesktop
+      show: !isDesktop,
+      fill: ["office"].includes(activeStory) ? color : ""
     },
     {
       id: "office-clubs",
       triggers: ["office-clubs"],
       name: "Сообщества",
-      before: <Icon36Users3Outline width={28} height={28} fill={color} />,
-      show: canViewClubs
+      before: <Icon36Users3Outline width={28} height={28} fill={["office-clubs"].includes(activeStory) ? color : ""} />,
+      show: canViewClubs,
+      fill: ["stats_home"].includes(activeStory) ? color : ""
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
-      show: canViewMailing
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={["office-mailings"].includes(activeStory) ? color : ""} />,
+      show: canViewMailing,
+      fill: ["office-mailings"].includes(activeStory) ? color : ""
     },
     {
       id: "faq",
       triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
-      before: <Icon28LifebuoyOutline fill={color} />,
-      show: canViewSupport
+      before: <Icon28LifebuoyOutline fill={["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""} />,
+      show: canViewSupport,
+      fill: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""
     }
   ];
 
@@ -550,15 +562,17 @@ function Home({
       id: "club-card",
       triggers: ["club-card"],
       name: clubCard?.name,
-      before: <Avatar src={clubCard?.photo} size={28} fill={color} />,
-      show: !isDesktop
+      before: <Avatar src={clubCard?.photo} size={28} fill={["club-card"].includes(activeStory) ? color : ""} />,
+      show: !isDesktop,
+      fill: ["club-card"].includes(activeStory) ? color : ""
     },
     {
       id: "clubCard-mailings",
       triggers: ["clubCard-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
-      show: true
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={["clubCard-mailings"].includes(activeStory) ? color : ""} />,
+      show: true,
+      fill: ["clubCard-mailings"].includes(activeStory) ? color : ""
     }
   ]
 
@@ -1312,7 +1326,7 @@ function Home({
                             disabled={activeStory === menuItem.id}
                             data-story={menuItem.id}
                             text={menuItem.name}
-                            style={menuItem.style ? menuItem.style : {}}
+                            style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                           >
                             {menuItem.before}
                           </TabbarItem>
@@ -1518,7 +1532,7 @@ function Home({
                               disabled={activeStory === menuItem.id}
                               data-story={menuItem.id}
                               text={menuItem.name}
-                              style={menuItem.style ? menuItem.style : {}}
+                              style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                             >
                               {menuItem.before}
                             </TabbarItem>
@@ -1652,7 +1666,7 @@ function Home({
                                 disabled={activeStory === menuItem.id}
                                 data-story={menuItem.id}
                                 text={menuItem.name}
-                                style={menuItem.style ? menuItem.style : {}}
+                                style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                               >
                                 {menuItem.before}
                               </TabbarItem>
@@ -1857,7 +1871,7 @@ function Home({
                                 disabled={activeStory === menuItem.id}
                                 data-story={menuItem.id}
                                 text={menuItem.name}
-                                style={menuItem.style ? menuItem.style : {}}
+                                style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                               >
                                 {menuItem.before}
                               </TabbarItem>
