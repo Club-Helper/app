@@ -116,6 +116,7 @@ export default class MailingList extends Component {
           isEnabled: true
         });
         this.props.setLoading(false);
+        if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
       },
       (error) => {
         this.props.createError(error.error.error_msg);
