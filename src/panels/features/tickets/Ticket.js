@@ -380,7 +380,9 @@ export default class TicketsList extends Component {
           left={
             <React.Fragment>
               <PanelHeaderBack onClick={() => this.props.go("tickets_list")} />
-              <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28AdvertisingOutline /></PanelHeaderButton>
+              {this.state.ticketOptions.includes("invitation_mailing") &&
+                <PanelHeaderButton onClick={() => this.openModal("actions")}><Icon28AdvertisingOutline /></PanelHeaderButton>
+              }
               {this.state.ticketOptions?.length > 0 &&
                 <PanelHeaderButton onClick={() => this.setState({ showOptions: !this.state.showOptions })}><Icon28MoreHorizontal /></PanelHeaderButton>
               }
