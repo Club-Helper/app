@@ -256,9 +256,9 @@ export default class ClubCard extends Component {
                 !Boolean(
                   this.state.openedReason?.comment_field?.is_required
                     ? this.state.openedReason?.reasons?.length > 1
-                      ? this.state.comment && this.state.selectedReason
+                      ? (this.state.comment && this.state.selectedReason)
                       : this.state.comment
-                    : this.state.selectedReason
+                    : (this.state.selectedReason || this.state.openedReason)
                 )
               }
               loading={this.state.sendButtonLoading}
