@@ -152,10 +152,12 @@ function Home({
   const [canViewTickets, toggleCanViewTickets] = useState(null);
   const [canViewPattern, toggleCanViewPattern] = useState(null);
   const [canViewMailing, toggleCanViewMailing] = useState(null);
-  const [canViewPush, toggleCanViewPush] = useState(null);
-  const [canViewClubs, toggleCanViewClubs] = useState(null);
+  const [canViewPush, toggleCanViewPush]       = useState(null);
+  const [canViewClubs, toggleCanViewClubs]     = useState(null);
   const [canViewSupport, toggleCanViewSupport] = useState(null);
-  const [canViewDonut, toggleCanViewDonut] = useState(null);
+  const [canViewDonut, toggleCanViewDonut]     = useState(null);
+  const [canAddReport, toggleCanAddReport]     = useState(null);
+
   const [color, setColor] = useState("");
   const [menuPosition, setMenuPosition] = useState("");
 
@@ -301,6 +303,9 @@ function Home({
             } else if (data.response.page === "club") {
               setIsNew(false);
               setToken(data.response.token)
+
+              toggleCanAddReport(data.response.can_add_report);
+              toggleCanViewMailing(data.response.can_view_mailing);
 
               /*ym(90794548, 'userParams', {
                 session_id: data.response.session_id
@@ -1939,6 +1944,8 @@ function Home({
                           formatRole={formatRole}
                           req={req}
                           platform={platform}
+                          canAddReport={canAddReport}
+                          canViewMailing={canViewMailing}
                         />
                       </View>
 
