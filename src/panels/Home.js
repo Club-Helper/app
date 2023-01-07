@@ -462,7 +462,7 @@ function Home({
         "ticket"
       ],
       name: "Обращения",
-      before: <Icon28MessagesOutline fill={["tickets_list", "ticket"].includes(activeStory) ? color : ""} />,
+      before: <Icon28MessagesOutline fill={isMobile ? ["tickets_list", "ticket"].includes(activeStory) ? color : "" : color} />,
       show: (club_role === "admin" || messages_enabled) && canViewTickets,
       fill: ["tickets_list", "ticket"].includes(activeStory) ? color : ""
     },
@@ -470,7 +470,7 @@ function Home({
       id: "links",
       triggers: ["links"],
       name: "Ссылки",
-      before: <Icon24Linked width={28} height={28} fill={["links"].includes(activeStory) ? color : ""} />,
+      before: <Icon24Linked width={28} height={28} fill={isMobile ? ["links"].includes(activeStory) ? color : "" : color} />,
       show: false,
       fill: ["links"].includes(activeStory) ? color : ""
     },
@@ -479,7 +479,7 @@ function Home({
       id: "comments",
       triggers: ["comments"],
       name: "Комментарии",
-      before: <Icon28CommentOutline fill={["comments"].includes(activeStory) ? color : ""} />,
+      before: <Icon28CommentOutline fill={isMobile ? ["comments"].includes(activeStory) ? color : "" : color} />,
       show: false,
       fill: ["comments"].includes(activeStory) ? color : ""
     },
@@ -487,7 +487,7 @@ function Home({
       id: "templates",
       triggers: ["templates"],
       name: "Шаблоны",
-      before: <Icon28ArticlesOutline fill={["templates"].includes(activeStory) ? color : ""} />,
+      before: <Icon28ArticlesOutline fill={isMobile ? ["templates"].includes(activeStory) ? color : "" : color} />,
       show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern,
       fill: ["templates"].includes(activeStory) ? color : ""
     },
@@ -495,7 +495,7 @@ function Home({
       id: "mailing_list",
       triggers: ["mailing_list", "mailing"],
       name: "Рассылки",
-      before: <Icon28AdvertisingOutline fill={["mailing_list", "mailing"].includes(activeStory) ? color : ""} />,
+      before: <Icon28AdvertisingOutline fill={isMobile ? ["mailing_list", "mailing"].includes(activeStory) ? color : "" : color} />,
       show: canViewMailing,
       fill: ["mailing_list", "mailing"].includes(activeStory) ? color : ""
     },
@@ -503,7 +503,7 @@ function Home({
       id: "settings",
       triggers: ["settings"],
       name: "Настройки",
-      before: <Icon28SettingsOutline fill={["settings"].includes(activeStory) ? color : ""} />,
+      before: <Icon28SettingsOutline fill={isMobile ? ["settings"].includes(activeStory) ? color : "" : color} />,
       // show: (club_role === "admin")
       show: false,
       fill: ["settings"].includes(activeStory) ? color : ""
@@ -512,7 +512,7 @@ function Home({
       id: "stats_home",
       triggers: ["stats_home"],
       name: "Статистика",
-      before: <Icon28StatisticsOutline fill={["stats_home"].includes(activeStory) ? color : ""} />,
+      before: <Icon28StatisticsOutline fill={isMobile ? ["stats_home"].includes(activeStory) ? color : "" : color} />,
       // show: (club_role === "admin")
       show: false,
       fill: ["stats_home"].includes(activeStory) ? color : ""
@@ -540,7 +540,7 @@ function Home({
       id: "office-clubs",
       triggers: ["office-clubs"],
       name: "Сообщества",
-      before: <Icon36Users3Outline width={28} height={28} fill={["office-clubs"].includes(activeStory) ? color : ""} />,
+      before: <Icon36Users3Outline width={28} height={28} fill={isMobile ? ["office-clubs"].includes(activeStory) ? color : "" : color} />,
       show: canViewClubs,
       fill: ["stats_home"].includes(activeStory) ? color : ""
     },
@@ -548,7 +548,7 @@ function Home({
       id: "office-mailings",
       triggers: ["office-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={["office-mailings"].includes(activeStory) ? color : ""} />,
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={isMobile ? ["office-mailings"].includes(activeStory) ? color : "" : color} />,
       show: canViewMailing,
       fill: ["office-mailings"].includes(activeStory) ? color : ""
     },
@@ -556,7 +556,7 @@ function Home({
       id: "faq",
       triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
-      before: <Icon28LifebuoyOutline fill={["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""} />,
+      before: <Icon28LifebuoyOutline fill={isMobile ? ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : "" : color} />,
       show: canViewSupport,
       fill: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""
     }
@@ -567,7 +567,7 @@ function Home({
       id: "club-card",
       triggers: ["club-card"],
       name: clubCard?.name,
-      before: <Avatar src={clubCard?.photo} size={28} fill={["club-card"].includes(activeStory) ? color : ""} />,
+      before: <Avatar src={clubCard?.photo} size={28} fill={isMobile ? ["club-card"].includes(activeStory) ? color : "" : color} />,
       show: !isDesktop,
       fill: ["club-card"].includes(activeStory) ? color : ""
     },
@@ -575,7 +575,7 @@ function Home({
       id: "clubCard-mailings",
       triggers: ["clubCard-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={["clubCard-mailings"].includes(activeStory) ? color : ""} />,
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={isMobile ? ["clubCard-mailings"].includes(activeStory) ? color : "" : color} />,
       show: true,
       fill: ["clubCard-mailings"].includes(activeStory) ? color : ""
     }
