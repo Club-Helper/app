@@ -1,5 +1,5 @@
 /*******************************************************
- * Авторское право (C) 2021-2022 Club Helper
+ * Авторское право (C) 2021-2023 Cloud Apps
  *
  * Этот файл является частью мини-приложения Club Helper, размещенного
  * в сети Интернет по адресу https://www.vk.com/app7938346
@@ -614,7 +614,7 @@ export default class ClubInfo extends Component {
                               this.props.go("tickets_list");
                             }}
                             before={<Icon20CommunityName width={28} height={28} fill="var(--dynamic_orange)" />}
-                            description={this.state.stats?.tickets?.all}
+                            description={this.state.stats.tickets.all > 0 ? this.state.stats.tickets.all : "0"}
                           >
                             Всего
                           </SimpleCell>
@@ -624,7 +624,7 @@ export default class ClubInfo extends Component {
                               this.props.go("tickets_list");
                             }}
                             before={<Icon20Search width={28} height={28} fill="var(--dynamic_blue)" />}
-                            description={this.state.stats?.tickets?.waiting_specialist}
+                            description={this.state.stats.tickets.waiting_specialist > 0 ? this.state.stats.tickets.waiting_specialist : "0"}
                           >
                             Ожидающих специалиста
                           </SimpleCell>
@@ -634,7 +634,7 @@ export default class ClubInfo extends Component {
                               this.props.go("tickets_list");
                             }}
                             before={<Icon20WorkOutline width={28} height={28} fill="var(--button_commerce_background)" />}
-                            description={this.state.stats?.tickets?.work}
+                            description={this.state.stats.tickets.work > 0 ? this.state.stats.tickets.work : "0"}
                           >
                             В работе
                           </SimpleCell>
@@ -644,7 +644,7 @@ export default class ClubInfo extends Component {
                               this.props.go("tickets_list");
                             }}
                             before={<Icon20BlockOutline width={28} height={28} fill="var(--destructive)" />}
-                            description={this.state.stats?.tickets?.closed}
+                            description={this.state.stats.tickets.closed > 0 ? this.state.stats.tickets.closed : "0"}
                           >
                             Закрыты
                           </SimpleCell>
@@ -660,7 +660,7 @@ export default class ClubInfo extends Component {
                               this.props.go("templates")
                             }}
                             before={<Icon24Linked width={28} height={28} fill="var(--dynamic_raspberry_pink)" />}
-                            description={this.state.stats?.links?.all}
+                            description={this.state.stats?.links?.all > 0 ? this.state.stats?.links?.all : "0"}
                           >
                             Ссылки
                           </SimpleCell><SimpleCell
@@ -669,7 +669,7 @@ export default class ClubInfo extends Component {
                               this.props.go("templates")
                             }}
                             before={<Icon24CommentOutline width={28} height={28} />}
-                            description={this.state.stats?.comments?.all}
+                            description={this.state.stats?.comments?.all > 0 ? this.state.stats?.comments?.all : "0"}
                           >
                             Комментарии
                           </SimpleCell>

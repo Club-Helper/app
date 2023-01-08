@@ -1,5 +1,5 @@
 /*******************************************************
- * Авторское право (C) 2021-2022 Club Helper
+ * Авторское право (C) 2021-2023 Cloud Apps
  *
  * Этот файл является частью мини-приложения Club Helper, размещенного
  * в сети Интернет по адресу https://www.vk.com/app7938346
@@ -152,10 +152,12 @@ function Home({
   const [canViewTickets, toggleCanViewTickets] = useState(null);
   const [canViewPattern, toggleCanViewPattern] = useState(null);
   const [canViewMailing, toggleCanViewMailing] = useState(null);
-  const [canViewPush, toggleCanViewPush] = useState(null);
-  const [canViewClubs, toggleCanViewClubs] = useState(null);
+  const [canViewPush, toggleCanViewPush]       = useState(null);
+  const [canViewClubs, toggleCanViewClubs]     = useState(null);
   const [canViewSupport, toggleCanViewSupport] = useState(null);
-  const [canViewDonut, toggleCanViewDonut] = useState(null);
+  const [canViewDonut, toggleCanViewDonut]     = useState(null);
+  const [canAddReport, toggleCanAddReport]     = useState(null);
+
   const [color, setColor] = useState("");
   const [menuPosition, setMenuPosition] = useState("");
 
@@ -301,6 +303,9 @@ function Home({
             } else if (data.response.page === "club") {
               setIsNew(false);
               setToken(data.response.token)
+
+              toggleCanAddReport(data.response.can_add_report);
+              toggleCanViewMailing(data.response.can_view_mailing);
 
               /*ym(90794548, 'userParams', {
                 session_id: data.response.session_id
@@ -457,60 +462,68 @@ function Home({
         "ticket"
       ],
       name: "Обращения",
-      before: <Icon28MessagesOutline fill={color} />,
-      show: (club_role === "admin" || messages_enabled) && canViewTickets
+      before: <Icon28MessagesOutline fill={isMobile ? ["tickets_list", "ticket"].includes(activeStory) ? color : "" : color} />,
+      show: (club_role === "admin" || messages_enabled) && canViewTickets,
+      fill: ["tickets_list", "ticket"].includes(activeStory) ? color : ""
     },
     {
       id: "links",
       triggers: ["links"],
       name: "Ссылки",
-      before: <Icon24Linked width={28} height={28} fill={color} />,
-      show: false
+      before: <Icon24Linked width={28} height={28} fill={isMobile ? ["links"].includes(activeStory) ? color : "" : color} />,
+      show: false,
+      fill: ["links"].includes(activeStory) ? color : ""
     },
 
     {
       id: "comments",
       triggers: ["comments"],
       name: "Комментарии",
-      before: <Icon28CommentOutline fill={color} />,
-      show: false
+      before: <Icon28CommentOutline fill={isMobile ? ["comments"].includes(activeStory) ? color : "" : color} />,
+      show: false,
+      fill: ["comments"].includes(activeStory) ? color : ""
     },
     {
       id: "templates",
       triggers: ["templates"],
       name: "Шаблоны",
-      before: <Icon28ArticlesOutline fill={color} />,
-      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern
+      before: <Icon28ArticlesOutline fill={isMobile ? ["templates"].includes(activeStory) ? color : "" : color} />,
+      show: (club_role === "admin" || links_enabled) || (club_role === "admin" || comments_enabled) && canViewPattern,
+      fill: ["templates"].includes(activeStory) ? color : ""
     },
     {
       id: "mailing_list",
       triggers: ["mailing_list", "mailing"],
       name: "Рассылки",
-      before: <Icon28AdvertisingOutline fill={color} />,
-      show: canViewMailing
+      before: <Icon28AdvertisingOutline fill={isMobile ? ["mailing_list", "mailing"].includes(activeStory) ? color : "" : color} />,
+      show: canViewMailing,
+      fill: ["mailing_list", "mailing"].includes(activeStory) ? color : ""
     },
     {
       id: "settings",
       triggers: ["settings"],
       name: "Настройки",
-      before: <Icon28SettingsOutline fill={color} />,
+      before: <Icon28SettingsOutline fill={isMobile ? ["settings"].includes(activeStory) ? color : "" : color} />,
       // show: (club_role === "admin")
-      show: false
+      show: false,
+      fill: ["settings"].includes(activeStory) ? color : ""
     },
     {
       id: "stats_home",
       triggers: ["stats_home"],
       name: "Статистика",
-      before: <Icon28StatisticsOutline fill={color} />,
+      before: <Icon28StatisticsOutline fill={isMobile ? ["stats_home"].includes(activeStory) ? color : "" : color} />,
       // show: (club_role === "admin")
-      show: false
+      show: false,
+      fill: ["stats_home"].includes(activeStory) ? color : ""
     },
     {
       id: "club_info",
       triggers: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: club?.name,
       before: <Avatar size={28} src={club?.photo} />,
-      show: !isDesktop && canViewClubs
+      show: !isDesktop && canViewClubs,
+      fill: ["club_info", "settings", "stats_home", "faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""
     },
   ];
 
@@ -520,28 +533,32 @@ function Home({
       triggers: ["office"],
       name: office?.user?.first_name,
       before: <Avatar size={28} src={office?.user?.photo} />,
-      show: !isDesktop
+      show: !isDesktop,
+      fill: ["office"].includes(activeStory) ? color : ""
     },
     {
       id: "office-clubs",
       triggers: ["office-clubs"],
       name: "Сообщества",
-      before: <Icon36Users3Outline width={28} height={28} fill={color} />,
-      show: canViewClubs
+      before: <Icon36Users3Outline width={28} height={28} fill={isMobile ? ["office-clubs"].includes(activeStory) ? color : "" : color} />,
+      show: canViewClubs,
+      fill: ["stats_home"].includes(activeStory) ? color : ""
     },
     {
       id: "office-mailings",
       triggers: ["office-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
-      show: canViewMailing
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={isMobile ? ["office-mailings"].includes(activeStory) ? color : "" : color} />,
+      show: canViewMailing,
+      fill: ["office-mailings"].includes(activeStory) ? color : ""
     },
     {
       id: "faq",
       triggers: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"],
       name: "Поддержка",
-      before: <Icon28LifebuoyOutline fill={color} />,
-      show: canViewSupport
+      before: <Icon28LifebuoyOutline fill={isMobile ? ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : "" : color} />,
+      show: canViewSupport,
+      fill: ["faq", "faq-solution", "faq-triggers", "faq-symptoms", "faq-tsolution"].includes(activeStory) ? color : ""
     }
   ];
 
@@ -550,15 +567,17 @@ function Home({
       id: "club-card",
       triggers: ["club-card"],
       name: clubCard?.name,
-      before: <Avatar src={clubCard?.photo} size={28} fill={color} />,
-      show: !isDesktop
+      before: <Avatar src={clubCard?.photo} size={28} fill={isMobile ? ["club-card"].includes(activeStory) ? color : "" : color} />,
+      show: !isDesktop,
+      fill: ["club-card"].includes(activeStory) ? color : ""
     },
     {
       id: "clubCard-mailings",
       triggers: ["clubCard-mailings"],
       name: "Рассылки",
-      before: <Icon32AdvertisingOutline width={28} height={28} fill={color} />,
-      show: true
+      before: <Icon32AdvertisingOutline width={28} height={28} fill={isMobile ? ["clubCard-mailings"].includes(activeStory) ? color : "" : color} />,
+      show: true,
+      fill: ["clubCard-mailings"].includes(activeStory) ? color : ""
     }
   ]
 
@@ -1312,7 +1331,7 @@ function Home({
                             disabled={activeStory === menuItem.id}
                             data-story={menuItem.id}
                             text={menuItem.name}
-                            style={menuItem.style ? menuItem.style : {}}
+                            style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                           >
                             {menuItem.before}
                           </TabbarItem>
@@ -1518,7 +1537,7 @@ function Home({
                               disabled={activeStory === menuItem.id}
                               data-story={menuItem.id}
                               text={menuItem.name}
-                              style={menuItem.style ? menuItem.style : {}}
+                              style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                             >
                               {menuItem.before}
                             </TabbarItem>
@@ -1652,7 +1671,7 @@ function Home({
                                 disabled={activeStory === menuItem.id}
                                 data-story={menuItem.id}
                                 text={menuItem.name}
-                                style={menuItem.style ? menuItem.style : {}}
+                                style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                               >
                                 {menuItem.before}
                               </TabbarItem>
@@ -1857,7 +1876,7 @@ function Home({
                                 disabled={activeStory === menuItem.id}
                                 data-story={menuItem.id}
                                 text={menuItem.name}
-                                style={menuItem.style ? menuItem.style : {}}
+                                style={menuItem.style ? { ...menuItem.style, color: menuItem.fill } : { color: menuItem.fill }}
                               >
                                 {menuItem.before}
                               </TabbarItem>
@@ -1925,6 +1944,8 @@ function Home({
                           formatRole={formatRole}
                           req={req}
                           platform={platform}
+                          canAddReport={canAddReport}
+                          canViewMailing={canViewMailing}
                         />
                       </View>
 

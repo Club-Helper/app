@@ -1,5 +1,5 @@
 /*******************************************************
- * Авторское право (C) 2021-2022 Club Helper
+ * Авторское право (C) 2021-2023 Cloud Apps
  *
  * Этот файл является частью мини-приложения Club Helper, размещенного
  * в сети Интернет по адресу https://www.vk.com/app7938346
@@ -65,9 +65,16 @@ export default class ClubCard extends Component {
           comment: this.state.comment,
           token: this.props.token
         },
-          (data) => {
-            this.setState({ activeModal: "" });
-            this.setState({ activeModal: "success" });
+          () => {
+            this.setState({
+              activeModal: "success",
+              comment: "",
+              openedReason: null,
+              sendButtonDisabled: true,
+              sendButtonLoading: false,
+              selectedReason: "",
+              errorText: ""
+            });
           },
           (error) => {
             this.setState({ activeModal: "error", errorText: error.error.error_msg });
@@ -76,7 +83,7 @@ export default class ClubCard extends Component {
 
         this.setState({ sendButtonDisabled: false, sendButtonLoading: false });
       })
-      .catch((error) => {
+      .catch(() => {
         this.setState(
           {
             sendButtonDisabled: false,
@@ -88,26 +95,30 @@ export default class ClubCard extends Component {
       });
   }
 
-  updateCCMailings () {
-    this.props.req("mailings.get", {
-      token: this.props.token,
-      my: true
-    },
-      (data) => {
-        this.setState({clubCardMailings: data.response});
-      }
-    );
+  updateCCMailings() {
+    if (this.props.canViewMailing) {
+      this.props.req("mailings.get", {
+        token: this.props.token,
+        my: true
+      },
+        (data) => {
+          this.setState({ clubCardMailings: data.response })
+        }
+      );
+    }
   }
 
   componentDidMount() {
-    this.props.req("mailings.get", {
-      token: this.props.token,
-      my: true
-    },
-      (data) => {
-        this.setState({clubCardMailings: data.response})
-      }
-    );
+    if (this.props.canViewMailing) {
+      this.props.req("mailings.get", {
+        token: this.props.token,
+        my: true
+      },
+        (data) => {
+          this.setState({ clubCardMailings: data.response })
+        }
+      );
+    }
   }
 
   render() {
@@ -182,11 +193,11 @@ export default class ClubCard extends Component {
           header={
             <ModalPageHeader
               left={
-                this.props.isDesktop &&
+                (this.props.isDesktop && this.props.canAddReport) &&
                 <PanelHeaderClose onClick={() => this.setState({ activeModal: "report" })} />
               }
               right={
-                !this.props.isDesktop &&
+                (!this.props.isDesktop && this.props.canAddReport) &&
                 <PanelHeaderClose onClick={() => this.setState({ activeModal: "report" })} />
               }
             >
@@ -256,9 +267,9 @@ export default class ClubCard extends Component {
                 !Boolean(
                   this.state.openedReason?.comment_field?.is_required
                     ? this.state.openedReason?.reasons?.length > 1
-                      ? this.state.comment && this.state.selectedReason
+                      ? (this.state.comment && this.state.selectedReason)
                       : this.state.comment
-                    : this.state.selectedReason
+                    : (this.state.selectedReason || this.state.openedReason)
                 )
               }
               loading={this.state.sendButtonLoading}
@@ -312,57 +323,63 @@ export default class ClubCard extends Component {
     return (
       <ConfigProvider appearance={this.props.appearance} platform={this.props.platform.current}>
         <SplitLayout modal={modal}>
-        <SplitCol>
-          <Panel id="club-card">
-            <PanelHeader left={<PanelHeaderButton onClick={() => this.openReportForm()}><Icon24ReportOutline /></PanelHeaderButton>} />
-            <Group>
-              {this.props.club ?
-                <>
-                  <Gradient
-                    style={{
-                      margin: this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      padding: 32,
-                    }}
-                    mode={this.props.appearance == "white" ? "white" : "black"}
-                  >
-                    <Avatar size={96} src={this.props.club?.photo} />
-                    <Title
-                      style={{ marginBottom: 8, marginTop: 20 }}
-                      level="2"
-                      weight="2"
+          <SplitCol>
+            <Panel id="club-card">
+              <PanelHeader left={this.props.canAddReport ? <PanelHeaderButton onClick={() => this.openReportForm()}><Icon24ReportOutline /></PanelHeaderButton> : ""} />
+              <Group>
+                {this.props.club ?
+                  <>
+                    <Gradient
+                      style={{
+                        margin: this.props.isDesktop ? "-7px -7px 0 -7px" : 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        padding: 32,
+                      }}
+                      mode={this.props.appearance == "white" ? "white" : "black"}
                     >
-                      {this.props.club?.name}
-                    </Title>
-                    <Cell
-                      after={
-                        <svg color="var(--dynamic_orange)" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><path fill="currentcolor" d="M5.5.5c.3-.7.7-.7 1 0l1.5 3.5 3.3.3c.7.1.9.5.3 1l-2.6 2.3 1 3.7c.2.7-.1.9-.7.5l-3.3-2.4-3.3 2.4c-.6.4-.9.2-.7-.5l1-3.7-2.6-2.3c-.6-.5-.4-.9.3-1l3.3-.3 1.5-3.5z"/></svg>
-                      }
-                    >
-                      <b>{this.props.club?.rating}</b>&nbsp;
-                    </Cell>
-                  </Gradient>
-                  <Spacing size={20} separator />
-                  <ClubCardMailings
-                    setPopout={this.props.setPopout}
-                    mailings={this.state.clubCardMailings?.items}
-                    formatRole={this.props.formatRole}
-                    token={this.props.token}
-                    updateMailings={this.updateCCMailings}
-                    createError={this.props.createError}
-                    req={this.props.req}
-                  />
-                </>
-                :
-                <PanelSpinner />
-              }
-            </Group>
-          </Panel>
-        </SplitCol>
+                      <Avatar size={96} src={this.props.club?.photo} />
+                      <Title
+                        style={{ marginBottom: 8, marginTop: 20 }}
+                        level="2"
+                        weight="2"
+                      >
+                        {this.props.club?.name}
+                      </Title>
+                      <Cell
+                        after={
+                          <svg color="var(--dynamic_orange)" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><path fill="currentcolor" d="M5.5.5c.3-.7.7-.7 1 0l1.5 3.5 3.3.3c.7.1.9.5.3 1l-2.6 2.3 1 3.7c.2.7-.1.9-.7.5l-3.3-2.4-3.3 2.4c-.6.4-.9.2-.7-.5l1-3.7-2.6-2.3c-.6-.5-.4-.9.3-1l3.3-.3 1.5-3.5z" /></svg>
+                        }
+                        disabled
+                        multiline
+                      >
+                        <b>{this.props.club?.rating}</b>&nbsp;
+                      </Cell>
+                    </Gradient>
+                    {this.props.canViewMailing &&
+                      <>
+                        <Spacing size={20} separator />
+                        <ClubCardMailings
+                          setPopout={this.props.setPopout}
+                          mailings={this.state.clubCardMailings?.items}
+                          formatRole={this.props.formatRole}
+                          token={this.props.token}
+                          updateMailings={this.updateCCMailings}
+                          createError={this.props.createError}
+                          req={this.props.req}
+                        />
+                      </>
+                    }
+                  </>
+                  :
+                  <PanelSpinner />
+                }
+              </Group>
+            </Panel>
+          </SplitCol>
         </SplitLayout>
       </ConfigProvider>
     )

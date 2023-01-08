@@ -1,5 +1,5 @@
 /*******************************************************
- * Авторское право (C) 2021-2022 Club Helper
+ * Авторское право (C) 2021-2023 Cloud Apps
  *
  * Этот файл является частью мини-приложения Club Helper, размещенного
  * в сети Интернет по адресу https://www.vk.com/app7938346
@@ -74,21 +74,32 @@ export default class Office extends Component {
               <FormItem
                 top={"Основной цвет приложения"}
               >
-                <Input
-                  after={
-                    <input
-                      type={isAndroid ? "text" : "color"}
-                      style={{ border: "none", background: "none", marginLeft: "-25%" }}
-                      onChange={(e) => {
-                        this.props.setColor(e.target.value);
-                        localStorage.setItem("ch_appearance_color", e.target.value);
-                      }}
-                      value={this.props.color}
-                    />
-                  }
-                  placeholder={isAndroid ? "Введите HEX" : "Выберите цвет"}
-                  value={this.props.color}
-                />
+                {isAndroid ?
+                  <Input
+                    placeholder={"Введите HEX"}
+                    value={this.props.color}
+                    onChange={(e) => {
+                      this.props.setColor(e.target.value);
+                      localStorage.setItem("ch_appearance_color", e.target.value);
+                    }}
+                  />
+                  :
+                  <Input
+                    after={
+                      <input
+                        type={"color"}
+                        style={{ border: "none", background: "none", marginLeft: "-25%", borderRadius: '50%' }}
+                        onChange={(e) => {
+                          this.props.setColor(e.target.value);
+                          localStorage.setItem("ch_appearance_color", e.target.value);
+                        }}
+                        value={this.props.color}
+                      />
+                    }
+                    placeholder={"Выберите цвет"}
+                    value={this.props.color}
+                  />
+                }
                 <CellButton
                   onClick={() => {
                     let _accent = this.props.isDesktop ? (this.props.appearance === "light" ? "#5181b8" : "#ffffff") : (this.props.appearance === "light" ? "#0077ff" : "#ffffff");
