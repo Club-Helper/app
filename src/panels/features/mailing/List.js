@@ -837,7 +837,6 @@ export default class MailingList extends Component {
                         Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["рассылку", "рассылки", "рассылок"])}.
                       </Footer>
                     }
-                    {console.log(this.props)}
                     {!this.state.availability.creat &&
                       <Footer>
                         Достигнут лимит рассылок. {this.props.canViewDonut ? "Оплатите подписку VK Donut или удалите" : "Удалите"} ненужные рассылки, чтобы создать больше.

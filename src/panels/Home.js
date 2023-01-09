@@ -598,8 +598,6 @@ function Home({
     }
 
     if (navigator.onLine) {
-      console.log(apiScheme);
-
       fetch(`${apiScheme}://cloud-apps.ru/api/${method}`, {
         method: "POST",
         body: JSON.stringify(body)
