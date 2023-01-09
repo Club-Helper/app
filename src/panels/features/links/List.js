@@ -610,7 +610,7 @@ export default class Links extends Component {
                       {
                         !this.state.availability.creat &&
                         <Footer>
-                          Достигнут лимит ссылок переадресации. Оплатите подписку VK Donut или удалите ненужные ссылки,
+                          Достигнут лимит ссылок переадресации. {this.props.canViewDonut ? "Оплатите подписку VK Donut или удалите" : "Удалите"} ненужные ссылки,
                           чтобы создать больше.
                         </Footer>
                       }

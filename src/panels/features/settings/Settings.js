@@ -142,10 +142,9 @@ export default class Settings extends Component {
       })
   }
 
-  deleteGroup(type) {
+  deleteGroup() {
     this.props.req("clubs.remove", {
-      token: this.props.token,
-      always: type === "full"
+      token: this.props.token
     }, (response) => {
       this.setState({ activeModal: "deleted" });
     });
@@ -172,27 +171,7 @@ export default class Settings extends Component {
         actionsLayout="horizontal"
         onClose={() => this.props.setPopout(null)}
         header="Внимание"
-        text="Все данные сообщества будут удалены. У вас будет время, чтобы восстановить их. Продолжить?"
-      />)
-    } else if (type == "full") {
-      this.props.setPopout(<Alert
-        actions={[
-          {
-            title: "Удалить",
-            mode: "destructive",
-            autoclose: true,
-            action: () => this.deleteGroup(type)
-          },
-          {
-            title: "Отмена",
-            mode: "cancel",
-            autoclose: true
-          }
-        ]}
-        actionsLayout="horizontal"
-        onClose={() => this.props.setPopout(null)}
-        header="Внимание"
-        text="ВСЕ ДАННЫЕ СООБЩЕСТВА БУДУТ УДАЛЕНЫ НАВСЕГДА. Продолжить?"
+        text="Мы начнем удаление данных сообщества. У вас будет время, чтобы восстановить их. Продолжить?"
       />)
     } else {
       return false;
@@ -216,26 +195,6 @@ export default class Settings extends Component {
               </Button>
             </ButtonGroup>
           </Div>
-        </ModalPage>
-        <ModalPage
-          id="preDelete"
-          header={<ModalPageHeader right={this.props.isMobile && <PanelHeaderButton onClick={() => this.closeFAQModal()}><Icon24Dismiss /></PanelHeaderButton>}>Деактивация</ModalPageHeader>}
-          onClose={() => this.closeFAQModal()}
-          settlingHeight={100}
-        >
-          <Div>
-            <ButtonGroup>
-              <Button stretched onClick={() => this.delete("part")}>
-                Обычная
-              </Button>
-              <Button stretched onClick={() => this.delete("full")}>
-                Полная
-              </Button>
-            </ButtonGroup>
-          </Div>
-          <Footer>
-            for testing purposes only
-          </Footer>
         </ModalPage>
         <ModalPage
           id="deleted"
@@ -355,34 +314,6 @@ export default class Settings extends Component {
                   placeholder={"{hello}!\n\nСпасибо, что написали нам, мы ответим Вам в ближайшее время."}
                 />
               </FormItem>
-              <Spacing size={20} separator />
-              <Header style={!this.props.isMobile ? { marginBottom: "-20px", marginTop: "-15px" } : {}}><b>Для тестирования</b></Header>
-              <Cell
-                multiline
-                disabled
-                after={
-                  <Switch
-                    name="donut"
-                    defaultChecked={this.props.hasDonut}
-                    disabled={false}
-                    onClick={
-                      (e) => {
-                        this.handleCheckboxChanged(e);
-                      }
-                    }
-                  />
-                }
-                before={<Icon28DonateOutline />}
-                description="Потребуется перезапустить сервис"
-              >
-                VK Donut
-              </Cell>
-              {false && <CellButton onClick={() => {
-                this.props.setPage("landing");
-                this.props.setActiveStory("start_app");
-              }}>
-                Показать онбординг
-              </CellButton>}
               <br />
               <Div>
                 <Button
@@ -396,7 +327,7 @@ export default class Settings extends Component {
                 </Button>
               </Div>
               <Footer>
-                Вы можете <Link onClick={() => this.setState({ activeModal: "preDelete" })}>удалить свое сообщество</Link>
+                Вы можете <Link onClick={() => this.delete("part")}>удалить свое сообщество</Link>
               </Footer>
               <br/><br/>
             </SplitCol>

@@ -496,7 +496,7 @@ export default class ClubInfo extends Component {
                       <List style={{ paddingTop: "10px" }}>
                         <MiniInfoCell before={<Icon16Hashtag width={20} height={20} />}>ID: {club.id}</MiniInfoCell>
                         <MiniInfoCell before={<Icon20CalendarOutline />}>Дата установки: {club.installation?.time.label}</MiniInfoCell>
-                        <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
+                        {this.props.canViewDonut && <MiniInfoCell before={<Icon28DonateOutline width={20} height={20} />} onClick={() => {
                           if (!this.props.startupError && !club.error) {
                             this.props.toggleShowMobileMenu(false);
                             this.openModal("donut");
@@ -506,7 +506,7 @@ export default class ClubInfo extends Component {
                             this.props.toggleShowMobileMenu(false);
                             this.openModal("donut");
                           }
-                        }} style={{ color: "var(--accent)" }}>Что это?</div> : ""} disabled={this.props.startupError || club.error}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>
+                        }} style={{ color: "var(--accent)" }}>Что это?</div> : ""} disabled={this.props.startupError || club.error}>Подписка {this.props.hasDonut ? "активна" : "неактивна"}</MiniInfoCell>}
                       </List>
                     </Group>
                     {!this.props.isMobile && !this.props.showMenu &&

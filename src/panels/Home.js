@@ -162,12 +162,12 @@ function Home({
   const [menuPosition, setMenuPosition] = useState("");
 
   useEffect(() => {
-    bridge.send("VKWebAppGetClientVersion")
-      .then((data) => {
-        if (params.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
-          setScheme('vkcors');
-        }
-      })
+    // bridge.send("VKWebAppGetClientVersion")
+    //   .then((data) => {
+    //     if (params.get('odr_enabled') === "1" && checkVersion(data.version, '6.46')) {
+    //       setScheme('vkcors');
+    //     }
+    //   })
 
     if (!localStorage.getItem("ch_appearance_color")) {
       let _accent = isDesktop ? (appearance === "light" ? "#5181b8" : "#ffffff") : (appearance === "light" ? "#0077ff" : "#ffffff");
@@ -186,23 +186,6 @@ function Home({
     }
 
     toggleTapticEngineSupport(bridge.supports("VKWebAppTapticNotificationOccurred"));
-
-    /*fetch(`${apiScheme}://cloud-apps.ru/translation/ru`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("RU LOCALE", data);
-        setRuLocale(data);
-        if (params.get("vk_language") == "ru") setLocale(data);
-      })
-
-    if (params.get("vk_language") != "ru") {
-      fetch(`${apiScheme}://cloud-apps.ru/translation/${params.get("vk_language")}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log(`LOCALE (${params.get("vk_language")})`, data);
-          setLocale(data);
-        })
-    }*/
 
     fetch(`${apiScheme}://cloud-apps.ru/api/app.start${window.location.search}`)
       .then(response => response.json())
@@ -306,10 +289,6 @@ function Home({
 
               toggleCanAddReport(data.response.can_add_report);
               toggleCanViewMailing(data.response.can_view_mailing);
-
-              /*ym(90794548, 'userParams', {
-                session_id: data.response.session_id
-              });*/
 
               fetch(`${apiScheme}://cloud-apps.ru/api/clubs.get?token=${data.response.token}`)
                 .then(response => response.json())
@@ -619,6 +598,8 @@ function Home({
     }
 
     if (navigator.onLine) {
+      console.log(apiScheme);
+
       fetch(`${apiScheme}://cloud-apps.ru/api/${method}`, {
         method: "POST",
         body: JSON.stringify(body)
@@ -700,7 +681,8 @@ function Home({
     setColor: setColor,
     menuPosition: menuPosition,
     setMenuPosition: setMenuPosition,
-    tapticEngineSupport: tapticEngineSupport
+    tapticEngineSupport: tapticEngineSupport,
+    canViewDonut: canViewDonut
   };
 
   const panels = [
@@ -918,6 +900,7 @@ function Home({
           toggleShowMobileMenu={toggleShowMobileMenu}
           needToOpenSettingsOnClubMount={needToOpenSettingsOnClubMount}
           toggleNeedToOpenSettingsOnClubMount={toggleNeedToOpenSettingsOnClubMount}
+          canViewDonut={canViewDonut}
         />
       )
     },

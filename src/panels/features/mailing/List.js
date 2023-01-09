@@ -428,9 +428,7 @@ export default class MailingList extends Component {
           ),
           activeModal: "",
           mailingEditMode: false,
-          mailingEditTitle: "",
           mailingEditTitleValidation: false,
-          mailingEditDescription: "",
           mailingEditDescriptionValidation: false
         });
         if (this.props.tapticEngineSupport) { bridge.send("VKWebAppTapticNotificationOccurred", { "type": "success" }); }
@@ -812,12 +810,12 @@ export default class MailingList extends Component {
                                   after={
                                     <IconButton
                                       onClick={() => {
+                                        this.getMailingUsers(this.state.list[idx].id);
                                         this.setState(
                                           {
                                             openedItem: this.state.list[idx],
                                             openedItemCreator: this.state.list[idx].creator,
                                             openedItemTime: this.state.list[idx].time,
-                                            openedItemUsers: this.getMailingUsers(this.state.list[idx].id),
                                             mailingEditTitle: this.state.list[idx].title,
                                             mailingEditDescription: this.state.list[idx]?.description
                                           }); this.openModal("mailingListItem")
@@ -839,9 +837,10 @@ export default class MailingList extends Component {
                         Вы можете создать ещё {this.state.availability.limit + " " + this.props.declOfNum(this.state.availability.limit, ["рассылку", "рассылки", "рассылок"])}.
                       </Footer>
                     }
+                    {console.log(this.props)}
                     {!this.state.availability.creat &&
                       <Footer>
-                        Достигнут лимит рассылок. Оплатите подписку VK Donut или удалите ненужные рассылки, чтобы создать больше.
+                        Достигнут лимит рассылок. {this.props.canViewDonut ? "Оплатите подписку VK Donut или удалите" : "Удалите"} ненужные рассылки, чтобы создать больше.
                       </Footer>
                     }
                   </Group>

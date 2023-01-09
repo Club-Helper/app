@@ -491,7 +491,7 @@ export default class CommentsList extends Component {
                                   : ""}
                                 {!this.state.availability.creat &&
                                   <Footer>
-                                    Достигнут лимит шаблонов комментариев. Оплатите подписку VK Donut или удалите ненужные шаблоны, чтобы создать больше.
+                                    Достигнут лимит шаблонов комментариев. {this.props.canViewDonut ? "Оплатите подписку VK Donut или удалите" : "Удалите"} ненужные шаблоны, чтобы создать больше.
                                   </Footer>
                                 }
                               </>
